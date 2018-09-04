@@ -79,10 +79,8 @@ class TrainerSearchView extends Component{
     }
 };
 
+const mapStateToProps = (state) => ({
+    allTrainers: state.trainers
+})
+
 export default connect(mapStateToProps)(TrainerSearchView);
-
-const mapStateToProps = (state) => (
-    {allTrainers: state.trainers}
-)
-
-// 
