@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { LOCAL_TRAINERS_ACTIONS } from '../actions/localTrainerActions';
 
 const state_and_SLO = (state = [], action) => {
     switch (action.type) {
@@ -27,8 +28,19 @@ const state_and_SLO = (state = [], action) => {
     }
   };
 
+  const allLocalTrainers  = (state = [], action) => {
+    switch (action.type) {
+        case LOCAL_TRAINERS_ACTIONS.SET_LOCAL_TRAINERS:
+            return action.payload || state
+    
+        default:
+            return state;
+    }
+}
+
   export default combineReducers({
     state_and_SLO,
     state_lead,
-    trainer_cohorts 
+    trainer_cohorts, 
+    allLocalTrainers
   });

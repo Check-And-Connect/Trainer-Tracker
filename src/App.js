@@ -35,7 +35,7 @@ const App = () => (
           component={UserPage}
         />
         <Route
-          path="/info"
+          path="/cohort_manager"
           component={CohortManager}
         />
         <Route
