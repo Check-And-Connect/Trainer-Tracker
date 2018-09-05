@@ -1,40 +1,18 @@
 import { combineReducers } from 'redux';
 import user from './userReducer';
 import login from './loginReducer';
-
-const state_and_SLO = (state = [], action) => {
-  switch (action.type) {
-    case 'STATE_AND_STATE_ORG':
-      return action.payload
-    default:
-      return state;
-  }
-};
-
-const state_lead = (state = [], action) => {
-  switch (action.type) {
-    case 'STATE_LEAD':
-      return action.payload
-    default:
-      return state;
-  }
-};
-
-const trainer_cohorts = (state = [], action) => {
-  switch (action.type) {
-    case 'TRAINER_COHORTS':
-      return action.payload
-    default:
-      return state;
-  }
-};
+import localTrainerReducer from './localTrainerReducer';
+import nationalTrainerReducer from './nationalTrainerReducer';
+import cohortReducer from './cohortReducer';
+import stateLeadReducer from './stateLeadReducer';
 
 const store = combineReducers({
   user,
   login,
-  state_and_SLO,
-  state_lead,
-  trainer_cohorts 
+  localTrainerReducer,
+  nationalTrainerReducer,
+  cohortReducer,
+  stateLeadReducer
 });
 
 export default store;
