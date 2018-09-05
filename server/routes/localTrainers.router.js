@@ -6,108 +6,76 @@ const {
 } = require("../modules/authentication-middleware");
 const router = express.Router();
 
-/**
- * This end point will return all local trainers and their requirements
- */
-router.get("/", rejectUnauthenticated, (req, res) => {
-  /**
-   * This query will retrieve the info about the local trainer, the cohort and the cohort requirements ( mainly for the due dates).
-   * Also, this query will get the state level organization associated with each person
-   */
-  let firstQuery =
-    "SELECT * FROM local_trainers JOIN cohort ON local_trainers.cohort_ref_id = cohort.cohort_id JOIN cohort_requirements ON cohort.cohort_id = cohort_requirements.cohort_id JOIN state_level_organization ON cohort.state_level_organization_ref_id = state_level_organization.state_level_organization_id";
+router.get('/', rejectUnauthenticated,  (req, res)=> {
+  const getAllLocalTrainersQuery = `SELECT local_trainers.*, local_trainers_requirements.*, national_trainer.first_name as national_trainer_first_name, national_trainer.last_name as national_trainer_last_name, cohort_requirements.*, cohort.*, state_level_organization.* FROM local_trainers
+  JOIN local_trainers_requirements ON local_trainers.local_trainers_id = local_trainers_requirements.local_trainers_ref_id
+  LEFT OUTER JOIN national_trainer ON local_trainers_requirements.national_trainer_ref_id = national_trainer.national_trainer_id
+  JOIN cohort_requirements ON local_trainers_requirements.cohort_requirements_ref_id = cohort_requirements.cohort_req_id
+  JOIN cohort ON cohort.cohort_id = local_trainers.cohort_ref_id
+  JOIN state_level_organization ON state_level_organization.state_level_organization_id = cohort.state_level_organization_ref_id`
 
-  /**
-   * This query will retrieve requirements for each local trainer in where we'll be able to see if a task is completed or not.
-   * Also, this query will get the national trainers who observed each task or held an event ...
-   */
-  let secondQuery =
-    "SELECT local_trainers_requirements.*, national_trainer.first_name, national_trainer.last_name FROM local_trainers_requirements LEFT OUTER JOIN national_trainer ON local_trainers_requirements.national_trainer_ref_id = national_trainer.national_trainer_id;";
+  pool.query(getAllLocalTrainersQuery)
+  .then((results) => {
+    console.log(results.rows);
+    let resultAry = [];
 
-  pool
-    .query(firstQuery)
-    .then(response => {
-      let responseAry = [];
+    results.rows.forEach(element => {
+      let indexOfLC = resultAry.findIndex(localTrainer => {
+        return localTrainer.local_trainers_id == element.local_trainers_id
+      })
 
-      pool
-        .query(secondQuery)
-        .then(second_response => {
-          console.log(second_response.rows[0]);
-
-          response.rows.forEach(element => {
-            let indexOfLC = responseAry.findIndex(local_trainer => {
-              return (
-                local_trainer.local_trainers_id == element.local_trainers_id
-              );
-            });
-            console.log(indexOfLC);
-
-            if (indexOfLC === -1) {
-              let newLC = {
-                local_trainers_id: element.local_trainers_id,
-                first_name: element.first_name,
-                last_name: element.last_name,
-                cohort: {
-                  cohort_id: element.cohort_id,
-                  cohort_name: element.name
-                },
-                state: element.state,
-                state_level_organization_id:
-                  element.state_level_organization_id,
-                requirements: [
-                  {
-                    requirement_id: element.requirement_id,
-                    requirement_due_date: element.due_date
-                  }
-                ]
-              };
-
-              responseAry.push(newLC);
-            } else {
-
-              let newReq = {
-                requirement_id: element.requirement_id,
-                requirement_due_date: element.due_date
-              };
-              responseAry[indexOfLC].requirements.push(newReq);
+      console.log(indexOfLC);
+      
+      if(indexOfLC === -1){
+        let newLC = {
+          local_trainers_id : element.local_trainers_id,
+          first_name : element.first_name,
+          last_name : element.last_name,
+          cohort : {
+            cohort_id: element.cohort_id,
+            cohort_name: element.name
+          },
+          state : element.state,
+          state_level_organization_id : element.state_level_organization_id,
+          requirements : [
+            {
+              requirement_id : element.requirement_id,
+              requirement_due_date : element.due_date,
+              scheduled_date : element.scheduled_date,
+              completed : element.completed,
+              national_trainer_id : element.national_trainer_ref_id,
+              national_trainer_first_name : element.national_trainer_first_name,
+              national_trainer_last_name : element.national_trainer_last_name
             }
-          });
+          ]
+        }
 
-          second_response.rows.forEach(element => {
-            let indexOfLC = responseAry.findIndex(local_trainer => {
-              return (
-                local_trainer.local_trainers_id == element.local_trainers_ref_id
-              );
-            });
+        resultAry.push(newLC);
+      }else{
+        let newReq =  {
+          requirement_id : element.requirement_id,
+          requirement_due_date : element.due_date,
+          scheduled_date : element.scheduled_date,
+          completed : element.completed,
+          national_trainer_id : element.national_trainer_ref_id,
+          national_trainer_first_name : element.national_trainer_first_name,
+          national_trainer_last_name : element.national_trainer_last_name
+        }
 
-            let indexOfReq = responseAry[indexOfLC].requirements.findIndex(
-              requirement => {
-                return requirement.requirement_id == element.requirements_ref_id;
-              }
-            );
+        resultAry[indexOfLC].requirements.push(newReq);
+      }
 
-            responseAry[indexOfLC].requirements[indexOfReq] = {
-              ...responseAry[indexOfLC].requirements[indexOfReq],
-              scheduled_date: element.scheduled_date,
-              completed: element.completed,
-              national_trainer_id: element.national_trainer_ref_id,
-              national_trainer_first_name: element.first_name,
-              national_trainer_last_nale: element.last_name
-            };
-          });
-
-          res.send(responseAry);
-        })
-        .catch(err => {
-          console.log(err);
-          res.sendStatus(500);
-        });
     })
-    .catch(err => {
+
+    res.send(resultAry);
+      
+
+  }).catch((err) => {
       console.log(err);
       res.sendStatus(500);
-    });
-});
+  })
+
+})
 
 
 router.get('/stateLevelOrganization', (req, res) => {

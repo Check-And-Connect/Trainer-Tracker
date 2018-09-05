@@ -14,9 +14,9 @@ CREATE TABLE "national_trainer" (
 );
 
 CREATE TABLE "state_level_organization" (
-  "state_level_organization_id" SERIAL PRIMARY KEY,
-  "name" VARCHAR(255),
-  "state" VARCHAR(255)
+  "state_level_organization_id" SERIAL PRIMARY KEY,
+  "name" VARCHAR(255),
+  "state" VARCHAR(255)
 );
 
 CREATE TABLE "state_lead" (
@@ -36,13 +36,12 @@ CREATE TABLE "requirements" (
   "description" text,
   "duration" integer NOT NULL,
   "notification_1_time" integer,
-  "notfication_2_time" integer
+  "notification_2_time" integer
 );
 
 CREATE TABLE "cohort" (
   "cohort_id" SERIAL PRIMARY KEY,
   "name" varchar(255) NOT NULL,
-  "state" varchar(255) NOT NULL,
   "start_date" date NOT NULL,
   "description" text,
   "state_level_organization_ref_id" INTEGER REFERENCES state_level_organization(state_level_organization_id)
@@ -51,7 +50,7 @@ CREATE TABLE "cohort" (
 CREATE TABLE "cohort_requirements" (
   "cohort_req_id" SERIAL PRIMARY KEY,
   "cohort_id" INTEGER REFERENCES cohort(cohort_id),
-  "requirement_id" INTEGER REFERENCES requirements(requirements_id),
+  "requirement_ref_id" INTEGER REFERENCES requirements(requirements_id),
   "due_date" date NOT NULL,
   "notes" text,
   "notification_1_date" date,
@@ -67,7 +66,6 @@ CREATE TABLE "local_trainers" (
   "phone_number" varchar(255),
   "organization" varchar(255),
   "district" varchar(255),
-  "state_level_organization" INTEGER REFERENCES state_level_organization(state_level_organization_id),
   "cohort_ref_id" INTEGER REFERENCES cohort(cohort_id),
   "status" boolean DEFAULT true,
   "notes" text
@@ -76,7 +74,7 @@ CREATE TABLE "local_trainers" (
 CREATE TABLE "local_trainers_requirements" (
   "local_trainers_requirements_id" SERIAL PRIMARY KEY,
   "local_trainers_ref_id" INTEGER REFERENCES local_trainers(local_trainers_id),
-  "requirements_ref_id" INTEGER REFERENCES requirements(requirements_id),
+  "cohort_requirements_ref_id" INTEGER REFERENCES cohort_requirements(cohort_req_id),
   "national_trainer_ref_id" INTEGER REFERENCES national_trainer(national_trainer_id),
   "completed" date,
   "notes" text,
