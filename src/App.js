@@ -10,9 +10,8 @@ import Header from './components/Header/Header';
 import LoginPage from './components/LoginPage/LoginPage';
 import RegisterPage from './components/RegisterPage/RegisterPage';
 import UserPage from './components/UserPage/UserPage';
-// import InfoPage from './components/InfoPage/InfoPage';
-//.env problem
-import InfoPage from './components/AddTrainer/AddTrainer';
+import InfoPage from './components/InfoPage/InfoPage';
+import AddTrainer from './components/AddTrainer/AddTrainer';
 
 import './styles/main.css';
 
@@ -37,6 +36,10 @@ const App = () => (
         <Route
           path="/info"
           component={InfoPage}
+        />
+        <Route
+          path="/addtrainer"
+          component={AddTrainer}
         />
         {/* OTHERWISE (no path!) */}
         <Route render={() => <h1>404</h1>} />

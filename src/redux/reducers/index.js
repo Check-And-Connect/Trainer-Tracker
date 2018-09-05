@@ -20,11 +20,21 @@ const state_lead = (state = [], action) => {
   }
 };
 
+const trainer_cohorts = (state = [], action) => {
+  switch (action.type) {
+    case 'TRAINER_COHORTS':
+      return action.payload
+    default:
+      return state;
+  }
+};
+
 const store = combineReducers({
   user,
   login,
   state_and_SLO,
-  state_lead 
+  state_lead,
+  trainer_cohorts 
 });
 
 export default store;

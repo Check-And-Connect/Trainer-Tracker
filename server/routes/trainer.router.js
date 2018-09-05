@@ -36,4 +36,21 @@ router.get('/stateLead', (req, res) => {
     // }
 });
 
+router.get('/cohort', (req, res) => {
+    // if (req.isAuthenticated) {
+        const queryText = `SELECT "name" FROM cohort;`;
+        pool.query(queryText)
+            .then((results) => {
+                res.send(results.rows)
+                console.log(results.rows);
+
+            }).catch((err) => {
+                console.log(err);
+                res.sendStatus(500);
+            })
+    // } else {
+    //     res.sendStatus(403);
+    // }
+});
+
 module.exports = router;

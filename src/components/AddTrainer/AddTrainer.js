@@ -6,7 +6,8 @@ import { USER_ACTIONS } from '../../redux/actions/userActions';
 const mapStateToProps = state => ({
     user: state.user,
     state_and_SLO: state.state_and_SLO,
-    state_lead: state.state_lead 
+    state_lead: state.state_lead,
+    trainer_cohorts: state.trainer_cohorts 
 });
 
 class AddTrainer extends Component {
@@ -36,7 +37,7 @@ class AddTrainer extends Component {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
         this.props.dispatch({ type: 'FETCH_STATE_LEVEL_ORG' });
         this.props.dispatch({ type: 'FETCH_STATE_LEAD' });
-        // this.props.dispatch({ type: 'FETCH_COHORTS' });
+        this.props.dispatch({ type: 'FETCH_COHORTS' });
     }
 
     componentDidUpdate() {
@@ -93,6 +94,10 @@ class AddTrainer extends Component {
         let stateLeadListArray = this.props.state_lead.map((item, index) => {
             return <option value={item.first_name}>{item.first_name} {item.last_name}</option> 
         })
+        let cohortListArray = this.props.trainer_cohorts.map((item, index) => {
+            return <option value={item.name}>{item.name}</option> 
+        })
+
         // let content = null;
         // if (this.props.user.userName) {
            let content = (
@@ -120,6 +125,7 @@ class AddTrainer extends Component {
                         </select>
                         <select name="cohort">
                             <option value="">Cohort</option>
+                            {cohortListArray}
                         </select>
                         <input type='submit' value='Submit' />
                     </form>
