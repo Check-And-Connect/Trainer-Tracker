@@ -99,3 +99,16 @@ li a:hover {
     position: absolute;
     padding: 10px;
 }
+
+.navBar {
+    width: 190px;
+    align: left;
+}
+
+.buttonGroup {
+    float: right;
+}
+
+.logOut {
+    float: left;
+}

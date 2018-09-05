@@ -36,7 +36,7 @@ class Header extends Component  {
             Hello, { this.props.user.userName }!
           </h5>
           {/* <p>Your ID is: {this.props.user.id}</p> */}
-          <button
+          <button className="logOut"
             onClick={this.logout}
           >
             Log Out
