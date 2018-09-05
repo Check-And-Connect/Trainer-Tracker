@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 
 const mapStateToProps = state => ({
-    user: state.user
+    user: state.user,
+    state_and_SLO: state.state_and_SLO
 });
 
 class AddTrainer extends Component {
@@ -82,7 +83,9 @@ class AddTrainer extends Component {
     }
 
     render() {
-        
+        let stateListArray = this.props.state_and_SLO.map((item, index) => {
+            return <option value={item.state}>{item.state}</option> 
+        })
         // let content = null;
         // if (this.props.user.userName) {
            let content = (
@@ -96,8 +99,23 @@ class AddTrainer extends Component {
                         <input type='text' placeholder='Email' value={this.state.newTrainer.email} onChange={this.handleChangeFor('email')} />
                         <input type='text' placeholder='Phone Number' value={this.state.newTrainer.phone_number} onChange={this.handleChangeFor('phone_number')} />
                         <input type='text' placeholder='Organization' value={this.state.newTrainer.organization} onChange={this.handleChangeFor('organization')} />
+                        <select name="state">
+                            <option value="">State</option>
+                            {stateListArray}
+                        </select>
+                        
+                        <select name="state_level_organization">
+                            <option value="">State Level Organization</option>
+                        </select>
+                        <select name="state_lead">
+                            <option value="">State Lead</option>
+                        </select>
+                        <select name="cohort">
+                            <option value="">Cohort</option>
+                        </select>
                         <input type='submit' value='Submit' />
                     </form>
+                    <h2>Recently Added</h2>
                 </div>
             );
         // } 
