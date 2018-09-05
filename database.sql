@@ -1,5 +1,7 @@
 -- These SQL commands should be run in order to initialize the tables needed for the project.
 
+CREATE DATABASE "check_and_connect";
+
 CREATE TABLE "national_trainer" (
   "national_trainer_id" SERIAL PRIMARY KEY,
   "first_name" varchar(255) NOT NULL,
@@ -11,6 +13,12 @@ CREATE TABLE "national_trainer" (
   "status" boolean DEFAULT true
 );
 
+CREATE TABLE "state_level_organization" (
+  "state_level_organization_id" SERIAL PRIMARY KEY,
+  "name" VARCHAR(255),
+  "state" VARCHAR(255)
+);
+
 CREATE TABLE "state_lead" (
   "state_lead_id" SERIAL PRIMARY KEY,
   "first_name" varchar(255) NOT NULL,
@@ -18,7 +26,7 @@ CREATE TABLE "state_lead" (
   "email" varchar(255),
   "phone_number" varchar(255),
   "title" varchar(255),
-  "state_level_organization" varchar(255),
+  "state_level_organization_ref_id" INTEGER REFERENCES state_level_organization(state_level_organization_id),
   "state" varchar(255) NOT NULL
 );
 
@@ -37,7 +45,7 @@ CREATE TABLE "cohort" (
   "state" varchar(255) NOT NULL,
   "start_date" date NOT NULL,
   "description" text,
-  "state_lead_ref_id" INTEGER REFERENCES state_lead(state_lead_id)
+  "state_level_organization_ref_id" INTEGER REFERENCES state_level_organization(state_level_organization_id)
 );
 
 CREATE TABLE "cohort_requirements" (
@@ -59,8 +67,7 @@ CREATE TABLE "local_trainers" (
   "phone_number" varchar(255),
   "organization" varchar(255),
   "district" varchar(255),
-  "state" varchar(255),
-  "state_level_organization" varchar(255),
+  "state_level_organization" INTEGER REFERENCES state_level_organization(state_level_organization_id),
   "cohort_ref_id" INTEGER REFERENCES cohort(cohort_id),
   "status" boolean DEFAULT true,
   "notes" text
@@ -71,7 +78,7 @@ CREATE TABLE "local_trainers_requirements" (
   "local_trainers_ref_id" INTEGER REFERENCES local_trainers(local_trainers_id),
   "requirements_ref_id" INTEGER REFERENCES requirements(requirements_id),
   "national_trainer_ref_id" INTEGER REFERENCES national_trainer(national_trainer_id),
-  "completed" boolean DEFAULT false,
+  "completed" date,
   "notes" text,
   "scheduled_date" date,
   "notification_1_sent" boolean DEFAULT false,
