@@ -7,7 +7,7 @@ const {
 const router = express.Router();
 
 router.get('/', rejectUnauthenticated,  (req, res)=> {
-  const getAllLocalTrainersQuery = `SELECT local_trainers.*, local_trainers_requirements.*, national_trainer.first_name as national_trainer_first_name, national_trainer.last_name as national_trainer_last_name, cohort_requirements.*, cohort.*, state_level_organization.* FROM local_trainers
+  const getAllLocalTrainersQuery = `SELECT local_trainers.*, local_trainers_requirements.*, national_trainer.first_name as national_trainer_first_name, national_trainer.last_name as national_trainer_last_name, cohort_requirements.*, cohort.*, state_level_organization.name as slo_name, state_level_organization.state_level_organization_id as state_level_organization_id, state_level_organization.state as state FROM local_trainers
   JOIN local_trainers_requirements ON local_trainers.local_trainers_id = local_trainers_requirements.local_trainers_ref_id
   LEFT OUTER JOIN national_trainer ON local_trainers_requirements.national_trainer_ref_id = national_trainer.national_trainer_id
   JOIN cohort_requirements ON local_trainers_requirements.cohort_requirements_ref_id = cohort_requirements.cohort_req_id
@@ -36,7 +36,10 @@ router.get('/', rejectUnauthenticated,  (req, res)=> {
             cohort_name: element.name
           },
           state : element.state,
-          state_level_organization_id : element.state_level_organization_id,
+          state_level_organization : {
+            state_level_organization_id : element.state_level_organization_id,
+            state_level_organization_name : element.slo_name
+          },
           requirements : [
             {
               requirement_id : element.requirement_id,

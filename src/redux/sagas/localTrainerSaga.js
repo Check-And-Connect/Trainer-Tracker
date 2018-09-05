@@ -1,7 +1,6 @@
 import { takeEvery, takeLatest, call, put as dispatch } from 'redux-saga/effects';
 import axios from '../../../node_modules/axios';
 import {LOCAL_TRAINERS_ACTIONS} from '../actions/localTrainerActions';
-import { callAllLocalTrainers } from '../requests/localTrainerRequests';
 
 
 function* getStateLevelOrg() {
@@ -54,12 +53,13 @@ function* addNewLT(action){
 
 function* fetchLocalTrainers() {
     try {
-        let allTrainers = yield callAllLocalTrainers();
+        let allTrainers = yield call(axios.get, '/api/localTrainers/')
+
         console.log(allTrainers);
         
         yield dispatch({
             type : LOCAL_TRAINERS_ACTIONS.SET_LOCAL_TRAINERS,
-            payload : allTrainers
+            payload : allTrainers.data
         })
         
     } catch (error) {
