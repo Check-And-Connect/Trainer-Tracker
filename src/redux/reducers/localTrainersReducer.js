@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { LOCAL_TRAINERS_ACTIONS } from '../actions/localTrainersAction';
+import { LOCAL_TRAINERS_ACTIONS } from '../actions/localTrainerActions';
 
 const allLocalTrainers  = (state = [], action) => {
     switch (action.type) {
