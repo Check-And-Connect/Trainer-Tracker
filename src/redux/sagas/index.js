@@ -3,8 +3,8 @@ import userSaga from './userSaga';
 import loginSaga from './loginSaga';
 import localTrainerSaga from './localTrainerSaga';
 // import nationalTrainerSaga from './nationalTrainerSaga';
-// import cohortSaga from './cohortSaga';
-// import stateLeadSaga from './stateLeadSaga';
+import cohortSaga from './cohortSaga';
+import stateLeadSaga from './stateLeadSaga';
 
 
 export default function* rootSaga() {
@@ -14,8 +14,8 @@ export default function* rootSaga() {
     loginSaga(),
     localTrainerSaga(),
     // nationalTrainerSaga(),
-    // cohortSaga(),
-    // stateLeadSaga()
+    cohortSaga(),
+    stateLeadSaga()
     // watchIncrementAsync()
   ]);
 }

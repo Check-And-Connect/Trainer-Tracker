@@ -5,7 +5,9 @@ import { USER_ACTIONS } from '../../redux/actions/userActions';
 
 const mapStateToProps = state => ({
     user: state.user,
-    localTrainerReducer: state.localTrainerReducer
+    localTrainerReducer: state.localTrainerReducer,
+    cohortReducer: state.cohortReducer,
+    stateLeadReducer: state.stateLeadReducer
 });
 
 class AddTrainer extends Component {
@@ -103,16 +105,16 @@ class AddTrainer extends Component {
     }
 
     render() {
-        let stateListArray = this.props.localTrainerReducer.state_and_SLO.map((item, index) => {
+        let stateListArray = this.props.cohortReducer.state_and_SLO.map((item, index) => {
             return <option value={item.state}>{item.state}</option> 
         })
-        let SLOListArray = this.props.localTrainerReducer.state_and_SLO.map((item, index) => {
+        let SLOListArray = this.props.cohortReducer.state_and_SLO.map((item, index) => {
             return <option value={item.name}>{item.name}</option> 
         })
-        let stateLeadListArray = this.props.localTrainerReducer.state_lead.map((item, index) => {
+        let stateLeadListArray = this.props.stateLeadReducer.state_lead.map((item, index) => {
             return <option value={item.state_lead_id}>{item.first_name} {item.last_name}</option> 
         })
-        let cohortListArray = this.props.localTrainerReducer.trainer_cohorts.map((item, index) => {
+        let cohortListArray = this.props.cohortReducer.trainer_cohorts.map((item, index) => {
             return <option value={item.cohort_id}>{item.name}</option> 
         })
         // let recentListArray = this.props.recentlyAdded.map((item, index) => {
