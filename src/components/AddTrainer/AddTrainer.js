@@ -26,15 +26,15 @@ class AddTrainer extends Component {
                 state_lead: '',
                 cohort: 0
             },
-            recentlyAdded: [
-                {
-                    first_name: '',
-                    last_name: '',
-                    title: '',
-                    state: '',
-                    state_level_organization: '',
-                }
-            ]
+            // recentlyAdded: [
+            //     {
+            //         first_name: '',
+            //         last_name: '',
+            //         title: '',
+            //         state: '',
+            //         state_level_organization: '',
+            //     }
+            // ]
         }
     }
 
