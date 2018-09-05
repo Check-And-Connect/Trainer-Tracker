@@ -6,7 +6,7 @@ import { callAllLocalTrainers } from '../requests/localTrainerRequests';
 
 function* getStateLevelOrg() {
     try {
-        const stateLevelResponse = yield call(axios.get, '/api/localTrainers')
+        const stateLevelResponse = yield call(axios.get, '/api/localTrainers//stateLevelOrganzation')
         yield dispatch({
             type: 'STATE_AND_STATE_ORG',
             payload: stateLevelResponse.data

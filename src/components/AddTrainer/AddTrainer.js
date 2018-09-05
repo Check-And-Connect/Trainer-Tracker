@@ -5,9 +5,7 @@ import { USER_ACTIONS } from '../../redux/actions/userActions';
 
 const mapStateToProps = state => ({
     user: state.user,
-    state_and_SLO: state.state_and_SLO,
-    state_lead: state.state_lead,
-    trainer_cohorts: state.trainer_cohorts 
+    localTrainerReducer: state.localTrainerReducer
 });
 
 class AddTrainer extends Component {
@@ -26,15 +24,24 @@ class AddTrainer extends Component {
                 state: '',
                 state_level_organization: '',
                 state_lead: '',
-                cohort: ''
-            }
+                cohort: 0
+            },
+            // recentlyAdded: [
+            //     {
+            //         first_name: '',
+            //         last_name: '',
+            //         title: '',
+            //         state: '',
+            //         state_level_organization: '',
+            //     }
+            // ]
         }
     }
 
     
 
     componentDidMount() {
-        this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+        // this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
         this.props.dispatch({ type: 'FETCH_STATE_LEVEL_ORG' });
         this.props.dispatch({ type: 'FETCH_STATE_LEAD' });
         this.props.dispatch({ type: 'FETCH_COHORTS' });
@@ -69,34 +76,48 @@ class AddTrainer extends Component {
         event.preventDefault();
         this.props.dispatch({ type: 'ADD_LT', payload: this.state.newTrainer })
         this.setState({
+            recentlyAdded: {
+                ...this.state.recentlyAdded,
+                first_name: this.state.newTrainer.first_name,
+                last_name: this.state.newTrainer.last_name,
+                title: this.state.newTrainer.title,
+                state: this.state.newTrainer.state,
+                state_level_organization: this.state.newTrainer.state_level_organization
+            }
+        })
+        this.setState({
             newTrainer: {
-                first_name: '',
-                last_name: '',
-                title: '',
-                email: '',
-                phone_number: '',
-                organization: '',
-                state: '',
-                state_level_organization: '',
-                state_lead: '',
-                cohort: ''
+                // first_name: '',
+                // last_name: '',
+                // title: '',
+                // email: '',
+                // phone_number: '',
+                // organization: '',
+                // district: '',
+                // state: '',
+                // state_level_organization: '',
+                // state_lead: '',
+                // cohort: ''
             }
         });
     }
 
     render() {
-        let stateListArray = this.props.state_and_SLO.map((item, index) => {
+        let stateListArray = this.props.localTrainerReducer.state_and_SLO.map((item, index) => {
             return <option value={item.state}>{item.state}</option> 
         })
-        let SLOListArray = this.props.state_and_SLO.map((item, index) => {
+        let SLOListArray = this.props.localTrainerReducer.state_and_SLO.map((item, index) => {
             return <option value={item.name}>{item.name}</option> 
         })
-        let stateLeadListArray = this.props.state_lead.map((item, index) => {
-            return <option value={item.first_name}>{item.first_name} {item.last_name}</option> 
+        let stateLeadListArray = this.props.localTrainerReducer.state_lead.map((item, index) => {
+            return <option value={item.state_lead_id}>{item.first_name} {item.last_name}</option> 
         })
-        let cohortListArray = this.props.trainer_cohorts.map((item, index) => {
-            return <option value={item.name}>{item.name}</option> 
+        let cohortListArray = this.props.localTrainerReducer.trainer_cohorts.map((item, index) => {
+            return <option value={item.cohort_id}>{item.name}</option> 
         })
+        // let recentListArray = this.props.recentlyAdded.map((item, index) => {
+        //     return <li>{item.first_name} {item.last_name}</li> 
+        // })
 
         // let content = null;
         // if (this.props.user.userName) {
@@ -111,25 +132,27 @@ class AddTrainer extends Component {
                         <input type='text' placeholder='Email' value={this.state.newTrainer.email} onChange={this.handleChangeFor('email')} />
                         <input type='text' placeholder='Phone Number' value={this.state.newTrainer.phone_number} onChange={this.handleChangeFor('phone_number')} />
                         <input type='text' placeholder='Organization' value={this.state.newTrainer.organization} onChange={this.handleChangeFor('organization')} />
-                        <select name="state">
+                        <input type='text' placeholder='District' value={this.state.newTrainer.district} onChange={this.handleChangeFor('district')} />
+                        <select onChange={this.handleChangeFor('state')}>
                             <option value="">State</option>
                             {stateListArray}
                         </select>
-                        <select name="state_level_organization">
-                            <option value="">State Level Organization</option>
+                        <select onChange={this.handleChangeFor('state_level_organization')}>
+                            <option value="state">State Level Organization</option>
                             {SLOListArray}
                         </select>
-                        <select name="state_lead">
+                        <select onChange={this.handleChangeFor('state_lead')}>
                             <option value="">State Lead</option>
                             {stateLeadListArray}
                         </select>
-                        <select name="cohort">
+                        <select onChange={this.handleChangeFor('cohort')}>
                             <option value="">Cohort</option>
                             {cohortListArray}
                         </select>
                         <input type='submit' value='Submit' />
                     </form>
                     <h2>Recently Added</h2>
+                    {/* {recentListArray} */}
                 </div>
             );
         // } 
