@@ -4,20 +4,6 @@ import { callAllLocalTrainers } from '../requests/localTrainersRequests';
 
 
 
-function* fetchLocalTrainers() {
-    try {
-        let allTrainers = yield callAllLocalTrainers();
-        console.log(allTrainers);
-        
-        yield dispatch({
-            type : LOCAL_TRAINERS_ACTIONS.SET_LOCAL_TRAINERS,
-            payload : allTrainers
-        })
-        
-    } catch (error) {
-        console.log(error);  
-    }
-}
 
 function* localTrainerSaga () {
     yield takeLatest(LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINERS, fetchLocalTrainers);

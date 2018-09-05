@@ -1,11 +1,18 @@
 import { combineReducers } from 'redux';
 import user from './userReducer';
 import login from './loginReducer';
-import localTrainers from './localTrainersReducer';
+import localTrainerReducer from './localTrainerReducer';
+import nationalTrainerReducer from './nationalTrainerReducer';
+import cohortReducer from './cohortReducer';
+import stateLeadReducer from './stateLeadReducer';
+
 const store = combineReducers({
   user,
   login,
-  localTrainers
+  localTrainerReducer,
+  nationalTrainerReducer,
+  cohortReducer,
+  stateLeadReducer
 });
 
 export default store;

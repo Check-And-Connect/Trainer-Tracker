@@ -5,7 +5,7 @@ import { withStyles } from "@material-ui/core";
 
 import Nav from "../../components/Nav/Nav";
 import { USER_ACTIONS } from "../../redux/actions/userActions";
-import { LOCAL_TRAINERS_ACTIONS } from '../../redux/actions/localTrainersAction';
+import { LOCAL_TRAINERS_ACTIONS } from '../../redux/actions/localTrainerActions';
 import CohortManagerFilter from "../CohortManagerFilter/CohortManagerFilter";
 import Scheduler from "../Scheduler/Scheduler";
 
