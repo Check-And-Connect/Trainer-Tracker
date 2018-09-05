@@ -36,7 +36,7 @@ CREATE TABLE "requirements" (
   "description" text,
   "duration" integer NOT NULL,
   "notification_1_time" integer,
-  "notfication_2_time" integer
+  "notification_2_time" integer
 );
 
 CREATE TABLE "cohort" (
@@ -67,7 +67,6 @@ CREATE TABLE "local_trainers" (
   "phone_number" varchar(255),
   "organization" varchar(255),
   "district" varchar(255),
-  "state_level_organization" INTEGER REFERENCES state_level_organization(state_level_organization_id),
   "cohort_ref_id" INTEGER REFERENCES cohort(cohort_id),
   "status" boolean DEFAULT true,
   "notes" text

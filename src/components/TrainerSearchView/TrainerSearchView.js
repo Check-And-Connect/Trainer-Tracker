@@ -5,13 +5,20 @@ import {Link} from 'react-router-dom';
 import {TRAINER_ACTIONS} from '../../redux/actions/trainerActions';
 import {COHORT_ACTIONS} from '../../redux/actions/cohortActions';
 
+import TrainerSearchSidebar from '../TrainerSearchSidebar/TrainerSearchSidebar';
+
 class TrainerSearchView extends Component{
     constructor(props){
         super(props)
         this.state = {
             localTrainers: [],
             searchInput: '',
-            selectedState: []
+            selectedCheckboxes: {
+                state: [],
+                slo: [],
+                cohort: [],
+                status: []
+            }
         }
     }
 
@@ -32,6 +39,12 @@ class TrainerSearchView extends Component{
     }
 
     render(){
+        let displayedCheckboxes = {
+            state: [],
+            slo: [],
+            cohort: [],
+            status: []
+        }
         let trainersTableBody = this.state.localTrainers.map((trainer) => {
             return (
                 <tr>
@@ -54,6 +67,7 @@ class TrainerSearchView extends Component{
         })
         return(
             <div>
+                <TrainerSearchSidebar {...this.getCheckboxes()} />
                 <input
                     onChange={this.handleSearchInputChange}
                     placeholder="filter table"
