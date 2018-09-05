@@ -1,3 +1,0 @@
-export const TRAINER_ACTIONS = {
-    FETCH_TRAINERS: 'FETCH_TRAINERS',
-}

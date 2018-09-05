@@ -12,19 +12,21 @@ class TrainerSearchView extends Component{
         super(props)
         this.state = {
             localTrainers: [],
-            searchInput: '',
-            selectedCheckboxes: {
-                state: [],
-                slo: [],
-                cohort: [],
-                status: []
-            }
+            searchInput: ''
         }
     }
 
     componentDidMount = () => {
         this.props.dispatch({
             type: TRAINER_ACTIONS.FETCH_TRAINERS
+        })
+        // Not quite sure how the timing of this is supposed to work.
+        // We want to wait until the full trainer list is mapped from redux state to props,
+        // and then assign that whole array to local state. Ideally this means we have a
+        // pretty simple render function that works the same way on the initial page load
+        // as it does when one of the checkboxes is toggled.
+        this.setState({
+            localTrainers: this.props.allTrainers
         })
     }
 
@@ -38,6 +40,16 @@ class TrainerSearchView extends Component{
         })
     }
 
+    // This function gets the checkbox value off of the event object and uses that to filter the array of trainers.
+    handleTrainersFilter = (e) => {
+        console.log(e.target.value);
+        this.props.allTrainers.filter((trainer => {
+            return(
+
+            )
+        }))
+    }
+
     render(){
         let displayedCheckboxes = {
             state: [],
@@ -46,6 +58,15 @@ class TrainerSearchView extends Component{
             status: []
         }
         let trainersTableBody = this.state.localTrainers.map((trainer) => {
+            // Since we are mapping through the trainer array as part of the render process anyway, here is a good place
+            // to keep track of all the unique states, slos, cohorts, and statuses.
+
+            // When we filter the trainer array, we will need to rerender, which means we recalcuate the checkboxes to display.
+            if (!displayedCheckboxes[state].includes(trainer.state)) displayedCheckboxes[state].push(trainer.state);
+            if (!displayedCheckboxes[slo].includes(trainer.stateLevelOrg)) displayedCheckboxes[slo].push(trainer.stateLevelOrg);
+            if (!displayedCheckboxes[cohort].includes(trainer.cohortName)) displayedCheckboxes[cohort].push(trainer.cohortName);
+            if (!displayedCheckboxes[status].includes(trainer.status)) displayedCheckboxes[status].push(trainer.status);
+
             return (
                 <tr>
                     <Link to={`/cohort/${trainer.cohortID}`}>
@@ -67,7 +88,8 @@ class TrainerSearchView extends Component{
         })
         return(
             <div>
-                <TrainerSearchSidebar {...this.getCheckboxes()} />
+                {/* Spread the displayedCheckboxes object to make the keys available as props on the Sidebar */}
+                <TrainerSearchSidebar {...displayedCheckboxes} />
                 <input
                     onChange={this.handleSearchInputChange}
                     placeholder="filter table"
