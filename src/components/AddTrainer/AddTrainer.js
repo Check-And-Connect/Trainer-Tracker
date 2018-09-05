@@ -5,7 +5,8 @@ import { USER_ACTIONS } from '../../redux/actions/userActions';
 
 const mapStateToProps = state => ({
     user: state.user,
-    state_and_SLO: state.state_and_SLO
+    state_and_SLO: state.state_and_SLO,
+    state_lead: state.state_lead 
 });
 
 class AddTrainer extends Component {
@@ -34,7 +35,7 @@ class AddTrainer extends Component {
     componentDidMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
         this.props.dispatch({ type: 'FETCH_STATE_LEVEL_ORG' });
-        // this.props.dispatch({ type: 'FETCH_STATE_LEAD' });
+        this.props.dispatch({ type: 'FETCH_STATE_LEAD' });
         // this.props.dispatch({ type: 'FETCH_COHORTS' });
     }
 
@@ -86,6 +87,12 @@ class AddTrainer extends Component {
         let stateListArray = this.props.state_and_SLO.map((item, index) => {
             return <option value={item.state}>{item.state}</option> 
         })
+        let SLOListArray = this.props.state_and_SLO.map((item, index) => {
+            return <option value={item.name}>{item.name}</option> 
+        })
+        let stateLeadListArray = this.props.state_lead.map((item, index) => {
+            return <option value={item.first_name}>{item.first_name} {item.last_name}</option> 
+        })
         // let content = null;
         // if (this.props.user.userName) {
            let content = (
@@ -103,12 +110,13 @@ class AddTrainer extends Component {
                             <option value="">State</option>
                             {stateListArray}
                         </select>
-                        
                         <select name="state_level_organization">
                             <option value="">State Level Organization</option>
+                            {SLOListArray}
                         </select>
                         <select name="state_lead">
                             <option value="">State Lead</option>
+                            {stateLeadListArray}
                         </select>
                         <select name="cohort">
                             <option value="">Cohort</option>

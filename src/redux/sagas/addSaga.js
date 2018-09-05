@@ -14,9 +14,22 @@ function* getStateLevelOrg() {
     }
   }
 
+  function* getStateLead() {
+    try {
+      console.log('getStateLead saga');
+      const stateLeadResponse = yield call(axios.get, '/api/trainer/stateLead')
+      yield dispatch({
+        type: 'STATE_LEAD',
+        payload: stateLeadResponse.data
+      })
+    } catch (err) {
+      yield console.log(err);
+    }
+  }
+
 function* addSaga() {
     yield takeEvery('FETCH_STATE_LEVEL_ORG', getStateLevelOrg);
-    // yield takeEvery();
+    yield takeEvery('FETCH_STATE_LEAD', getStateLead);
   }
 
 export default addSaga;

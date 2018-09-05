@@ -11,10 +11,20 @@ const state_and_SLO = (state = [], action) => {
   }
 };
 
+const state_lead = (state = [], action) => {
+  switch (action.type) {
+    case 'STATE_LEAD':
+      return action.payload
+    default:
+      return state;
+  }
+};
+
 const store = combineReducers({
   user,
   login,
-  state_and_SLO
+  state_and_SLO,
+  state_lead 
 });
 
 export default store;
