@@ -1,5 +1,8 @@
-import { takeEvery, call, put as dispatch } from 'redux-saga/effects';
+import { takeEvery, takeLatest, call, put as dispatch } from 'redux-saga/effects';
 import axios from '../../../node_modules/axios';
+import {LOCAL_TRAINERS_ACTIONS} from '../actions/localTrainerActions';
+import { callAllLocalTrainers } from '../requests/localTrainerRequests';
+
 
 function* getStateLevelOrg() {
     try {
@@ -48,11 +51,28 @@ function* addNewLT(action){
     }
   }
 
+
+function* fetchLocalTrainers() {
+    try {
+        let allTrainers = yield callAllLocalTrainers();
+        console.log(allTrainers);
+        
+        yield dispatch({
+            type : LOCAL_TRAINERS_ACTIONS.SET_LOCAL_TRAINERS,
+            payload : allTrainers
+        })
+        
+    } catch (error) {
+        console.log(error);  
+    }
+}
+
 function* addSaga() {
     yield takeEvery('FETCH_STATE_LEVEL_ORG', getStateLevelOrg);
     yield takeEvery('FETCH_STATE_LEAD', getStateLead);
     yield takeEvery('FETCH_COHORTS', getCohorts);
     yield takeEvery('ADD_LT', addNewLT);
+    yield takeLatest(LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINERS, fetchLocalTrainers);
 }
 
 export default addSaga;

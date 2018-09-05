@@ -14,9 +14,9 @@ CREATE TABLE "national_trainer" (
 );
 
 CREATE TABLE "state_level_organization" (
-  "state_level_organization_id" SERIAL PRIMARY KEY,
-  "name" VARCHAR(255),
-  "state" VARCHAR(255)
+  "state_level_organization_id" SERIAL PRIMARY KEY,
+  "name" VARCHAR(255),
+  "state" VARCHAR(255)
 );
 
 CREATE TABLE "state_lead" (
@@ -50,7 +50,7 @@ CREATE TABLE "cohort" (
 CREATE TABLE "cohort_requirements" (
   "cohort_req_id" SERIAL PRIMARY KEY,
   "cohort_id" INTEGER REFERENCES cohort(cohort_id),
-  "requirement_id" INTEGER REFERENCES requirements(requirements_id),
+  "requirement_ref_id" INTEGER REFERENCES requirements(requirements_id),
   "due_date" date NOT NULL,
   "notes" text,
   "notification_1_date" date,

@@ -4,11 +4,11 @@ const encryptLib = require('../modules/encryption');
 const pool = require('../modules/pool');
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user.national_trainer_id);
 });
 
 passport.deserializeUser((id, done) => {
-  pool.query('SELECT id, username FROM person WHERE id = $1', [id]).then((result) => {
+  pool.query('SELECT national_trainer_id, user_name FROM national_trainer WHERE national_trainer_id = $1', [id]).then((result) => {
     // Handle Errors
     const user = result && result.rows && result.rows[0];
 
@@ -30,7 +30,7 @@ passport.use('local', new LocalStrategy({
   passReqToCallback: true,
   usernameField: 'username',
 }, ((req, username, password, done) => {
-    pool.query('SELECT * FROM person WHERE username = $1', [username])
+    pool.query('SELECT * FROM national_trainer WHERE user_name = $1', [username])
       .then((result) => {
         const user = result && result.rows && result.rows[0];
         if (user && encryptLib.comparePassword(password, user.password)) {
