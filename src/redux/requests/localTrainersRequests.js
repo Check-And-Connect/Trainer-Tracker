@@ -5,7 +5,5 @@ export function callAllLocalTrainers() {
         .then(res => res.data)
         .catch(err => {
             console.log(err);
-            
         })
-    
 }
