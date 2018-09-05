@@ -24,8 +24,17 @@ class AddTrainer extends Component {
                 state: '',
                 state_level_organization: '',
                 state_lead: '',
-                cohort: 1
-            }
+                cohort: 0
+            },
+            recentlyAdded: [
+                {
+                    first_name: '',
+                    last_name: '',
+                    title: '',
+                    state: '',
+                    state_level_organization: '',
+                }
+            ]
         }
     }
 
@@ -67,17 +76,28 @@ class AddTrainer extends Component {
         event.preventDefault();
         this.props.dispatch({ type: 'ADD_LT', payload: this.state.newTrainer })
         this.setState({
+            recentlyAdded: {
+                ...this.state.recentlyAdded,
+                first_name: this.state.newTrainer.first_name,
+                last_name: this.state.newTrainer.last_name,
+                title: this.state.newTrainer.title,
+                state: this.state.newTrainer.state,
+                state_level_organization: this.state.newTrainer.state_level_organization
+            }
+        })
+        this.setState({
             newTrainer: {
-                first_name: '',
-                last_name: '',
-                title: '',
-                email: '',
-                phone_number: '',
-                organization: '',
-                state: '',
-                state_level_organization: '',
-                state_lead: '',
-                cohort: ''
+                // first_name: '',
+                // last_name: '',
+                // title: '',
+                // email: '',
+                // phone_number: '',
+                // organization: '',
+                // district: '',
+                // state: '',
+                // state_level_organization: '',
+                // state_lead: '',
+                // cohort: ''
             }
         });
     }
@@ -95,6 +115,9 @@ class AddTrainer extends Component {
         let cohortListArray = this.props.localTrainerReducer.trainer_cohorts.map((item, index) => {
             return <option value={item.cohort_id}>{item.name}</option> 
         })
+        // let recentListArray = this.props.recentlyAdded.map((item, index) => {
+        //     return <li>{item.first_name} {item.last_name}</li> 
+        // })
 
         // let content = null;
         // if (this.props.user.userName) {
@@ -129,6 +152,7 @@ class AddTrainer extends Component {
                         <input type='submit' value='Submit' />
                     </form>
                     <h2>Recently Added</h2>
+                    {/* {recentListArray} */}
                 </div>
             );
         // } 
