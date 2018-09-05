@@ -10,6 +10,10 @@ const passport = require('./strategies/user.strategy');
 
 // Route includes
 const userRouter = require('./routes/user.router');
+const localTrainersRouter = require('./routes/localTrainers.router');
+const nationalTrainersRouter = require('./routes/nationalTrainers.router');
+const cohortsRouter = require('./routes/cohorts.router');
+const stateLeadsRouter = require('./routes/stateLeads.router');
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -24,6 +28,10 @@ app.use(passport.session());
 
 /* Routes */
 app.use('/api/user', userRouter);
+app.use('/api/localTrainers', localTrainersRouter);
+app.use('/api/nationalTrainers', nationalTrainersRouter);
+app.use('/api/cohorts', cohortsRouter);
+app.use('/api/stateLeads', stateLeadsRouter);
 
 // Serve static files
 app.use(express.static('build'));
