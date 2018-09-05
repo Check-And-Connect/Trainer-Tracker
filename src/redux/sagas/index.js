@@ -13,9 +13,9 @@ export default function* rootSaga() {
     userSaga(),
     loginSaga(),
     localTrainerSaga(),
-    nationalTrainerSaga(),
-    cohortSaga(),
-    stateLeadSaga()
+    // nationalTrainerSaga(),
+    // cohortSaga(),
+    // stateLeadSaga()
     // watchIncrementAsync()
   ]);
 }
