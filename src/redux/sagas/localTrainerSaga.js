@@ -8,15 +8,15 @@ import axios from "../../../node_modules/axios";
 import { LOCAL_TRAINERS_ACTIONS } from "../actions/localTrainerActions";
 
 function* getStateLevelOrg() {
-  try {
-    const stateLevelResponse = yield call(axios.get, "/api/localTrainers");
-    yield dispatch({
-      type: "STATE_AND_STATE_ORG",
-      payload: stateLevelResponse.data
-    });
-  } catch (err) {
-    yield console.log(err);
-  }
+    try {
+        const stateLevelResponse = yield call(axios.get, '/api/localTrainers//stateLevelOrganzation')
+        yield dispatch({
+            type: 'STATE_AND_STATE_ORG',
+            payload: stateLevelResponse.data
+        })
+    } catch (err) {
+        yield console.log(err);
+    }
 }
 
 function* getStateLead() {
