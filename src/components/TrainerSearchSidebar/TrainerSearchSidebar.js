@@ -52,7 +52,7 @@ class TrainerSearchSidebar extends Component {
                         value={setElement}
                         name="state_level_organization_name"
                         defaultChecked
-                        onChange={this.props.handleCheckboxClick}
+                        onChange={this.props.handleSloCheckbox}
                     />
                 </div>
             )

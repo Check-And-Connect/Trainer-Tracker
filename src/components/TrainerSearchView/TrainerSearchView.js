@@ -151,6 +151,41 @@ class TrainerSearchView extends Component {
         })
     }
 
+    handleSloCheckbox = (e) => {
+        console.log('handling slo checkbox');
+        let newSet = new Set(this.state.selections.state_level_organization_name);
+        let cohortSet= new Set();
+        if (newSet.has(e.target.value)){
+            newSet.delete(e.target.value)
+        } else {
+            newSet.add(e.target.value)
+        }
+
+        this.setState({
+            selections: {
+                ...this.state.selections,
+                state_level_organization_name: newSet
+            }
+        })
+
+        let filteredTrainersList = [];
+        this.props.localTrainersReducer.allLocalTrainers.forEach((trainer) => {
+            if (newSet.has(trainer.state_level_organization.state_level_organization_name)){
+                cohortSet.add(trainer.cohort.cohort_name);
+                filteredTrainersList.push(trainer)
+            }
+        })
+
+        this.setState({
+            localTrainers: filteredTrainersList,
+            checkboxesDisplayed: {
+                ...this.state.checkboxesDisplayed,
+                cohort_name: cohortSet
+            }
+        })
+    }
+
+
     render() {
         let { classes } = this.props;
         let trainersTableBody = null;
@@ -180,6 +215,7 @@ class TrainerSearchView extends Component {
                         {...this.state.checkboxesDisplayed} 
                         handleCheckboxClick={this.handleCheckboxClick} 
                         handleStateCheckbox={this.handleStateCheckbox}
+                        handleSloCheckbox={this.handleSloCheckbox}
                     />                 
                 </div>
                 <div className={classes.rightPanel}>
