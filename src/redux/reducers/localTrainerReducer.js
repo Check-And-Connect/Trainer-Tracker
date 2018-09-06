@@ -38,9 +38,21 @@ const state_and_SLO = (state = [], action) => {
     }
 }
 
+
+const singleTrainerReqInfo =  (state = [], action) => {
+  switch (action.type) {
+      case LOCAL_TRAINERS_ACTIONS.SET_TRAINER_REQUIREMENT_SINGLE:
+          return action.payload || state
+  
+      default:
+          return state;
+  }
+}
+
   export default combineReducers({
     state_and_SLO,
     state_lead,
     trainer_cohorts, 
-    allLocalTrainers
+    allLocalTrainers,
+    singleTrainerReqInfo
   });
