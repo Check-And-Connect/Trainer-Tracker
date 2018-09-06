@@ -1,3 +1,4 @@
+
 import {
   takeEvery,
   takeLatest,
@@ -7,55 +8,17 @@ import {
 import axios from "../../../node_modules/axios";
 import { LOCAL_TRAINERS_ACTIONS } from "../actions/localTrainerActions";
 
-function* getStateLevelOrg() {
-    try {
-        const stateLevelResponse = yield call(axios.get, '/api/localTrainers//stateLevelOrganzation')
-        yield dispatch({
-            type: 'STATE_AND_STATE_ORG',
-            payload: stateLevelResponse.data
-        })
-    } catch (err) {
-        yield console.log(err);
+
+
+
+function* addNewLT(action){
+    try{
+      yield call(axios.post, '/api/localTrainers/addLT', action.payload);
+    } catch (error) {
+      console.log(error);
     }
-}
-
-function* getStateLead() {
-  try {
-    const stateLeadResponse = yield call(
-      axios.get,
-      "/api/localTrainers/stateLead"
-    );
-    yield dispatch({
-      type: "STATE_LEAD",
-      payload: stateLeadResponse.data
-    });
-  } catch (err) {
-    yield console.log(err);
   }
-}
 
-function* getCohorts() {
-  try {
-    const cohortResponse = yield call(axios.get, "/api/localTrainers/cohort");
-    yield dispatch({
-      type: "TRAINER_COHORTS",
-      payload: cohortResponse.data
-    });
-  } catch (err) {
-    yield console.log(err);
-  }
-}
-
-function* addNewLT(action) {
-  try {
-    yield call(axios.post, "/api/localTrainers/addLT", action.payload);
-    //   yield dispatch({
-    //     type: 'GET_DATA'
-    //   })
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 function* fetchLocalTrainers() {
   try {
@@ -93,18 +56,15 @@ function* fetchRequirementForLocalTrainer(action) {
 }
 
 function* addSaga() {
-  yield takeEvery("FETCH_STATE_LEVEL_ORG", getStateLevelOrg);
-  yield takeEvery("FETCH_STATE_LEAD", getStateLead);
-  yield takeEvery("FETCH_COHORTS", getCohorts);
-  yield takeEvery("ADD_LT", addNewLT);
-  yield takeLatest(
-    LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINERS,
-    fetchLocalTrainers
-  );
+
+    yield takeEvery(LOCAL_TRAINERS_ACTIONS.ADD_LT, addNewLT);
+    yield takeLatest(LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINERS, fetchLocalTrainers);
+
   yield takeLatest(
     LOCAL_TRAINERS_ACTIONS.FETCH_TRAINER_REQUIREMENT_SINGLE,
     fetchRequirementForLocalTrainer
   );
+
 }
 
 export default addSaga;

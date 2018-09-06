@@ -1,13 +1,13 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import { withStyles } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import React from "react";
+import Button from "@material-ui/core/Button";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import { withStyles } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 class Nav extends React.Component {
   state = {
-    anchorEl: null,
+    anchorEl: null
   };
 
   handleClick = event => {
@@ -22,66 +22,97 @@ class Nav extends React.Component {
     const { anchorEl } = this.state;
 
     return (
-      <div className="buttonGroup">
-      <Button
-          aria-owns={anchorEl ? 'simple-menu' : null}
-          aria-haspopup="true"
-        >
-          <Link to="/user">HOME4NOW</Link>
-        </Button>
-      <Button
-          aria-owns={anchorEl ? 'simple-menu' : null}
-          aria-haspopup="true"
-        >
-          Search Trainers
-        </Button>
+      <div>
+        <Link to="/user">
+          <Button
+            aria-owns={anchorEl ? "simple-menu" : null}
+            aria-haspopup="true"
+          >
+            HOME4NOW
+          </Button>
+        </Link>
+
+        <Link to="/">
+          <Button
+            aria-owns={anchorEl ? "simple-menu" : null}
+            aria-haspopup="true"
+          >
+            Search Trainers
+          </Button>
+        </Link>
+
+        <Link to="/info">
+          <Button
+            aria-owns={anchorEl ? "simple-menu" : null}
+            aria-haspopup="true"
+          >
+            Cohort Manager
+          </Button>
+        </Link>
+
         <Button
-          aria-owns={anchorEl ? 'simple-menu' : null}
-          aria-haspopup="true"
-          
-        >
-        <Link to="/info">Cohort Manager</Link>
-          
-        </Button>
-        <Button
-          aria-owns={anchorEl ? 'simple-menu' : null}
+          aria-owns={anchorEl ? "simple-menu" : null}
           aria-haspopup="true"
           onClick={this.handleClick}
         >
           Create
         </Button>
-        <Menu 
-          
+
+        <Menu
           id="simple-menu"
-          className="navBar"
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
-          <MenuItem className={this.props.classes.dropDown} onClick={this.handleClose}><Link to="/addtrainer">Trainer</Link></MenuItem>
+          <Link to="/addtrainer">
+            <MenuItem
+              className={this.props.classes.dropDown}
+              onClick={this.handleClose}
+            >
+              Trainer
+            </MenuItem>
+          </Link>
 
-          <MenuItem className={this.props.classes.dropDown} onClick={this.handleClose}>Cohort</MenuItem>
+          <Link to="/">
+            <MenuItem
+              className={this.props.classes.dropDown}
+              onClick={this.handleClose}
+            >
+              Cohort
+            </MenuItem>
+          </Link>
 
-          <MenuItem className={this.props.classes.dropDown} onClick={this.handleClose}>Requirements</MenuItem>
+          <Link to="/">
+            <MenuItem
+              className={this.props.classes.dropDown}
+              onClick={this.handleClose}
+            >
+              Requirements
+            </MenuItem>
+          </Link>
 
-          <MenuItem className={this.props.classes.dropDown} onClick={this.handleClose}> 
-          <Link to="/register">National Trainer</Link></MenuItem>
+          <Link to="/register">
+            <MenuItem
+              className={this.props.classes.dropDown}
+              onClick={this.handleClose}
+            >
+              National Trainer
+            </MenuItem>
+          </Link>
 
-          <MenuItem className={this.props.classes.dropDown} onClick={this.handleClose}>State Lead</MenuItem>
+          <Link to="/">
+            <MenuItem
+              className={this.props.classes.dropDown}
+              onClick={this.handleClose}
+            >
+              State Lead
+            </MenuItem>
+          </Link>
         </Menu>
       </div>
     );
   }
 }
-
-
-
-
-
-
-
-
-
 
 // const Nav = () => (
 //   <div className="navbar">
@@ -102,10 +133,6 @@ class Nav extends React.Component {
 //   </div>
 // );
 
-let styles = {
-  dropDown:{
-    display: 'flex',
+let styles = {};
 
-  }
-}
 export default withStyles(styles)(Nav);

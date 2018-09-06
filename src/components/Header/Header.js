@@ -41,6 +41,7 @@ class Header extends Component  {
           >
             Log Out
           </button>
+          
         </div>
       );
     }
@@ -51,6 +52,9 @@ class Header extends Component  {
           <h1 className="lead">{ content }</h1>
           <img className="logo" src={require('../../styles/images/checkconnect_logo_h_rgb.jpg')} />
           <img className="person" src={require('../../styles/images/person_icon.jpg')} />
+
+         <Nav />
+
         </div>
       </div>
       )

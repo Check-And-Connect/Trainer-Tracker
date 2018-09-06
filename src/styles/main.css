@@ -63,9 +63,12 @@ ul {
     overflow: hidden;
 }
 
+
 /* li {
     float: left;
 } */
+
+
 
 li a {
     display: block;
@@ -100,10 +103,10 @@ li a:hover {
     padding: 10px;
 }
 
-.navBar {
+/* .navBar {
     width: 190px;
     align: left;
-}
+} */
 
 .buttonGroup {
     float: right;
@@ -111,4 +114,9 @@ li a:hover {
 
 .logOut {
     float: left;
+}
+
+/* center headings */
+.centerHeadings {
+    text-align: center;
 }
