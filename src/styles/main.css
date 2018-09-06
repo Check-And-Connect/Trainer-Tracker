@@ -118,3 +118,8 @@ li a:hover {
 .logOut {
     float: left;
 }
+
+/* center headings */
+.centerHeadings {
+    text-align: center;
+}

@@ -153,58 +153,6 @@ router.get("/stateLevelOrganization", (req, res) => {
 
 })
 
-
-router.get('/stateLevelOrganization', (req, res) => {
-    // if (req.isAuthenticated) {
-        const queryText = `SELECT "state", "name", "state_level_organization_id" FROM state_level_organization;`;
-        pool.query(queryText)
-            .then((results) => {
-                res.send(results.rows)
-                console.log(results.rows);
-
-            }).catch((err) => {
-                console.log(err);
-                res.sendStatus(500);
-            })
-    // } else {
-    //     res.sendStatus(403);
-    // }
-});
-
-router.get('/stateLead', (req, res) => {
-    // if (req.isAuthenticated) {
-        const queryText = `SELECT "first_name", "last_name", "state_lead_id" FROM state_lead;`;
-        pool.query(queryText)
-            .then((results) => {
-                res.send(results.rows)
-                console.log(results.rows);
-
-            }).catch((err) => {
-                console.log(err);
-                res.sendStatus(500);
-            })
-    // } else {
-    //     res.sendStatus(403);
-    // }
-});
-
-router.get('/cohort', (req, res) => {
-    // if (req.isAuthenticated) {
-        const queryText = `SELECT "name", "cohort_id" FROM cohort;`;
-        pool.query(queryText)
-            .then((results) => {
-                res.send(results.rows)
-                console.log(results.rows);
-
-            }).catch((err) => {
-                console.log(err);
-                res.sendStatus(500);
-            })
-    // } else {
-    //     res.sendStatus(403);
-    // }
-});
-
 router.post('/addLT', (req, res) => {
     console.log('got to post', req.body);
     // if (req.isAuthenticated) {

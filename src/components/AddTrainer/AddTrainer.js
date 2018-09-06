@@ -5,7 +5,9 @@ import { USER_ACTIONS } from '../../redux/actions/userActions';
 
 const mapStateToProps = state => ({
     user: state.user,
-    localTrainerReducer: state.localTrainerReducer
+    localTrainerReducer: state.localTrainerReducer,
+    cohortReducer: state.cohortReducer,
+    stateLeadReducer: state.stateLeadReducer
 });
 
 class AddTrainer extends Component {
@@ -64,6 +66,18 @@ class AddTrainer extends Component {
         }
     }
 
+    // handleChangeForState = (propertyName) => {
+    //     return (event) => {
+    //         this.setState({
+    //             newTrainer: {
+    //                 ...this.state.newTrainer,
+    //                 [propertyName]: event.target.value
+    //             }
+    //         })
+    //         this.props.dispatch({ type: 'FILTER_STATE', payload: this.state.newTrainer.state });
+    //     }
+    // }
+
     // addLog = () => {
     //     this.props.dispatch({
     //         type: 'POST_LOG',
@@ -102,17 +116,19 @@ class AddTrainer extends Component {
         });
     }
 
+    
+
     render() {
-        let stateListArray = this.props.localTrainerReducer.state_and_SLO.map((item, index) => {
+        let stateListArray = this.props.cohortReducer.state_and_SLO.map((item, index) => {
             return <option value={item.state}>{item.state}</option> 
         })
-        let SLOListArray = this.props.localTrainerReducer.state_and_SLO.map((item, index) => {
+        let SLOListArray = this.props.cohortReducer.state_and_SLO.map((item, index) => {
             return <option value={item.name}>{item.name}</option> 
         })
-        let stateLeadListArray = this.props.localTrainerReducer.state_lead.map((item, index) => {
+        let stateLeadListArray = this.props.stateLeadReducer.state_lead.map((item, index) => {
             return <option value={item.state_lead_id}>{item.first_name} {item.last_name}</option> 
         })
-        let cohortListArray = this.props.localTrainerReducer.trainer_cohorts.map((item, index) => {
+        let cohortListArray = this.props.cohortReducer.trainer_cohorts.map((item, index) => {
             return <option value={item.cohort_id}>{item.name}</option> 
         })
         // let recentListArray = this.props.recentlyAdded.map((item, index) => {
@@ -124,7 +140,7 @@ class AddTrainer extends Component {
            let content = (
                 <div>
                     {/* <Nav /> */}
-                    <h2>Add New Trainer</h2>
+                    <h2 className='centerHeadings'>Add New Trainer</h2>
                     <form onSubmit={this.addNewTrainer}>
                         <input type='text' placeholder='First Name' value={this.state.newTrainer.first_name} onChange={this.handleChangeFor('first_name')} />
                         <input type='text' placeholder='Last Name' value={this.state.newTrainer.last_name} onChange={this.handleChangeFor('last_name')} />
@@ -133,7 +149,7 @@ class AddTrainer extends Component {
                         <input type='text' placeholder='Phone Number' value={this.state.newTrainer.phone_number} onChange={this.handleChangeFor('phone_number')} />
                         <input type='text' placeholder='Organization' value={this.state.newTrainer.organization} onChange={this.handleChangeFor('organization')} />
                         <input type='text' placeholder='District' value={this.state.newTrainer.district} onChange={this.handleChangeFor('district')} />
-                        <select onChange={this.handleChangeFor('state')}>
+                        <select onChange={this.handleChangeForState('state')}>
                             <option value="">State</option>
                             {stateListArray}
                         </select>
@@ -151,7 +167,7 @@ class AddTrainer extends Component {
                         </select>
                         <input type='submit' value='Submit' />
                     </form>
-                    <h2>Recently Added</h2>
+                    <h2 className='centerHeadings'>Recently Added</h2>
                     {/* {recentListArray} */}
                 </div>
             );
