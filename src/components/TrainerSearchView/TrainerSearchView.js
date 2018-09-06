@@ -66,7 +66,11 @@ class TrainerSearchView extends Component {
                 [e.target.name]: newSet
             }
         })
-        this.forceUpdate();
+
+        let filteredTrainersList = this.props.localTrainersReducer.allLocalTrainers.filter((trainer) => newSet.has(trainer[e.target.name]))
+        this.setState({
+            localTrainers: filteredTrainersList
+        })
     }
 
     render() {

@@ -14,6 +14,7 @@ class TrainerSearchSidebar extends Component{
                                 type="checkbox" 
                                 value={state} 
                                 name="state"
+                                defaultChecked
                                 onChange={this.props.handleCheckboxClick}
                             />
                         </div>
@@ -27,6 +28,7 @@ class TrainerSearchSidebar extends Component{
                                 type="checkbox" 
                                 value={slo} 
                                 name="slo"
+                                defaultChecked
                                 onChange={this.props.handleCheckboxClick}
                             />
                         </div>
@@ -40,6 +42,7 @@ class TrainerSearchSidebar extends Component{
                                 type="checkbox" 
                                 value={cohort} 
                                 name="cohort"
+                                defaultChecked
                                 onChange={this.props.handleCheckboxClick}
                             />
                         </div>
