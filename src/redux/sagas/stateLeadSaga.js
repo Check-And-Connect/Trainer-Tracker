@@ -1,4 +1,4 @@
-import { takeEvery, takeLatest, call, put as dispatch } from 'redux-saga/effects';
+import { takeEvery, call, put as dispatch } from 'redux-saga/effects';
 import axios from '../../../node_modules/axios';
 import {STATE_LEAD_ACTIONS} from '../actions/stateLeadActions';
 
