@@ -13,14 +13,14 @@ body {
     color: #ece7e7;
 }
 
-form {
+/* form {
     background-color: #dbd5d5;
     width: 30%;
     height: 250px;
     margin: 20px auto;
     padding: 25px;
     border-radius: 2px;
-}
+} */
 
 input {
     margin: 5px;
@@ -60,9 +60,9 @@ ul {
     overflow: hidden;
 }
 
-li {
+/* li {
     float: left;
-}
+} */
 
 li a {
     display: block;

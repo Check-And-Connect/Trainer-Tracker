@@ -10,7 +10,10 @@ import { COHORT_ACTIONS } from '../../redux/actions/cohortActions';
 import CohortManagerFilter from "../CohortManagerFilter/CohortManagerFilter";
 import Scheduler from "../Scheduler/Scheduler";
 import CohortManagerTable from "../CohortManagerTable/CohortManagerTable";
-import SearchCohortTable from "../SearchCohortTable/SearchCohortTable"
+import SearchCohortTable from "../SearchCohortTable/SearchCohortTable";
+import CohortManagerModal from "../CohortManagerModal/CohortManagerModal";
+
+
 const mapStateToProps = state => ({
   user: state.user,
   localTrainers : state.localTrainerReducer
@@ -35,7 +38,12 @@ const styles = {
 class CohortManager extends Component {
 
   state = {
-    currentTrainers : []
+    currentTrainers : [],
+    cellInfo : {
+      localTrainerId : 0,
+      requirementId : 0
+    },
+    dialogOpen : false
   }
 
   componentDidMount() {
@@ -45,6 +53,9 @@ class CohortManager extends Component {
     // this.props.dispatch({type : REQUIREMENTS.FETCH_REQUIREMENTS})
     // this.props.dispatch({type : COHORT_ACTIONS.FETCH_COHORTS})
     this.props.dispatch({type : COHORT_ACTIONS.FETCH_SLOS})
+    this.setState({
+      currentTrainers : this.props.localTrainers.allLocalTrainers
+    })
 
   }
 
@@ -61,6 +72,29 @@ class CohortManager extends Component {
     }
   }
 
+  handleCellClick = (localTrainerId, requirementId) => {
+    console.log('trainer id ' + localTrainerId);
+    console.log('req id ' + requirementId);
+
+    this.setState({
+      cellInfo : {
+        localTrainerId : localTrainerId,
+        requirementId : requirementId
+      },
+      dialogOpen : true
+    })
+    
+    console.log('cell clicked');
+    
+    
+  }
+
+  handleDialogClose = () => {
+    this.setState({
+      dialogOpen : false
+    })
+  }
+
   render() {
     let { classes } = this.props;
 
@@ -74,7 +108,10 @@ class CohortManager extends Component {
           </div>
           <div className={classes.rightPanel}> 
             <SearchCohortTable/>
-            <CohortManagerTable currentTrainers={this.state.currentTrainers}/>
+            <CohortManagerTable onCellClick={this.handleCellClick} currentTrainers={this.state.currentTrainers}/>
+            {this.state.dialogOpen &&
+            <CohortManagerModal dialogOpen={this.state.dialogOpen} handleDialgClose={this.handleDialogClose} cellInfo={this.state.cellInfo}/>
+            }
           </div>
         </div>
       </div>
