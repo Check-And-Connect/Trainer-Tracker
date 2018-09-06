@@ -63,15 +63,9 @@ ul {
     overflow: hidden;
 }
 
-<<<<<<< HEAD
 /* li {
     float: left;
 } */
-=======
-li {
-    float: right;
-}
->>>>>>> master
 
 li a {
     display: block;

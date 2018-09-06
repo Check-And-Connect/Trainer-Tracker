@@ -100,7 +100,6 @@ class CohortManager extends Component {
 
     return (
       <div>
-        <Nav />
         <div className={classes.mainComponent}>
           <div className={classes.leftPanel}>
             <CohortManagerFilter/>
