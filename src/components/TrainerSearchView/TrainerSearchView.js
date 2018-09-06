@@ -7,9 +7,29 @@ import { COHORT_ACTIONS } from '../../redux/actions/cohortActions';
 
 import TrainerSearchSidebar from '../TrainerSearchSidebar/TrainerSearchSidebar';
 
+import { withStyles } from "@material-ui/core";
 import { Table, TableBody, TableHead, TableRow, TableCell } from '@material-ui/core';
 
 let displayedCheckboxes = null;
+
+
+const styles = {
+    mainComponent: {
+      display: "Grid",
+      gridTemplateColumns: "1fr 4fr"
+    },
+    leftPanel: {
+      display: "Grid",
+      gridTemplateRows: "3fr 1fr",
+      backgroundColor: "red"
+    },
+    rightPanel: {
+      display : "Grid",
+      gridTemplateRows:"1fr 9fr",
+      backgroundColor: "yellow"
+    }
+  };
+
 
 class TrainerSearchView extends Component {
     constructor(props) {
@@ -94,7 +114,7 @@ class TrainerSearchView extends Component {
     }
 
     render() {
-
+        let { classes } = this.props;
 
         let trainersTableBody = null;
         if (this.state.localTrainers) {
@@ -106,20 +126,25 @@ class TrainerSearchView extends Component {
                         <TableCell>{trainer.last_name}</TableCell>
                         <TableCell>{trainer.state}</TableCell>
                         <TableCell>{trainer.state_level_organization.state_level_organization_name}</TableCell>
-                        <TableCell>{JSON.stringify(trainer.requirements)}</TableCell>
+                        <TableCell>Requirements</TableCell>
                     </TableRow>
                 )
             })
         }
         return (
-            <div>
-                {JSON.stringify(this.state.selections)}
-                <TrainerSearchSidebar {...displayedCheckboxes} handleCheckboxClick={this.handleCheckboxClick}/>
-                <input
-                    onChange={this.handleSearchInputChange}
-                    placeholder="filter table"
-                    value={this.state.searchInput}
-                />
+            <React.Fragment>
+            {JSON.stringify(this.state.selections)}
+            <input
+                onChange={this.handleSearchInputChange}
+                placeholder="filter table"
+                value={this.state.searchInput}
+            />
+            <div className={classes.mainComponent}>
+                 <div className={classes.leftPanel} >
+                    <TrainerSearchSidebar {...displayedCheckboxes} handleCheckboxClick={this.handleCheckboxClick}/>                 
+                </div>
+                <div className={classes.rightPanel}>
+
                 <Table id="trainer-search-table">
                     <TableHead>
                         <TableRow>
@@ -135,11 +160,15 @@ class TrainerSearchView extends Component {
                         {trainersTableBody}
                     </TableBody>
                 </Table>
+                </div>
             </div>
+            </React.Fragment>
         )
     }
 };
 
 const mapStateToProps = (state) => state;
 
-export default connect(mapStateToProps)(TrainerSearchView);
+
+const componentWithStyle = withStyles(styles)(TrainerSearchView);
+export default connect(mapStateToProps)(componentWithStyle);
