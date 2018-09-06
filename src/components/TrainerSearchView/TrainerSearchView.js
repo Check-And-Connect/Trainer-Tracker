@@ -14,7 +14,15 @@ class TrainerSearchView extends Component {
         super(props)
         this.state = {
             localTrainers: [],
-            searchInput: ''
+            searchInput: '',
+            // Using sets instead of arrays for the selections, since they are limited to 
+            // unique values by default.
+            selections: {
+                state: new Set(),
+                slo: new Set(),
+                cohort: new Set(),
+                status: new Set()
+            }
         }
     }
 
@@ -22,12 +30,6 @@ class TrainerSearchView extends Component {
         this.props.dispatch({
             type: LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINERS
         })
-        // Not quite sure how the timing of this is supposed to work.
-        // We want to wait until the full trainer list is mapped from redux state to props,
-        // and then assign that whole array to local state. Ideally this means we have a
-        // pretty simple render function that works the same way on the initial page load
-        // as it does when one of the checkboxes is toggled.
-
     }
 
     componentDidUpdate = (prevProps) => {
@@ -48,9 +50,24 @@ class TrainerSearchView extends Component {
         })
     }
 
-    // This function gets the checkbox value off of the event object and uses that to filter the array of trainers.
+    handleCheckboxClick = (e) => {
+        console.log('handling checkbox click from the main component. e.target.name:', e.target.name);
+        console.log('e.target.value', e.target.value);
+        let newSet = new Set(this.state.selections[e.target.name]);
+        if (newSet.has(e.target.value)){
+            newSet.delete(e.target.value)
+        } else {
+            newSet.add(e.target.value)
+        }
 
-
+        this.setState({
+            selections: {
+                ...this.state.selections,
+                [e.target.name]: newSet
+            }
+        })
+        this.forceUpdate();
+    }
 
     render() {
 
@@ -68,11 +85,11 @@ class TrainerSearchView extends Component {
 
                 // When we filter the trainer array, we will need to rerender, which means we recalcuate the checkboxes to display.
                 if (!displayedCheckboxes.state.includes(trainer.state)) displayedCheckboxes.state.push(trainer.state);
-                if (!displayedCheckboxes.slo.includes(trainer.state_level_organization)) displayedCheckboxes.slo.push(trainer.state_level_organization);
-                if (!displayedCheckboxes.cohort.includes(trainer.cohort_name)) displayedCheckboxes.cohort.push(trainer.cohort_name);
+                if (!displayedCheckboxes.slo.includes(trainer.state_level_organization.state_level_organization_name)){
+                    displayedCheckboxes.slo.push(trainer.state_level_organization.state_level_organization_name);
+                }
+                if (!displayedCheckboxes.cohort.includes(trainer.cohort.cohort_name)) displayedCheckboxes.cohort.push(trainer.cohort.cohort_name);
                 if (!displayedCheckboxes.status.includes(trainer.status)) displayedCheckboxes.status.push(trainer.status);
-
-                console.log(displayedCheckboxes);
 
                 return (
                     <TableRow key={trainer.local_trainers_id}>
@@ -88,6 +105,8 @@ class TrainerSearchView extends Component {
         }
         return (
             <div>
+                {JSON.stringify(this.state.selections)}
+                <TrainerSearchSidebar {...displayedCheckboxes} handleCheckboxClick={this.handleCheckboxClick}/>
                 <input
                     onChange={this.handleSearchInputChange}
                     placeholder="filter table"
@@ -108,8 +127,6 @@ class TrainerSearchView extends Component {
                         {trainersTableBody}
                     </TableBody>
                 </Table>
-
-                {JSON.stringify(this.props.localTrainersReducer.allLocalTrainers)}
             </div>
         )
     }
