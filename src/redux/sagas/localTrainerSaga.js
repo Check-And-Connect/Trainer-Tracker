@@ -6,9 +6,6 @@ import { callAllLocalTrainers } from '../requests/localTrainerRequests';
 function* addNewLT(action){
     try{
       yield call(axios.post, '/api/localTrainers/addLT', action.payload);
-    //   yield dispatch({
-    //     type: 'GET_DATA'
-    //   })
     } catch (error) {
       console.log(error);
     }
@@ -30,7 +27,7 @@ function* fetchLocalTrainers() {
 }
 
 function* addSaga() {
-    yield takeEvery('ADD_LT', addNewLT);
+    yield takeEvery(LOCAL_TRAINERS_ACTIONS.ADD_LT, addNewLT);
     yield takeLatest(LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINERS, fetchLocalTrainers);
 }
 

@@ -78,3 +78,8 @@ li a:hover {
     text-decoration: underline;
     color: #eee;
 }
+
+/* center headings */
+.centerHeadings {
+    text-align: center;
+}
