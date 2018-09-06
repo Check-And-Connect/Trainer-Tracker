@@ -49,7 +49,7 @@ class UserPage extends Component {
 
     return (
       <div>
-        <Nav />
+        {/* <Nav /> */}
         { content }
       </div>
     );

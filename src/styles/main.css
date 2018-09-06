@@ -63,15 +63,12 @@ ul {
     overflow: hidden;
 }
 
-<<<<<<< HEAD
+
 /* li {
     float: left;
 } */
-=======
-li {
-    float: right;
-}
->>>>>>> master
+
+
 
 li a {
     display: block;
@@ -106,10 +103,10 @@ li a:hover {
     padding: 10px;
 }
 
-.navBar {
+/* .navBar {
     width: 190px;
     align: left;
-}
+} */
 
 .buttonGroup {
     float: right;
