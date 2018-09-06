@@ -63,9 +63,9 @@ ul {
     overflow: hidden;
 }
 
-li {
+/* li {
     float: right;
-}
+} */
 
 li a {
     display: block;
@@ -100,10 +100,10 @@ li a:hover {
     padding: 10px;
 }
 
-.navBar {
+/* .navBar {
     width: 190px;
     align: left;
-}
+} */
 
 .buttonGroup {
     float: right;
