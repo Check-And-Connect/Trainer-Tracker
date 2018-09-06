@@ -26,7 +26,12 @@ class Nav extends React.Component {
       <Button
           aria-owns={anchorEl ? 'simple-menu' : null}
           aria-haspopup="true"
-          
+        >
+          <Link to="/user">HOME4NOW</Link>
+        </Button>
+      <Button
+          aria-owns={anchorEl ? 'simple-menu' : null}
+          aria-haspopup="true"
         >
           Search Trainers
         </Button>
@@ -35,7 +40,8 @@ class Nav extends React.Component {
           aria-haspopup="true"
           
         >
-          Cohort Manager
+        <Link to="/info">Cohort Manager</Link>
+          
         </Button>
         <Button
           aria-owns={anchorEl ? 'simple-menu' : null}
@@ -52,10 +58,15 @@ class Nav extends React.Component {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
-          <MenuItem className={this.props.classes.dropDown} onClick={this.handleClose}>Trainer</MenuItem>
+          <MenuItem className={this.props.classes.dropDown} onClick={this.handleClose}><Link to="/addtrainer">Trainer</Link></MenuItem>
+
           <MenuItem className={this.props.classes.dropDown} onClick={this.handleClose}>Cohort</MenuItem>
+
           <MenuItem className={this.props.classes.dropDown} onClick={this.handleClose}>Requirements</MenuItem>
-          <MenuItem className={this.props.classes.dropDown} onClick={this.handleClose}>National Trainer</MenuItem>
+
+          <MenuItem className={this.props.classes.dropDown} onClick={this.handleClose}> 
+          <Link to="/register">National Trainer</Link></MenuItem>
+
           <MenuItem className={this.props.classes.dropDown} onClick={this.handleClose}>State Lead</MenuItem>
         </Menu>
       </div>
