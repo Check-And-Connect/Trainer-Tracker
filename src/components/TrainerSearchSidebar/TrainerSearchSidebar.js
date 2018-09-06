@@ -65,6 +65,7 @@ import {
   Typography
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { isNullOrUndefined } from "util";
 
 const styles = {};
 
@@ -75,17 +76,13 @@ class TrainerSearchSidebar extends Component {
 
   render() {
     let { classes } = this.props;
-    let stateCheckboxes = 'placeholder';
+    let stateCheckboxes = null;
+    let stateLevelOrgCheckboxes = null;
+    let cohortNameCheckboxes = null;
 
-    const logStateName = (thing) => {
-        console.log(thing);
-    }
-
-    console.log('TYPE', typeof this.props.state_name);
     if (this.props.state_name !== undefined){
         const stateArray = Array.from(this.props.state_name);
         stateCheckboxes = stateArray.map((setElement) => {
-            console.log(setElement);
             return(
                 <div>
                     <p>{setElement}</p>
@@ -99,7 +96,42 @@ class TrainerSearchSidebar extends Component {
                 </div>
             )
         })
-        // stateCheckboxes = this.props.state_name.forEach(logStateName)
+    }
+
+    if (this.props.state_level_organization_name !== undefined){
+        const sloArray = Array.from(this.props.state_level_organization_name);
+        stateLevelOrgCheckboxes = sloArray.map((setElement) => {
+            return(
+                <div>
+                    <p>{setElement}</p>
+                    <input
+                        type="checkbox"
+                        value={setElement}
+                        name="state_level_organization_name"
+                        defaultChecked
+                        onChange={this.props.handleCheckboxClick}
+                    />
+                </div>
+            )
+        })
+    }
+
+    if (this.props.cohort_name !== undefined){
+        const cohortArray = Array.from(this.props.cohort_name);
+        cohortNameCheckboxes = cohortArray.map((setElement) => {
+            return(
+                <div>
+                    <p>{setElement}</p>
+                    <input
+                        type="checkbox"
+                        value={setElement}
+                        name="cohort_name"
+                        defaultChecked
+                        onChange={this.props.handleCheckboxClick}
+                    />
+                </div>
+            )
+        })
     }
 
     return (
@@ -124,7 +156,7 @@ class TrainerSearchSidebar extends Component {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Typography>
-                {this.props.state_level_organization_name}
+                {stateLevelOrgCheckboxes}
             </Typography>
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -136,7 +168,7 @@ class TrainerSearchSidebar extends Component {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Typography>
-                {this.props.cohort_name}
+                {cohortNameCheckboxes}
             </Typography>
           </ExpansionPanelDetails>
         </ExpansionPanel>
