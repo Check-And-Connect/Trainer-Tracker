@@ -69,8 +69,39 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 const styles = {};
 
 class TrainerSearchSidebar extends Component {
+    constructor(props){
+        super(props)
+    }
+
   render() {
     let { classes } = this.props;
+    let stateCheckboxes = 'placeholder';
+
+    const logStateName = (thing) => {
+        console.log(thing);
+    }
+
+    console.log('TYPE', typeof this.props.state_name);
+    if (this.props.state_name !== undefined){
+        const stateArray = Array.from(this.props.state_name);
+        stateCheckboxes = stateArray.map((setElement) => {
+            console.log(setElement);
+            return(
+                <div>
+                    <p>{setElement}</p>
+                    <input
+                        type="checkbox"
+                        value={setElement}
+                        name="state"
+                        defaultChecked
+                        onChange={this.props.handleCheckboxClick}
+                    />
+                </div>
+            )
+        })
+        // stateCheckboxes = this.props.state_name.forEach(logStateName)
+    }
+
     return (
       <div>
         <ExpansionPanel>
@@ -80,11 +111,9 @@ class TrainerSearchSidebar extends Component {
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-              eget.
-            </Typography>
+              <Typography>
+                {stateCheckboxes}
+              </Typography>
           </ExpansionPanelDetails>
         </ExpansionPanel>
         <ExpansionPanel>
@@ -95,9 +124,7 @@ class TrainerSearchSidebar extends Component {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-              eget.
+                {this.props.state_level_organization_name}
             </Typography>
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -109,9 +136,7 @@ class TrainerSearchSidebar extends Component {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-              eget.
+                {this.props.cohort_name}
             </Typography>
           </ExpansionPanelDetails>
         </ExpansionPanel>

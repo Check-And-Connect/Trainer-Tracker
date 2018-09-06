@@ -110,7 +110,7 @@ class CohortManager extends Component {
             <SearchCohortTable/>
             <CohortManagerTable onCellClick={this.handleCellClick} currentTrainers={this.state.currentTrainers}/>
             {this.state.dialogOpen &&
-            <CohortManagerModal dialogOpen={this.state.dialogOpen} handleDialgClose={this.handleDialogClose} cellInfo={this.state.cellInfo}/>
+            <CohortManagerModal dialogOpen={this.state.dialogOpen} handleDialogClose={this.handleDialogClose} cellInfo={this.state.cellInfo}/>
             }
           </div>
         </div>

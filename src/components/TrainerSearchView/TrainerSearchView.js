@@ -10,9 +10,6 @@ import TrainerSearchSidebar from '../TrainerSearchSidebar/TrainerSearchSidebar';
 import { withStyles } from "@material-ui/core";
 import { Table, TableBody, TableHead, TableRow, TableCell } from '@material-ui/core';
 
-let displayedCheckboxes = null;
-
-
 const styles = {
     mainComponent: {
       display: "Grid",
@@ -44,7 +41,8 @@ class TrainerSearchView extends Component {
                 slo: new Set(),
                 cohort: new Set(),
                 status: new Set()
-            }
+            },
+            checkboxesDisplayed: null
         }
     }
 
@@ -52,26 +50,26 @@ class TrainerSearchView extends Component {
         this.props.dispatch({
             type: LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINERS
         })
-
-        let newDisplayedCheckboxes = {
-            state: new Set(),
-            state_level_organization_name: new Set(),
-            cohort_name: new Set(),
-            status: new Set()
-        }
-        this.props.localTrainersReducer.allLocalTrainers.map((trainer) => {
-            newDisplayedCheckboxes.state.add(trainer.state)
-            newDisplayedCheckboxes.state_level_organization_name.add(trainer.state_level_organization.state_level_organization_name)
-            newDisplayedCheckboxes.cohort_name.add(trainer.cohort.cohort_name)
-            displayedCheckboxes = newDisplayedCheckboxes;
-        })
-
     }
 
     componentDidUpdate = (prevProps) => {
         if (prevProps.localTrainersReducer.allLocalTrainers !== this.props.localTrainersReducer.allLocalTrainers) {
+
+            let newDisplayedCheckboxes = {
+                state_name: new Set(),
+                state_level_organization_name: new Set(),
+                cohort_name: new Set(),
+                status: new Set()
+            }
+            this.props.localTrainersReducer.allLocalTrainers.map((trainer) => {
+                newDisplayedCheckboxes.state_name.add(trainer.state)
+                newDisplayedCheckboxes.state_level_organization_name.add(trainer.state_level_organization.state_level_organization_name)
+                newDisplayedCheckboxes.cohort_name.add(trainer.cohort.cohort_name)
+            })
+
             this.setState({
-                localTrainers: this.props.localTrainersReducer.allLocalTrainers
+                localTrainers: this.props.localTrainersReducer.allLocalTrainers,
+                checkboxesDisplayed: newDisplayedCheckboxes
             })
                             // Since we are mapping through the trainer array as part of the render process anyway, here is a good place
                 // to keep track of all the unique states, slos, cohorts, and statuses.
@@ -115,8 +113,10 @@ class TrainerSearchView extends Component {
 
     render() {
         let { classes } = this.props;
-
         let trainersTableBody = null;
+
+        let testArray = null;
+
         if (this.state.localTrainers) {
             trainersTableBody = this.state.localTrainers.map((trainer) => {
                 return (
@@ -131,19 +131,20 @@ class TrainerSearchView extends Component {
                 )
             })
         }
+
         return (
             <React.Fragment>
-            {JSON.stringify(this.state.selections)}
-            <input
-                onChange={this.handleSearchInputChange}
-                placeholder="filter table"
-                value={this.state.searchInput}
-            />
             <div className={classes.mainComponent}>
                  <div className={classes.leftPanel} >
-                    <TrainerSearchSidebar {...displayedCheckboxes} handleCheckboxClick={this.handleCheckboxClick}/>                 
+                    <TrainerSearchSidebar {...this.state.checkboxesDisplayed} handleCheckboxClick={this.handleCheckboxClick} />                 
                 </div>
                 <div className={classes.rightPanel}>
+
+                    <input
+                    onChange={this.handleSearchInputChange}
+                    placeholder="filter table"
+                    value={this.state.searchInput}
+                    />
 
                 <Table id="trainer-search-table">
                     <TableHead>
