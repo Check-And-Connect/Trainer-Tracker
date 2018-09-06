@@ -6,7 +6,7 @@ class TrainerSearchSidebar extends Component{
             <div>
                 <div id="state-checkbox-selector">
                     <h3>State</h3>
-                    {this.props.state.map(((state, index) => (
+                    {this.props.state.forEach(((state, index) => (
                         <div>
                             <p>{state}</p>
                             <input 
@@ -20,7 +20,7 @@ class TrainerSearchSidebar extends Component{
                         </div>
                     )))}
                     <h3>State-Level Org.</h3>
-                    {this.props.slo.map(((slo, index) => (
+                    {this.props.state_level_organization_name.forEach(((slo, index) => (
                         <div>
                             <p>{slo}</p>
                             <input 
@@ -34,7 +34,7 @@ class TrainerSearchSidebar extends Component{
                         </div>
                     )))}
                     <h3>Cohort</h3>
-                    {this.props.cohort.map(((cohort, index) => (
+                    {this.props.cohort_name.forEach(((cohort, index) => (
                         <div>
                             <p>{cohort}</p>
                             <input 

@@ -9,6 +9,8 @@ import TrainerSearchSidebar from '../TrainerSearchSidebar/TrainerSearchSidebar';
 
 import { Table, TableBody, TableHead, TableRow, TableCell } from '@material-ui/core';
 
+let displayedCheckboxes = null;
+
 class TrainerSearchView extends Component {
     constructor(props) {
         super(props)
@@ -30,6 +32,20 @@ class TrainerSearchView extends Component {
         this.props.dispatch({
             type: LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINERS
         })
+
+        let newDisplayedCheckboxes = {
+            state: new Set(),
+            state_level_organization_name: new Set(),
+            cohort_name: new Set(),
+            status: new Set()
+        }
+        this.props.localTrainersReducer.allLocalTrainers.map((trainer) => {
+            newDisplayedCheckboxes.state.add(trainer.state)
+            newDisplayedCheckboxes.state_level_organization_name.add(trainer.state_level_organization.state_level_organization_name)
+            newDisplayedCheckboxes.cohort_name.add(trainer.cohort.cohort_name)
+            displayedCheckboxes = newDisplayedCheckboxes;
+        })
+
     }
 
     componentDidUpdate = (prevProps) => {
@@ -37,6 +53,10 @@ class TrainerSearchView extends Component {
             this.setState({
                 localTrainers: this.props.localTrainersReducer.allLocalTrainers
             })
+                            // Since we are mapping through the trainer array as part of the render process anyway, here is a good place
+                // to keep track of all the unique states, slos, cohorts, and statuses.
+
+                // When we filter the trainer array, we will need to rerender, which means we recalcuate the checkboxes to display.
         }
     }
 
@@ -75,26 +95,10 @@ class TrainerSearchView extends Component {
 
     render() {
 
-        let displayedCheckboxes = {
-            state: [],
-            slo: [],
-            cohort: [],
-            status: []
-        }
+
         let trainersTableBody = null;
         if (this.state.localTrainers) {
             trainersTableBody = this.state.localTrainers.map((trainer) => {
-                // Since we are mapping through the trainer array as part of the render process anyway, here is a good place
-                // to keep track of all the unique states, slos, cohorts, and statuses.
-
-                // When we filter the trainer array, we will need to rerender, which means we recalcuate the checkboxes to display.
-                if (!displayedCheckboxes.state.includes(trainer.state)) displayedCheckboxes.state.push(trainer.state);
-                if (!displayedCheckboxes.slo.includes(trainer.state_level_organization.state_level_organization_name)){
-                    displayedCheckboxes.slo.push(trainer.state_level_organization.state_level_organization_name);
-                }
-                if (!displayedCheckboxes.cohort.includes(trainer.cohort.cohort_name)) displayedCheckboxes.cohort.push(trainer.cohort.cohort_name);
-                if (!displayedCheckboxes.status.includes(trainer.status)) displayedCheckboxes.status.push(trainer.status);
-
                 return (
                     <TableRow key={trainer.local_trainers_id}>
                         <TableCell>{trainer.cohort.cohort_name}</TableCell>
