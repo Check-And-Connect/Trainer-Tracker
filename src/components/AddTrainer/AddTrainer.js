@@ -102,17 +102,17 @@ class AddTrainer extends Component {
         })
         this.setState({
             newTrainer: {
-                // first_name: '',
-                // last_name: '',
-                // title: '',
-                // email: '',
-                // phone_number: '',
-                // organization: '',
-                // district: '',
-                // state: '',
-                // state_level_organization: '',
-                // state_lead: '',
-                // cohort: ''
+                first_name: '',
+                last_name: '',
+                title: '',
+                email: '',
+                phone_number: '',
+                organization: '',
+                district: '',
+                state: '',
+                state_level_organization: '',
+                state_lead: '',
+                cohort: ''
             }
         });
     }
@@ -126,12 +126,16 @@ class AddTrainer extends Component {
         let SLOListArray = this.props.cohortReducer.state_and_SLO.map((item, index) => {
             return <option value={item.name}>{item.name}</option>
         })
-        // let stateLeadListArray = this.props.stateLeadReducer.state_lead.map((item, index) => {
-        //     return <option value={item.state_lead_id}>{item.first_name} {item.last_name}</option>
-        // })
         let cohortListArray = this.props.cohortReducer.trainer_cohorts.map((item, index) => {
             return <option value={item.cohort_id}>{item.name}</option>
         })
+
+
+
+        // let stateLeadListArray = this.props.stateLeadReducer.state_lead.map((item, index) => {
+        //     return <option value={item.state_lead_id}>{item.first_name} {item.last_name}</option>
+        // })
+
         // let recentListArray = this.props.recentlyAdded.map((item, index) => {
         //     return <li>{item.first_name} {item.last_name}</li> 
         // })
@@ -142,7 +146,7 @@ class AddTrainer extends Component {
             <div>
                 {/* <Nav /> */}
                 <h2 className='centerHeadings'>Add New Trainer</h2>
-                <form className='trainerForm' onSubmit={this.addNewTrainer}>
+                        <form className='trainerForm' onSubmit={this.addNewTrainer}>
                     <Grid container>
                         <Grid item xs={7}>
                             <input className='lengthOfInputs' type='text' placeholder='First Name' value={this.state.newTrainer.first_name} onChange={this.handleChangeFor('first_name')} />
@@ -196,7 +200,7 @@ class AddTrainer extends Component {
                 {/* {recentListArray} */}
             </div>
         );
-        // } 
+        // }
 
         return (
             <div>
