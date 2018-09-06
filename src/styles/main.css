@@ -83,3 +83,13 @@ li a:hover {
 .centerHeadings {
     text-align: center;
 }
+
+/* format new trainer inputs */
+.leftAlign {
+    float: left;
+}
+
+/* format new trainer inputs */
+.rightAlign {
+    float: right;
+}
