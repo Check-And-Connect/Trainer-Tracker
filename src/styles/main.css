@@ -15,14 +15,14 @@ body {
     color: black;
 }
 
-form {
+/* form {
     background-color: #dbd5d5;
     width: 30%;
     height: 250px;
     margin: 20px auto;
     padding: 25px;
     border-radius: 2px;
-}
+} */
 
 input {
     margin: 5px;
@@ -63,9 +63,12 @@ ul {
     overflow: hidden;
 }
 
+
 /* li {
-    float: right;
+    float: left;
 } */
+
+
 
 li a {
     display: block;
@@ -111,4 +114,9 @@ li a:hover {
 
 .logOut {
     float: left;
+}
+
+/* center headings */
+.centerHeadings {
+    text-align: center;
 }
