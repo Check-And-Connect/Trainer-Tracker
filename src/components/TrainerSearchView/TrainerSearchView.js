@@ -72,10 +72,6 @@ class TrainerSearchView extends Component {
                 checkboxesDisplayed: newDisplayedCheckboxes,
                 selections: newDisplayedCheckboxes
             })
-                            // Since we are mapping through the trainer array as part of the render process anyway, here is a good place
-                // to keep track of all the unique states, slos, cohorts, and statuses.
-
-                // When we filter the trainer array, we will need to rerender, which means we recalcuate the checkboxes to display.
         }
     }
 
@@ -86,29 +82,6 @@ class TrainerSearchView extends Component {
     handleSearchInputChange = (e) => {
         this.setState({
             searchInput: e.target.value
-        })
-    }
-
-    handleCheckboxClick = (e) => {
-        console.log('handling checkbox click from the main component. e.target.name:', e.target.name);
-        console.log('e.target.value', e.target.value);
-        let newSet = new Set(this.state.selections[e.target.name]);
-        if (newSet.has(e.target.value)){
-            newSet.delete(e.target.value)
-        } else {
-            newSet.add(e.target.value)
-        }
-
-        this.setState({
-            selections: {
-                ...this.state.selections,
-                [e.target.name]: newSet
-            }
-        })
-
-        let filteredTrainersList = this.props.localTrainersReducer.allLocalTrainers.filter((trainer) => !newSet.has(trainer[e.target.name]))
-        this.setState({
-            localTrainers: filteredTrainersList
         })
     }
 
@@ -185,6 +158,34 @@ class TrainerSearchView extends Component {
         })
     }
 
+    handleCohortCheckbox = (e) => {
+        console.log('handling cohort checkbox');
+        let newSet = new Set(this.state.selections.cohort_name);
+        if (newSet.has(e.target.value)){
+            newSet.delete(e.target.value)
+        } else {
+            newSet.add(e.target.value)
+        }
+
+        this.setState({
+            selections: {
+                ...this.state.selections,
+                cohort_name: newSet
+            }
+        })
+
+        let filteredTrainersList = [];
+        this.props.localTrainersReducer.allLocalTrainers.forEach((trainer) => {
+            if (newSet.has(trainer.cohort.cohort_name)){
+                filteredTrainersList.push(trainer)
+            }
+        })
+
+        this.setState({
+            localTrainers: filteredTrainersList
+        })
+    }
+
 
     render() {
         let { classes } = this.props;
@@ -216,6 +217,7 @@ class TrainerSearchView extends Component {
                         handleCheckboxClick={this.handleCheckboxClick} 
                         handleStateCheckbox={this.handleStateCheckbox}
                         handleSloCheckbox={this.handleSloCheckbox}
+                        handleCohortCheckbox={this.handleCohortCheckbox}
                     />                 
                 </div>
                 <div className={classes.rightPanel}>

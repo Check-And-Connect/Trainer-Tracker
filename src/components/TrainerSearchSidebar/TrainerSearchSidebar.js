@@ -70,7 +70,7 @@ class TrainerSearchSidebar extends Component {
                         value={setElement}
                         name="cohort_name"
                         defaultChecked
-                        onChange={this.props.handleCheckboxClick}
+                        onChange={this.props.handleCohortCheckbox}
                     />
                 </div>
             )
