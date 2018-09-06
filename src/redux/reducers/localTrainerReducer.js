@@ -10,7 +10,22 @@ import { LOCAL_TRAINERS_ACTIONS } from '../actions/localTrainerActions';
             return state;
     }
 }
+  
+  const singleTrainerReqInfo =  (state = [], action) => {
+  switch (action.type) {
+      case LOCAL_TRAINERS_ACTIONS.SET_TRAINER_REQUIREMENT_SINGLE:
+          return action.payload || state
+  
+      default:
+          return state;
+  }
+}
+
 
 export default combineReducers({
-  allLocalTrainers
+  allLocalTrainers,
+  singleTrainerReqInfo
 });
+
+
+

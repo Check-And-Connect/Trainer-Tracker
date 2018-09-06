@@ -24,4 +24,5 @@ const trainer_cohorts = (state = [], action) => {
 export default combineReducers({
     state_and_SLO,
     trainer_cohorts
-});
+}); 
+

@@ -7,6 +7,7 @@ import cohortSaga from './cohortSaga';
 import stateLeadSaga from './stateLeadSaga';
 
 
+
 export default function* rootSaga() {
   
   yield all([
@@ -15,7 +16,9 @@ export default function* rootSaga() {
     localTrainerSaga(),
     // nationalTrainerSaga(),
     cohortSaga(),
+
     stateLeadSaga()
+
     // watchIncrementAsync()
   ]);
 }

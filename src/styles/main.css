@@ -8,19 +8,21 @@ body {
 }
 
 .instructions {
-    background-color: #00acb0;
+    /* background-color: #00acb0; */
+    background-color: white;
     padding: 5px;
-    color: #ece7e7;
+    /* color: #ece7e7; */
+    color: black;
 }
 
-form {
+/* form {
     background-color: #dbd5d5;
     width: 30%;
     height: 250px;
     margin: 20px auto;
     padding: 25px;
     border-radius: 2px;
-}
+} */
 
 input {
     margin: 5px;
@@ -48,7 +50,8 @@ input[type="submit"] {
 }
 
 .navbar {
-  background-color: #00acb0;
+  /* background-color: #00acb0; */
+  background-color: white;
   width: 100%;
   border-radius: 0px;
 }
@@ -60,13 +63,20 @@ ul {
     overflow: hidden;
 }
 
-li {
+<<<<<<< HEAD
+/* li {
     float: left;
+} */
+=======
+li {
+    float: right;
 }
+>>>>>>> master
 
 li a {
     display: block;
-    color: white;
+    /* color: white; */
+    color: black;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -76,7 +86,37 @@ li a {
 /* Change the link color to #111 (black) on hover */
 li a:hover {
     text-decoration: underline;
-    color: #eee;
+    /* color: #eee; */
+    color: black;
+}
+
+.username {
+    float: right;
+}
+
+.welcome {
+    right: 150px;
+    position: absolute;
+    padding: 10px;
+}
+
+.person {
+    right: 0px;
+    position: absolute;
+    padding: 10px;
+}
+
+.navBar {
+    width: 190px;
+    align: left;
+}
+
+.buttonGroup {
+    float: right;
+}
+
+.logOut {
+    float: left;
 }
 
 /* center headings */
