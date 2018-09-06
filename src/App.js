@@ -19,8 +19,10 @@ import './styles/main.css';
 
 const App = () => (
   <div>
-    <Header title="Project Base" />
+    
     <Router>
+      <div>
+    <Header title="" />
       <Switch>
         <Redirect exact from="/" to="/home" />
         <Route
@@ -36,7 +38,7 @@ const App = () => (
           component={UserPage}
         />
         <Route
-          path="/info"
+          path="/cohort_manager"
           component={CohortManager}
         />
         <Route
@@ -51,6 +53,7 @@ const App = () => (
         <Route render={() => <h1>404</h1>} />
 
       </Switch>
+      </div>
     </Router>
   </div>
 );

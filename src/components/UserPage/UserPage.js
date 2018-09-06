@@ -29,27 +29,27 @@ class UserPage extends Component {
   render() {
     let content = null;
 
-    if (this.props.user.userName) {
-      content = (
-        <div>
-          <h1
-            id="welcome"
-          >
-            Welcome, { this.props.user.userName }!
-          </h1>
-          <p>Your ID is: {this.props.user.id}</p>
-          <button
-            onClick={this.logout}
-          >
-            Log Out
-          </button>
-        </div>
-      );
-    }
+    // if (this.props.user.userName) {
+    //   content = (
+    //     <div>
+    //       <h1
+    //         id="welcome"
+    //       >
+    //         Hello, { this.props.user.userName }!
+    //       </h1>
+    //       <p>Your ID is: {this.props.user.id}</p>
+    //       <button
+    //         onClick={this.logout}
+    //       >
+    //         Log Out
+    //       </button>
+    //     </div>
+    //   );
+    // }
 
     return (
       <div>
-        <Nav />
+        {/* <Nav /> */}
         { content }
       </div>
     );
