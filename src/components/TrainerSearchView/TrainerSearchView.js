@@ -218,7 +218,7 @@ class TrainerSearchView extends Component {
 
         if (this.state.localTrainers) {
             trainersTableBody = this.state.localTrainers.map((trainer) => {
-                let lastNext = this.getLastNext(trainer.requirements)
+                // let lastNext = this.getLastNext(trainer.requirements)
                 return (
                     <TableRow key={trainer.local_trainers_id}>
                         <TableCell>{trainer.cohort.cohort_name}</TableCell>
