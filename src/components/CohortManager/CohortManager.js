@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 
 import { withStyles } from "@material-ui/core";
 
-import Nav from "../../components/Nav/Nav";
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 import { LOCAL_TRAINERS_ACTIONS } from '../../redux/actions/localTrainerActions';
 import { COHORT_ACTIONS } from '../../redux/actions/cohortActions';
@@ -100,7 +99,6 @@ class CohortManager extends Component {
 
     return (
       <div>
-        <Nav />
         <div className={classes.mainComponent}>
           <div className={classes.leftPanel}>
             <CohortManagerFilter/>
