@@ -35,26 +35,6 @@ function* fetchLocalTrainers() {
   }
 }
 
-function* fetchLocalTrainerDetails(action) {
-  try {
-    console.log('fetching details for trainer', action.payload);
-    let trainerID = action.payload;
-    const trainerDetails = yield call(
-      axios.get, `/api/localTrainers/${trainerID}`
-    )
-    
-    yield dispatch({
-      type: LOCAL_TRAINERS_ACTIONS.SET_LOCAL_TRAINER_DETAILS,
-      payload: trainerDetails.data
-    })
-
-
-  } catch (err){
-    console.log(err);
-    yield(err);
-  }
-}
-
 function* fetchRequirementForLocalTrainer(action) {
   try {
     let trainerInfo = yield call(
@@ -79,7 +59,6 @@ function* addSaga() {
 
     yield takeEvery(LOCAL_TRAINERS_ACTIONS.ADD_LT, addNewLT);
     yield takeLatest(LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINERS, fetchLocalTrainers);
-    yield takeLatest(LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINER_DETAILS, fetchLocalTrainerDetails);
 
   yield takeLatest(
     LOCAL_TRAINERS_ACTIONS.FETCH_TRAINER_REQUIREMENT_SINGLE,
