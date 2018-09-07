@@ -98,9 +98,9 @@ li a:hover {
 }
 
 .person {
-    right: 0px;
+    /* right: 0px;
     position: absolute;
-    padding: 10px;
+    padding: 10px; */
 }
 
 /* .navBar {
@@ -121,12 +121,58 @@ li a:hover {
     text-align: center;
 }
 
-/* format new trainer inputs */
-.trainerForm {
-    width: 400px;
+.wrapper {
+    display: grid;
+    grid-template-columns: 3fr 9fr;
 }
 
-/* format new trainer inputs */
-.lengthOfInputs {
-    width: 150px;
+.hSplit {
+    display: grid;
+    grid-template-rows: 1fr .2fr;
+}
+
+.item3 {
+    display: grid;
+    grid-template-columns: 4fr 3fr 1fr;
+}
+
+.item3b {
+    display: grid;
+    grid-template-rows: 1fr;
+}
+
+/* .item3b1 {
+    display: grid;
+    backround: grey;
+} */
+
+.item3b2 {
+    display: grid;
+    justify-content: right;
+}
+
+.item3b3 {
+    display: grid;
+}
+
+.item3c {
+    display: grid;
+    grid-template-rows:  1fr;
+    
+}
+.item3c2 {
+    display: grid;
+    justify-content: center;
+    /* vertical-align: center; */
+    align-items: center
+
+}
+
+.item3c3 {
+    display: grid;
+}
+
+.item4 {
+    display: grid;
+    justify-content: right;
 }
