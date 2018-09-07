@@ -38,7 +38,7 @@ router.get('/states', (req, res) => {
 
 router.get('/cohort', (req, res) => {
     if (req.isAuthenticated) {
-        const queryText = `SELECT "name", "cohort_id" FROM cohort;`;
+        const queryText = `SELECT "name", "cohort_id", "state_level_organization_ref_id" FROM cohort;`;
         pool.query(queryText)
             .then((results) => {
                 res.send(results.rows)
