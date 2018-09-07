@@ -205,7 +205,10 @@ router.get('/:id', rejectUnauthenticated, async (req, res) => {
       err = true;
     })
 
-  const getTrainerRequirementsQuery = `SELECT * FROM local_trainers_requirements WHERE local_trainers_ref_id = $1;`;
+  const getTrainerRequirementsQuery = `SELECT * FROM local_trainers_requirements
+  JOIN cohort_requirements ON local_trainers_requirements.cohort_requirements_ref_id = cohort_requirements.cohort_req_id
+  JOIN requirements ON requirements.requirements_id = cohort_requirements.requirement_id
+  WHERE local_trainers_ref_id = $1`;
   const trainerRequirementsArray = await pool.query(getTrainerRequirementsQuery, [req.params.id])
     .then((PGres) => {
       return PGres.rows || null

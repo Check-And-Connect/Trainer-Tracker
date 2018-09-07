@@ -214,16 +214,22 @@ class TrainerSearchView extends Component {
         let { classes } = this.props;
         let trainersTableBody = null;
 
-        let testArray = null;
-
         if (this.state.localTrainers) {
             trainersTableBody = this.state.localTrainers.map((trainer) => {
                 // let lastNext = this.getLastNext(trainer.requirements)
                 return (
                     <TableRow key={trainer.local_trainers_id}>
                         <TableCell>{trainer.cohort.cohort_name}</TableCell>
-                        <TableCell>{trainer.first_name}</TableCell>
-                        <TableCell>{trainer.last_name}</TableCell>
+                        <TableCell>
+                            <Link to={"/trainerdetails/" + trainer.local_trainers_id}>
+                                {trainer.first_name}
+                            </Link>
+                        </TableCell>
+                        <TableCell>
+                            <Link to={"/trainerdetails/" + trainer.local_trainers_id}>
+                                {trainer.last_name}
+                            </Link>
+                        </TableCell>
                         <TableCell>{trainer.state}</TableCell>
                         <TableCell>{trainer.state_level_organization.state_level_organization_name}</TableCell>
                         <TableCell>Last Requirement Completed</TableCell>

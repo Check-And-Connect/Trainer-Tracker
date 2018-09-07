@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import axios from 'axios'
 
-import {LOCAL_TRAINERS_ACTIONS} from '../../redux/actions/localTrainerActions.js';
-
 class TrainerDetails extends Component{
     constructor(props){
         super(props)
@@ -87,6 +85,17 @@ class TrainerDetails extends Component{
             }
         }
 
+        let requirementsHistory;
+        if (this.state.requirements !== null){
+            requirementsHistory = this.state.requirements.map(requirement => {
+                return(
+                    <div className="requirementHistory">
+                        <p key={requirement.requirements_id}>{requirement.name}</p>
+                    </div>
+                )
+            })
+        }
+
         return(
             <React.Fragment>
                 {JSON.stringify(this.state)}
@@ -111,6 +120,7 @@ class TrainerDetails extends Component{
             <hr></hr>
             <div className="trainerHistory">
                 <h3>History</h3>
+                {requirementsHistory}
             </div>
             </React.Fragment>
         )
