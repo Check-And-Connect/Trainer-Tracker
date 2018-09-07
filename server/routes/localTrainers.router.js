@@ -172,4 +172,73 @@ router.post('/addLT', (req, res) => {
     }
 })
 
+// THIS IS THE ROUTE FOR EDITING THE LOCAL TRAINER DETAILS
+// i.e. FROM THE TRAINER DETAILS VIEW
+router.put('/:id', rejectUnauthenticated, (req, res) => {
+  console.log('local_trainer PUT route for', req.params.id);
+  const editLocalTrainerDetailsQuery = `UPDATE local_trainers SET first_name = $1, last_name = $2, title = $3, email = $4, phone_number = $5, organization = $6, district = $7, notes = $8
+                                        WHERE local_trainers_id = $9`;
+  pool.query(editLocalTrainerDetailsQuery, [req.body.first_name, req.body.last_name, req.body.title, req.body.email, req.body.phone_number, req.body.organization, req.body.district, req.body.notes, req.params.id])
+    .then((PGres) => {
+      console.log(PGres);
+      res.sendStatus(200)
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500)
+    })
+})
+
+// THIS IS THE ROUTE TO GET ALL OF THE DETAILS FOR A SINGLE LOCAL TRAINER
+router.get('/:id', rejectUnauthenticated, async (req, res) => {
+  console.log('local_trainer GET details route', req.params.id);
+  let err = false;
+  let cohortID = null;
+  const getLocalTrainerDetailsQuery = `SELECT * FROM local_trainers WHERE local_trainers_id = $1;`;
+  const localTrainerObject = await pool.query(getLocalTrainerDetailsQuery, [req.params.id])
+    .then((PGres) => {
+      cohortID = PGres.rows[0].cohort_ref_id
+      return PGres.rows[0] || null
+    })
+    .catch((err) => {
+      console.log(err);
+      err = true;
+    })
+
+  const getTrainerRequirementsQuery = `SELECT * FROM local_trainers_requirements
+  JOIN cohort_requirements ON local_trainers_requirements.cohort_requirements_ref_id = cohort_requirements.cohort_req_id
+  JOIN requirements ON requirements.requirements_id = cohort_requirements.requirement_id
+  WHERE local_trainers_ref_id = $1`;
+  const trainerRequirementsArray = await pool.query(getTrainerRequirementsQuery, [req.params.id])
+    .then((PGres) => {
+      return PGres.rows || null
+    })
+    .catch((err) => {
+      console.log(err);
+      err = true;
+    })
+
+  const getTrainerCohortQuery = `SELECT * FROM cohort WHERE cohort_id = $1;`;
+  const trainerCohortObject = await pool.query(getTrainerCohortQuery, [cohortID])
+    .then((PGres) => {
+      return PGres.rows[0] || null
+    })
+    .catch((err) => {
+      console.log(err);
+      err = true;
+    })
+
+
+    if (err){
+      res.sendStatus(500)
+    } else {
+      res.send({
+        trainer: localTrainerObject,
+        requirements: trainerRequirementsArray,
+        cohort: trainerCohortObject
+      })
+    }
+
+})
+
 module.exports = router;

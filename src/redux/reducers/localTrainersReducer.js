@@ -11,8 +11,6 @@ const allLocalTrainers  = (state = [], action) => {
     }
 }
 
-
-
 export default combineReducers({
-    allLocalTrainers
+    allLocalTrainers,
 })

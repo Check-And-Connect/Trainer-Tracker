@@ -14,6 +14,7 @@ import UserPage from './components/UserPage/UserPage';
 import CohortManager from './components/CohortManager/CohortManager'
 import AddTrainer from './components/AddTrainer/AddTrainer';
 import TrainerSearchView from './components/TrainerSearchView/TrainerSearchView';
+import TrainerDetails from './components/TrainerDetails/TrainerDetails';
 
 import './styles/main.css';
 
@@ -48,6 +49,10 @@ const App = () => (
         <Route
           path="/trainersearch"
           component={TrainerSearchView}
+        />
+        <Route
+          path="/trainerdetails/:id"
+          component={TrainerDetails}
         />
         {/* OTHERWISE (no path!) */}
         <Route render={() => <h1>404</h1>} />
