@@ -10,9 +10,10 @@ import Header from './components/Header/Header';
 import LoginPage from './components/LoginPage/LoginPage';
 import RegisterPage from './components/RegisterPage/RegisterPage';
 import UserPage from './components/UserPage/UserPage';
-import InfoPage from './components/InfoPage/InfoPage';
+// import InfoPage from './components/InfoPage/InfoPage';
 import CohortManager from './components/CohortManager/CohortManager'
 import AddTrainer from './components/AddTrainer/AddTrainer';
+import TrainerSearchView from './components/TrainerSearchView/TrainerSearchView';
 
 import './styles/main.css';
 
@@ -43,6 +44,10 @@ const App = () => (
         <Route
           path="/addtrainer"
           component={AddTrainer}
+        />
+        <Route
+          path="/trainersearch"
+          component={TrainerSearchView}
         />
         {/* OTHERWISE (no path!) */}
         <Route render={() => <h1>404</h1>} />
