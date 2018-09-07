@@ -16,7 +16,8 @@ class TrainerDetails extends Component{
                 phone_number: '',
                 organization: '',
                 district: '',
-                cohort_id: ''
+                cohort_id: '',
+                notes: ''
             }
         }
     }
@@ -38,6 +39,9 @@ class TrainerDetails extends Component{
                 payload: this.state.trainer
             })
         }
+        this.setState({
+            editing: !this.state.editing
+        })
     }
 
     render(){
@@ -49,6 +53,7 @@ class TrainerDetails extends Component{
         let phoneField = <p>{this.state.phone_number}</p>;
         let organizationField = <p>{this.state.organization}</p>;
         let districtField = <p>{this.state.district}</p>;
+        let notesField = <p>{this.state.notes}</p>
 
         if (this.state.editing){
             fnameField = <input type="text" placeholder="first name" />
@@ -58,20 +63,33 @@ class TrainerDetails extends Component{
             phoneField = <input type="text" placeholder="phone number" />
             organizationField = <input type="text" placeholder="organization" />
             districtField = <input type="text" placeholder="district" />
+            notesField = <textarea type="text" placeholder="notes"></textarea>
         }
 
         return(
+            <React.Fragment>
+            <button onClick={this.handleIconClick}>{this.state.editing ? "Save" : "Edit"}</button>
             <div className="trainerDetails">
                 <h3>Trainer Information</h3>
                 <hr></hr>
-                <div>{fnameField}</div>
-                <div>{lnameField}</div>
-                <div>{titleField}</div>
-                <div>{emailField}</div>
-                <div>{phoneField}</div>
-                <div>{organizationField}</div>
-                <div>{districtField}</div>
+                <div>First Name: {fnameField}</div>
+                <div>Last Name: {lnameField}</div>
+                <div>Title: {titleField}</div>
+                <div>Email Address: {emailField}</div>
+                <div>Phone Number: {phoneField}</div>
+                <div>Organization: {organizationField}</div>
+                <div>District: {districtField}</div>
             </div>
+            <hr></hr>
+            <div className="trainerNotes">
+                Notes:
+                <br></br>
+                <div>{notesField}</div>
+            </div>
+            <div className="trainerHistory">
+
+            </div>
+            </React.Fragment>
         )
     }
 };

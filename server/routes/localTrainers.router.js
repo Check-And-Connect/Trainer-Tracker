@@ -186,4 +186,10 @@ router.put('/', rejectUnauthenticated, (req, res) => {
     })
 })
 
+// THIS IS THE ROUTE TO GET ALL OF THE DETAILS FOR A SINGLE LOCAL TRAINER
+router.get('/:id', rejectUnauthenticated, (req, res) => {
+  console.log('local_trainer GET details route', req.param.id);
+  const getLocalTrainerDetailsQuery = `SELECT`
+})
+
 module.exports = router;
