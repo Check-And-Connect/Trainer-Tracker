@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import axios from 'axios'
 
 import {LOCAL_TRAINERS_ACTIONS} from '../../redux/actions/localTrainerActions.js';
 
@@ -12,25 +13,39 @@ class TrainerDetails extends Component{
         }
     }
 
+    // componentDidMount = () => {
+    //     console.log(this.props.match.params.id);
+    //     this.props.dispatch({
+    //         type: LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINER_DETAILS,
+    //         payload: this.props.match.params.id
+    //     })
+    // }
+
+    // componentDidUpdate = (prevProps) => {
+    //     if (prevProps.trainer !== this.props.trainer) {
+
+    //         this.setState({
+    //             trainer: this.props.trainer
+    //         })
+    //     }
+    // }
+
     componentDidMount = () => {
-        console.log(this.props.match.params.id);
-        this.props.dispatch({
-            type: LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINER_DETAILS,
-            payload: this.props.match.params.id
-        })
-    }
-
-    componentDidUpdate = (prevProps) => {
-        if (prevProps.trainer !== this.props.trainer) {
-
-            this.setState({
-                trainer: this.props.trainer
+        let localTrainerID = this.props.match.params.id;
+        axios.get(`/api/localTrainers/${localTrainerID}`)
+            .then(res => {
+                this.setState({
+                    trainer: res.data
+                })
             })
-        }
+            .catch(err => {
+                console.log(err);
+            })
     }
 
     handleInputChange = (e) => {
         console.log('changin here');
+        console.log(e.target.name, e.target.value);
         this.setState({
             trainer: {
                 ...this.state.trainer,
@@ -39,12 +54,28 @@ class TrainerDetails extends Component{
         })
     }
 
+    // handleIconClick = () => {
+    //     if (this.state.editing){
+    //         this.props.dispatch({
+    //             type: LOCAL_TRAINERS_ACTIONS.EDIT_LOCAL_TRAINER,
+    //             payload: this.state.trainer
+    //         })
+    //     }
+    //     this.setState({
+    //         editing: !this.state.editing
+    //     })
+    // }
+
     handleIconClick = () => {
         if (this.state.editing){
-            this.props.dispatch({
-                type: LOCAL_TRAINERS_ACTIONS.EDIT_LOCAL_TRAINER,
-                payload: this.state.trainer
-            })
+            let localTrainerID = this.props.match.params.id;
+            axios.put(`/api/localTrainers/${localTrainerID}`, this.state.trainer)
+                .then(res => {
+                    console.log(res.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
         }
         this.setState({
             editing: !this.state.editing
@@ -69,16 +100,16 @@ class TrainerDetails extends Component{
             phoneField = <p>{this.state.trainer.phone_number}</p>;
             organizationField = <p>{this.state.trainer.organization}</p>;
             districtField = <p>{this.state.trainer.district}</p>;
-    
+            notesField = <p>{this.state.trainer.notes}</p>
             if (this.state.editing){
-                fnameField = <input type="text" placeholder="first name" value={this.state.trainer.first_name}/>
-                lnameField = <input type="text" placeholder="last name" value={this.state.trainer.last_name}/>
-                titleField = <input type="text" placeholder="title" value={this.state.trainer.title}/>
-                emailField = <input type="text" placeholder="email" value={this.state.trainer.email}/>
-                phoneField = <input type="text" placeholder="phone number" value={this.state.trainer.phone_number}/>
-                organizationField = <input type="text" placeholder="organization" value={this.state.trainer.organization}/>
-                districtField = <input type="text" placeholder="district" value={this.state.trainer.district}/>
-                notesField = <textarea type="text" placeholder="notes"></textarea>
+                fnameField = <input type="text" name="first_name" placeholder="first name" value={this.state.trainer.first_name} onChange={this.handleInputChange}/>
+                lnameField = <input type="text" name="last_name" placeholder="last name" value={this.state.trainer.last_name} onChange={this.handleInputChange}/>
+                titleField = <input type="text" name="title" placeholder="title" value={this.state.trainer.title} onChange={this.handleInputChange}/>
+                emailField = <input type="text" name="email" placeholder="email" value={this.state.trainer.email} onChange={this.handleInputChange}/>
+                phoneField = <input type="text" name="phone_number" placeholder="phone number" value={this.state.trainer.phone_number} onChange={this.handleInputChange}/>
+                organizationField = <input type="text" name="organization" placeholder="organization" value={this.state.trainer.organization} onChange={this.handleInputChange}/>
+                districtField = <input type="text" name="district" placeholder="district" value={this.state.trainer.district} onChange={this.handleInputChange}/>
+                notesField = <textarea type="text" name="notes" placeholder="notes" value={this.state.trainer.notes} onChange={this.handleInputChange}></textarea>
             }
         }
 
@@ -112,8 +143,8 @@ class TrainerDetails extends Component{
     }
 };
 
-const mapStateToProps = state => ({
-    trainer: state.localTrainersReducer.localTrainerDetails
-})
+// const mapStateToProps = state => ({
+//     trainer: state.localTrainersReducer.localTrainerDetails
+// })
 
-export default connect(mapStateToProps)(TrainerDetails);
+export default connect()(TrainerDetails);

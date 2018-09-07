@@ -174,10 +174,11 @@ router.post('/addLT', (req, res) => {
 
 // THIS IS THE ROUTE FOR EDITING THE LOCAL TRAINER DETAILS
 // i.e. FROM THE TRAINER DETAILS VIEW
-router.put('/', rejectUnauthenticated, (req, res) => {
-  console.log('local_trainer PUT route');
-  const editLocalTrainerDetailsQuery = `UPDATE local_trainers SET first_name = $1, last_name = $2, title = $3, email = $4, phone_number = $5, organization = $6, district = $7, cohort_ref_id = $8;`;
-  pool.query(editLocalTrainerDetailsQuery, [req.body.first_name, req.body.last_name, req.body.title, req.body.email, req.body.phone_number, req.body.organization, req.body.district, req.body.cohort.cohort_id])
+router.put('/:id', rejectUnauthenticated, (req, res) => {
+  console.log('local_trainer PUT route for', req.params.id);
+  const editLocalTrainerDetailsQuery = `UPDATE local_trainers SET first_name = $1, last_name = $2, title = $3, email = $4, phone_number = $5, organization = $6, district = $7, notes = $8
+                                        WHERE local_trainers_id = $9`;
+  pool.query(editLocalTrainerDetailsQuery, [req.body.first_name, req.body.last_name, req.body.title, req.body.email, req.body.phone_number, req.body.organization, req.body.district, req.body.notes, req.params.id])
     .then((PGres) => {
       console.log(PGres);
       res.sendStatus(200)
