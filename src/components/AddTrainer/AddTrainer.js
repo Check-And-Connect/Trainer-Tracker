@@ -92,6 +92,15 @@ class AddTrainer extends Component {
         }
     }
 
+    reset = () => {
+        let stateDrop = document.getElementById("stateDrop");
+        stateDrop.selectedIndex = 0;
+        let SLODrop = document.getElementById("SLODrop");
+        SLODrop.selectedIndex = 0;
+        let cohortDrop = document.getElementById("cohortDrop");
+        cohortDrop.selectedIndex = 0;
+    }
+
     addNewTrainer = event => {
         event.preventDefault();
         this.props.dispatch({ type: 'ADD_LT', payload: this.state.newTrainer })
@@ -113,13 +122,10 @@ class AddTrainer extends Component {
                 email: '',
                 phone_number: '',
                 organization: '',
-                district: '',
-                state: '',
-                state_level_organization: '',
-                state_lead: '',
-                cohort: ''
+                district: ''
             }
         });
+        this.reset();
     }
 
     render() {
@@ -151,8 +157,8 @@ class AddTrainer extends Component {
                                     <input className='lengthOfInputs' type='text' placeholder='First Name' value={this.state.newTrainer.first_name} onChange={this.handleChangeFor('first_name')} />
                                 </Grid>
                                 <Grid item xs={8}>
-                                    <select className='lengthOfInputs' onChange={this.handleChangeForState('state')}>
-                                        <option value="">State</option>
+                                    <select id='stateDrop' className='lengthOfInputs' onChange={this.handleChangeForState('state')}>
+                                        <option value="state">State</option>
                                         {stateListArray}
                                     </select>
                                 </Grid>
@@ -160,7 +166,7 @@ class AddTrainer extends Component {
                                     <input className='lengthOfInputs' type='text' placeholder='Last Name' value={this.state.newTrainer.last_name} onChange={this.handleChangeFor('last_name')} />
                                 </Grid>
                                 <Grid item xs={8}>
-                                    <select className='lengthOfInputs' onChange={this.handleChangeForSLO('state_level_organization')}>
+                                    <select id='SLODrop' className='lengthOfInputs' onChange={this.handleChangeForSLO('state_level_organization')}>
                                         <option value="">State Level Organization</option>
                                         {SLOListArray}
                                     </select>
@@ -169,7 +175,7 @@ class AddTrainer extends Component {
                                     <input className='lengthOfInputs' type='text' placeholder='Title' value={this.state.newTrainer.title} onChange={this.handleChangeFor('title')} />
                                 </Grid>
                                 <Grid item xs={8}>
-                                    <select className='lengthOfInputs' onChange={this.handleChangeFor('cohort')}>
+                                    <select id='cohortDrop' className='lengthOfInputs' onChange={this.handleChangeFor('cohort')}>
                                         <option value="">Cohort</option>
                                         {cohortListArray}
                                     </select>
@@ -178,7 +184,7 @@ class AddTrainer extends Component {
                                     <input className='lengthOfInputs' type='text' placeholder='Email' value={this.state.newTrainer.email} onChange={this.handleChangeFor('email')} />
                                 </Grid>
                                 <Grid item xs={8}>
-                                    <input type='submit' value='Submit' />
+                                    <input type='submit' value='Submit'/>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <input className='lengthOfInputs' type='text' placeholder='Phone Number' value={this.state.newTrainer.phone_number} onChange={this.handleChangeFor('phone_number')} />
