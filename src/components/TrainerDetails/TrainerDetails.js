@@ -9,33 +9,20 @@ class TrainerDetails extends Component{
         super(props)
         this.state = {
             editing: false,
-            trainer: null
+            trainer: null,
+            requirements: null,
+            cohort: null
         }
     }
-
-    // componentDidMount = () => {
-    //     console.log(this.props.match.params.id);
-    //     this.props.dispatch({
-    //         type: LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINER_DETAILS,
-    //         payload: this.props.match.params.id
-    //     })
-    // }
-
-    // componentDidUpdate = (prevProps) => {
-    //     if (prevProps.trainer !== this.props.trainer) {
-
-    //         this.setState({
-    //             trainer: this.props.trainer
-    //         })
-    //     }
-    // }
 
     componentDidMount = () => {
         let localTrainerID = this.props.match.params.id;
         axios.get(`/api/localTrainers/${localTrainerID}`)
             .then(res => {
                 this.setState({
-                    trainer: res.data
+                    trainer: res.data.trainer,
+                    requirements: res.data.requirements,
+                    cohort: res.data.cohort
                 })
             })
             .catch(err => {
@@ -44,7 +31,6 @@ class TrainerDetails extends Component{
     }
 
     handleInputChange = (e) => {
-        console.log('changin here');
         console.log(e.target.name, e.target.value);
         this.setState({
             trainer: {
@@ -53,18 +39,6 @@ class TrainerDetails extends Component{
             }
         })
     }
-
-    // handleIconClick = () => {
-    //     if (this.state.editing){
-    //         this.props.dispatch({
-    //             type: LOCAL_TRAINERS_ACTIONS.EDIT_LOCAL_TRAINER,
-    //             payload: this.state.trainer
-    //         })
-    //     }
-    //     this.setState({
-    //         editing: !this.state.editing
-    //     })
-    // }
 
     handleIconClick = () => {
         if (this.state.editing){
@@ -115,7 +89,7 @@ class TrainerDetails extends Component{
 
         return(
             <React.Fragment>
-                {JSON.stringify(this.state.trainer)}
+                {JSON.stringify(this.state)}
             <button onClick={this.handleIconClick}>{this.state.editing ? "Save" : "Edit"}</button>
             <div className="trainerDetails">
                 <h3>Trainer Information</h3>
@@ -142,9 +116,5 @@ class TrainerDetails extends Component{
         )
     }
 };
-
-// const mapStateToProps = state => ({
-//     trainer: state.localTrainersReducer.localTrainerDetails
-// })
 
 export default connect()(TrainerDetails);

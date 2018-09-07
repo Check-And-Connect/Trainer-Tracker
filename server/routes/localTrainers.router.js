@@ -190,18 +190,52 @@ router.put('/:id', rejectUnauthenticated, (req, res) => {
 })
 
 // THIS IS THE ROUTE TO GET ALL OF THE DETAILS FOR A SINGLE LOCAL TRAINER
-router.get('/:id', rejectUnauthenticated, (req, res) => {
+router.get('/:id', rejectUnauthenticated, async (req, res) => {
   console.log('local_trainer GET details route', req.params.id);
+  let err = false;
+  let cohortID = null;
   const getLocalTrainerDetailsQuery = `SELECT * FROM local_trainers WHERE local_trainers_id = $1;`;
-  pool.query(getLocalTrainerDetailsQuery, [req.params.id])
+  const localTrainerObject = await pool.query(getLocalTrainerDetailsQuery, [req.params.id])
     .then((PGres) => {
-      console.log(PGres);
-      res.send(PGres.rows[0] || null)
+      cohortID = PGres.rows[0].cohort_ref_id
+      return PGres.rows[0] || null
     })
     .catch((err) => {
       console.log(err);
-      res.sendStatus(500);
+      err = true;
     })
+
+  const getTrainerRequirementsQuery = `SELECT * FROM local_trainers_requirements WHERE local_trainers_ref_id = $1;`;
+  const trainerRequirementsArray = await pool.query(getTrainerRequirementsQuery, [req.params.id])
+    .then((PGres) => {
+      return PGres.rows || null
+    })
+    .catch((err) => {
+      console.log(err);
+      err = true;
+    })
+
+  const getTrainerCohortQuery = `SELECT * FROM cohort WHERE cohort_id = $1;`;
+  const trainerCohortObject = await pool.query(getTrainerCohortQuery, [cohortID])
+    .then((PGres) => {
+      return PGres.rows[0] || null
+    })
+    .catch((err) => {
+      console.log(err);
+      err = true;
+    })
+
+
+    if (err){
+      res.sendStatus(500)
+    } else {
+      res.send({
+        trainer: localTrainerObject,
+        requirements: trainerRequirementsArray,
+        cohort: trainerCohortObject
+      })
+    }
+
 })
 
 module.exports = router;
