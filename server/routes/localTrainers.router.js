@@ -190,8 +190,17 @@ router.put('/', rejectUnauthenticated, (req, res) => {
 
 // THIS IS THE ROUTE TO GET ALL OF THE DETAILS FOR A SINGLE LOCAL TRAINER
 router.get('/:id', rejectUnauthenticated, (req, res) => {
-  console.log('local_trainer GET details route', req.param.id);
-  const getLocalTrainerDetailsQuery = `SELECT`
+  console.log('local_trainer GET details route', req.params.id);
+  const getLocalTrainerDetailsQuery = `SELECT * FROM local_trainers WHERE local_trainers_id = $1;`;
+  pool.query(getLocalTrainerDetailsQuery, [req.params.id])
+    .then((PGres) => {
+      console.log(PGres);
+      res.send(PGres.rows[0] || null)
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    })
 })
 
 module.exports = router;

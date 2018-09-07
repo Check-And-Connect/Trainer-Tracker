@@ -8,17 +8,24 @@ class TrainerDetails extends Component{
         super(props)
         this.state = {
             editing: false,
-            trainer: {
-                first_name: '',
-                last_name: '',
-                title: '',
-                email: '',
-                phone_number: '',
-                organization: '',
-                district: '',
-                cohort_id: '',
-                notes: ''
-            }
+            trainer: null
+        }
+    }
+
+    componentDidMount = () => {
+        console.log(this.props.match.params.id);
+        this.props.dispatch({
+            type: LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINER_DETAILS,
+            payload: this.props.match.params.id
+        })
+    }
+
+    componentDidUpdate = (prevProps) => {
+        if (prevProps.trainer !== this.props.trainer) {
+
+            this.setState({
+                trainer: this.props.trainer
+            })
         }
     }
 
@@ -35,7 +42,7 @@ class TrainerDetails extends Component{
     handleIconClick = () => {
         if (this.state.editing){
             this.props.dispatch({
-                type: 'EDIT_LOCAL_TRAINER',
+                type: LOCAL_TRAINERS_ACTIONS.EDIT_LOCAL_TRAINER,
                 payload: this.state.trainer
             })
         }
@@ -45,29 +52,39 @@ class TrainerDetails extends Component{
     }
 
     render(){
+        let fnameField;
+        let lnameField;
+        let titleField;
+        let emailField;
+        let phoneField;
+        let organizationField;
+        let districtField;
+        let notesField;
 
-        let fnameField = <p>{this.state.first_name}</p>;
-        let lnameField = <p>{this.state.last_name}</p>;
-        let titleField = <p>{this.state.title}</p>;
-        let emailField = <p>{this.state.email}</p>;
-        let phoneField = <p>{this.state.phone_number}</p>;
-        let organizationField = <p>{this.state.organization}</p>;
-        let districtField = <p>{this.state.district}</p>;
-        let notesField = <p>{this.state.notes}</p>
-
-        if (this.state.editing){
-            fnameField = <input type="text" placeholder="first name" />
-            lnameField = <input type="text" placeholder="last name" />
-            titleField = <input type="text" placeholder="title" />
-            emailField = <input type="text" placeholder="email" />
-            phoneField = <input type="text" placeholder="phone number" />
-            organizationField = <input type="text" placeholder="organization" />
-            districtField = <input type="text" placeholder="district" />
-            notesField = <textarea type="text" placeholder="notes"></textarea>
+        if (this.state.trainer !== null){
+            fnameField = <p>{this.state.trainer.first_name}</p>;
+            lnameField = <p>{this.state.trainer.last_name}</p>;
+            titleField = <p>{this.state.trainer.title}</p>;
+            emailField = <p>{this.state.trainer.email}</p>;
+            phoneField = <p>{this.state.trainer.phone_number}</p>;
+            organizationField = <p>{this.state.trainer.organization}</p>;
+            districtField = <p>{this.state.trainer.district}</p>;
+    
+            if (this.state.editing){
+                fnameField = <input type="text" placeholder="first name" value={this.state.trainer.first_name}/>
+                lnameField = <input type="text" placeholder="last name" value={this.state.trainer.last_name}/>
+                titleField = <input type="text" placeholder="title" value={this.state.trainer.title}/>
+                emailField = <input type="text" placeholder="email" value={this.state.trainer.email}/>
+                phoneField = <input type="text" placeholder="phone number" value={this.state.trainer.phone_number}/>
+                organizationField = <input type="text" placeholder="organization" value={this.state.trainer.organization}/>
+                districtField = <input type="text" placeholder="district" value={this.state.trainer.district}/>
+                notesField = <textarea type="text" placeholder="notes"></textarea>
+            }
         }
 
         return(
             <React.Fragment>
+                {JSON.stringify(this.state.trainer)}
             <button onClick={this.handleIconClick}>{this.state.editing ? "Save" : "Edit"}</button>
             <div className="trainerDetails">
                 <h3>Trainer Information</h3>
@@ -82,16 +99,21 @@ class TrainerDetails extends Component{
             </div>
             <hr></hr>
             <div className="trainerNotes">
-                Notes:
+                <h3>Notes</h3>
                 <br></br>
                 <div>{notesField}</div>
             </div>
+            <hr></hr>
             <div className="trainerHistory">
-
+                <h3>History</h3>
             </div>
             </React.Fragment>
         )
     }
 };
 
-export default connect()(TrainerDetails);
+const mapStateToProps = state => ({
+    trainer: state.localTrainersReducer.localTrainerDetails
+})
+
+export default connect(mapStateToProps)(TrainerDetails);

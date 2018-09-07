@@ -51,7 +51,7 @@ const App = () => (
           component={TrainerSearchView}
         />
         <Route
-          path="/trainerdetails"
+          path="/trainerdetails/:id"
           component={TrainerDetails}
         />
         {/* OTHERWISE (no path!) */}
