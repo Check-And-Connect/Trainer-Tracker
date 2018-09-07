@@ -138,7 +138,7 @@ router.get("/", rejectUnauthenticated, (req, res) => {
 // })
 
 router.get("/stateLevelOrganization", (req, res) => {
-  // if (req.isAuthenticated) {
+  if (req.isAuthenticated) {
   const queryText = `SELECT "state", "name", "id" FROM state_level_organization;`;
   pool
     .query(queryText)
@@ -150,12 +150,14 @@ router.get("/stateLevelOrganization", (req, res) => {
       console.log(err);
       res.sendStatus(500);
   })
-
-})
+} else {
+  res.sendStatus(403);
+}
+});
 
 router.post('/addLT', (req, res) => {
     console.log('got to post', req.body);
-    // if (req.isAuthenticated) {
+    if (req.isAuthenticated) {
         const queryText = `INSERT INTO "local_trainers" ("first_name", "last_name", "title", "email", "phone_number", "organization", "district", "cohort_ref_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8);`
         pool.query(queryText, [req.body.first_name, req.body.last_name, req.body.title, req.body.email, req.body.phone_number, req.body.organization, req.body.district, req.body.cohort])
             .then(() => {
@@ -165,9 +167,9 @@ router.post('/addLT', (req, res) => {
                 console.log(error);
                 res.sendStatus(500)
             })
-    // } else {
-    //     res.sendStatus(403);
-    // }
+    } else {
+        res.sendStatus(403);
+    }
 })
 
 module.exports = router;
