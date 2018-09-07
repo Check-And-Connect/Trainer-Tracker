@@ -28,7 +28,7 @@ class AddTrainer extends Component {
                 organization: '',
                 state: '',
                 state_level_organization: '',
-                state_lead: '',
+                district: '',
                 cohort: 0
             },
             // recentlyAdded: [
@@ -47,7 +47,7 @@ class AddTrainer extends Component {
 
     componentDidMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
-        this.props.dispatch({ type: COHORT_ACTIONS.FETCH_COHORTS });
+        // this.props.dispatch({ type: COHORT_ACTIONS.FETCH_COHORTS });
         this.props.dispatch({ type: COHORT_ACTIONS.FETCH_STATES });
     }
 
@@ -76,7 +76,19 @@ class AddTrainer extends Component {
                     [propertyName]: event.target.value
                 }
             })
-            this.props.dispatch({ type: 'FETCH_FILTER_STATE', payload: event.target.value });
+            this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_STATE, payload: event.target.value });
+        }
+    }
+
+    handleChangeForSLO = (propertyName) => {
+        return (event) => {
+            this.setState({
+                newTrainer: {
+                    ...this.state.newTrainer,
+                    [propertyName]: event.target.value
+                }
+            })
+            this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_SLO, payload: event.target.value });
         }
     }
 
@@ -115,9 +127,9 @@ class AddTrainer extends Component {
             return <option value={item}>{item}</option>
         })
         let SLOListArray = this.props.cohortReducer.SLO_dropDown.map((item, index) => {
-            return <option value={item.name}>{item.name}</option>
+            return <option value={item.state_level_organization_id}>{item.name}</option>
         })
-        let cohortListArray = this.props.cohortReducer.trainer_cohorts.map((item, index) => {
+        let cohortListArray = this.props.cohortReducer.cohort_dropDown.map((item, index) => {
             return <option value={item.cohort_id}>{item.name}</option>
         })
 
@@ -135,37 +147,37 @@ class AddTrainer extends Component {
                     <Grid item xs={8}>
                         <form className='trainerForm' onSubmit={this.addNewTrainer}>
                             <Grid container>
-                                <Grid item xs={7}>
+                                <Grid item xs={4}>
                                     <input className='lengthOfInputs' type='text' placeholder='First Name' value={this.state.newTrainer.first_name} onChange={this.handleChangeFor('first_name')} />
                                 </Grid>
-                                <Grid item xs={5}>
+                                <Grid item xs={8}>
                                     <select className='lengthOfInputs' onChange={this.handleChangeForState('state')}>
                                         <option value="">State</option>
                                         {stateListArray}
                                     </select>
                                 </Grid>
-                                <Grid item xs={7}>
+                                <Grid item xs={4}>
                                     <input className='lengthOfInputs' type='text' placeholder='Last Name' value={this.state.newTrainer.last_name} onChange={this.handleChangeFor('last_name')} />
                                 </Grid>
-                                <Grid item xs={5}>
-                                    <select className='lengthOfInputs' onChange={this.handleChangeFor('state_level_organization')}>
-                                        <option value="state">State Level Organization</option>
+                                <Grid item xs={8}>
+                                    <select className='lengthOfInputs' onChange={this.handleChangeForSLO('state_level_organization')}>
+                                        <option value="">State Level Organization</option>
                                         {SLOListArray}
                                     </select>
                                 </Grid>
-                                <Grid item xs={7}>
+                                <Grid item xs={4}>
                                     <input className='lengthOfInputs' type='text' placeholder='Title' value={this.state.newTrainer.title} onChange={this.handleChangeFor('title')} />
                                 </Grid>
-                                <Grid item xs={5}>
+                                <Grid item xs={8}>
                                     <select className='lengthOfInputs' onChange={this.handleChangeFor('cohort')}>
                                         <option value="">Cohort</option>
                                         {cohortListArray}
                                     </select>
                                 </Grid>
-                                <Grid item xs={8}>
+                                <Grid item xs={4}>
                                     <input className='lengthOfInputs' type='text' placeholder='Email' value={this.state.newTrainer.email} onChange={this.handleChangeFor('email')} />
                                 </Grid>
-                                <Grid item xs={4}>
+                                <Grid item xs={8}>
                                     <input type='submit' value='Submit' />
                                 </Grid>
                                 <Grid item xs={12}>

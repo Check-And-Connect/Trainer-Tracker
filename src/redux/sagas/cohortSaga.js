@@ -29,6 +29,22 @@ function* getStates() {
     }
 }
 
+function* filterSLO(action) {
+    try {
+        const cohortResponse = yield call(axios.get, '/api/cohorts/cohort')
+        yield dispatch({
+            type: COHORT_ACTIONS.TRAINER_COHORTS,
+            payload: cohortResponse.data
+        })
+        yield dispatch({
+            type: COHORT_ACTIONS.FILTER_SLO,
+            payload: action.payload
+        })
+    } catch (err) {
+        yield console.log(err);
+    }
+}
+
 // filter state level orgs and states
 function* filterState(action) {
     try {
@@ -64,6 +80,8 @@ function* cohortSaga() {
     yield takeEvery(COHORT_ACTIONS.FETCH_STATES, getStates);
     yield takeEvery(COHORT_ACTIONS.FETCH_FILTER_STATE, filterState);
     yield takeEvery(COHORT_ACTIONS.FETCH_STATE_LEVEL_ORG, getStateLevelOrgandState);
+    yield takeEvery(COHORT_ACTIONS.FETCH_FILTER_SLO, filterSLO);
+    
 }
 
 export default cohortSaga;
