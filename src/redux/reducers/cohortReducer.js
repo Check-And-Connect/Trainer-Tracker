@@ -1,7 +1,21 @@
 import { combineReducers } from 'redux';
 import { COHORT_ACTIONS } from '../actions/cohortActions';
 
-const state_and_SLO = (state = [], action) => {
+const state_dropDown = (state = [], action) => {
+    switch (action.type) {
+        case COHORT_ACTIONS.STATE_LIST:
+            let stateSet = new Set();
+            for (let i = 0; i < action.payload.length; i++) {
+                stateSet.add(action.payload[i].state)
+            }
+            let newStateArray = Array.from(stateSet)
+            return newStateArray;
+        default:
+            return state;
+    }
+};
+
+const SLO_dropDown = (state = [], action) => {
     switch (action.type) {
         case COHORT_ACTIONS.STATE_AND_STATE_ORG:
             return action.payload
@@ -28,7 +42,8 @@ const trainer_cohorts = (state = [], action) => {
 };
 
 export default combineReducers({
-    state_and_SLO,
+    state_dropDown,
+    SLO_dropDown,
     trainer_cohorts
 }); 
 
