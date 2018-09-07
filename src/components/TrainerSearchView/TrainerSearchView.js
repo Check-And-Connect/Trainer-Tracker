@@ -186,6 +186,29 @@ class TrainerSearchView extends Component {
         })
     }
 
+    handleStatusCheckbox = (e) => {
+        console.log('handling status checkbox');
+    }
+
+    // getLastNext = (requirementsArray) => {
+    //     let lastNext = [null, null, null];
+    //     for (let i=0; i<requirementsArray.length; i++ ){
+    //         for (let j=1; j<6; j++){
+    //             if(requirementsArray[i].requirement_id === j){
+    //                 if (requirementsArray[i].completed !== null){
+    //                     lastNext[0] = requirementsArray[i].requirement_name;
+    //                     if (j === 5){
+    //                         return lastNext
+    //                     }
+    //                     lastNext[1] = requirementsArray[i+1].requirement_name;
+    //                     lastNext[2] = requirementsArray[i+1].requirement_name;
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return lastNext
+    // }
+
 
     render() {
         let { classes } = this.props;
@@ -195,6 +218,7 @@ class TrainerSearchView extends Component {
 
         if (this.state.localTrainers) {
             trainersTableBody = this.state.localTrainers.map((trainer) => {
+                let lastNext = this.getLastNext(trainer.requirements)
                 return (
                     <TableRow key={trainer.local_trainers_id}>
                         <TableCell>{trainer.cohort.cohort_name}</TableCell>
@@ -202,7 +226,9 @@ class TrainerSearchView extends Component {
                         <TableCell>{trainer.last_name}</TableCell>
                         <TableCell>{trainer.state}</TableCell>
                         <TableCell>{trainer.state_level_organization.state_level_organization_name}</TableCell>
-                        <TableCell>Requirements</TableCell>
+                        <TableCell>Last Requirement Completed</TableCell>
+                        <TableCell>Next Requirement Due</TableCell>
+                        <TableCell>Due Date</TableCell>
                     </TableRow>
                 )
             })
@@ -236,7 +262,9 @@ class TrainerSearchView extends Component {
                             <TableCell>Last Name</TableCell>
                             <TableCell>State</TableCell>
                             <TableCell>State-Level Org.</TableCell>
-                            <TableCell>Requirements</TableCell>
+                            <TableCell>Latest Req.</TableCell>
+                            <TableCell>Upcoming Req.</TableCell>
+                            <TableCell>Due Date</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -245,6 +273,7 @@ class TrainerSearchView extends Component {
                 </Table>
                 </div>
             </div>
+            {JSON.stringify(this.state.localTrainers)}
             </React.Fragment>
         )
     }
