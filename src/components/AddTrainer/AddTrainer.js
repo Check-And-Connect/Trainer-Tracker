@@ -31,23 +31,12 @@ class AddTrainer extends Component {
                 district: '',
                 cohort: 0
             },
-            // recentlyAdded: [
-            //     {
-            //         first_name: '',
-            //         last_name: '',
-            //         title: '',
-            //         state: '',
-            //         state_level_organization: '',
-            //     }
-            // ]
+            recentlyAdded: []
         }
     }
 
-
-
     componentDidMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
-        // this.props.dispatch({ type: COHORT_ACTIONS.FETCH_COHORTS });
         this.props.dispatch({ type: COHORT_ACTIONS.FETCH_STATES });
     }
 
@@ -104,16 +93,7 @@ class AddTrainer extends Component {
     addNewTrainer = event => {
         event.preventDefault();
         this.props.dispatch({ type: 'ADD_LT', payload: this.state.newTrainer })
-        this.setState({
-            recentlyAdded: {
-                ...this.state.recentlyAdded,
-                first_name: this.state.newTrainer.first_name,
-                last_name: this.state.newTrainer.last_name,
-                title: this.state.newTrainer.title,
-                state: this.state.newTrainer.state,
-                state_level_organization: this.state.newTrainer.state_level_organization
-            }
-        })
+        this.state.recentlyAdded.unshift(this.state.newTrainer);
         this.setState({
             newTrainer: {
                 first_name: '',
@@ -138,71 +118,77 @@ class AddTrainer extends Component {
         let cohortListArray = this.props.cohortReducer.cohort_dropDown.map((item, index) => {
             return <option value={item.cohort_id}>{item.name}</option>
         })
-
-        // let recentListArray = this.props.recentlyAdded.map((item, index) => {
-        //     return <li>{item.first_name} {item.last_name}</li> 
-        // })
+        let recentListArray = this.state.recentlyAdded.map((item, index) => {
+            return <li>NAME: {item.first_name} {item.last_name} STATE: {item.state}</li>
+        })
 
         let content = null;
         if (this.props.user.userName) {
-        content = (
-            <div>
-                <h2 className='centerHeadings'>Add New Trainer</h2>
-                <Grid container>
-                    <Grid item xs={4}></Grid>
-                    <Grid item xs={8}>
-                        <form className='trainerForm' onSubmit={this.addNewTrainer}>
-                            <Grid container>
-                                <Grid item xs={4}>
-                                    <input className='lengthOfInputs' type='text' placeholder='First Name' value={this.state.newTrainer.first_name} onChange={this.handleChangeFor('first_name')} />
+            content = (
+                <div>
+                    <h2 className='centerHeadings'>Add New Trainer</h2>
+                    <Grid container>
+                        <Grid item xs={4}></Grid>
+                        <Grid item xs={8}>
+                            <form className='trainerForm' onSubmit={this.addNewTrainer}>
+                                <Grid container>
+                                    <Grid item xs={4}>
+                                        <input className='lengthOfInputs' type='text' placeholder='First Name' value={this.state.newTrainer.first_name} onChange={this.handleChangeFor('first_name')} />
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                        <select id='stateDrop' className='lengthOfInputs' onChange={this.handleChangeForState('state')}>
+                                            <option value="state">State</option>
+                                            {stateListArray}
+                                        </select>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <input className='lengthOfInputs' type='text' placeholder='Last Name' value={this.state.newTrainer.last_name} onChange={this.handleChangeFor('last_name')} />
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                        <select id='SLODrop' className='lengthOfInputs' onChange={this.handleChangeForSLO('state_level_organization')}>
+                                            <option value="">State Level Organization</option>
+                                            {SLOListArray}
+                                        </select>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <input className='lengthOfInputs' type='text' placeholder='Title' value={this.state.newTrainer.title} onChange={this.handleChangeFor('title')} />
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                        <select id='cohortDrop' className='lengthOfInputs' onChange={this.handleChangeFor('cohort')}>
+                                            <option value="">Cohort</option>
+                                            {cohortListArray}
+                                        </select>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <input className='lengthOfInputs' type='text' placeholder='Email' value={this.state.newTrainer.email} onChange={this.handleChangeFor('email')} />
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                        <input type='submit' value='Submit' />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <input className='lengthOfInputs' type='text' placeholder='Phone Number' value={this.state.newTrainer.phone_number} onChange={this.handleChangeFor('phone_number')} />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <input className='lengthOfInputs' type='text' placeholder='Organization' value={this.state.newTrainer.organization} onChange={this.handleChangeFor('organization')} />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <input className='lengthOfInputs' type='text' placeholder='District' value={this.state.newTrainer.district} onChange={this.handleChangeFor('district')} />
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={8}>
-                                    <select id='stateDrop' className='lengthOfInputs' onChange={this.handleChangeForState('state')}>
-                                        <option value="state">State</option>
-                                        {stateListArray}
-                                    </select>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <input className='lengthOfInputs' type='text' placeholder='Last Name' value={this.state.newTrainer.last_name} onChange={this.handleChangeFor('last_name')} />
-                                </Grid>
-                                <Grid item xs={8}>
-                                    <select id='SLODrop' className='lengthOfInputs' onChange={this.handleChangeForSLO('state_level_organization')}>
-                                        <option value="">State Level Organization</option>
-                                        {SLOListArray}
-                                    </select>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <input className='lengthOfInputs' type='text' placeholder='Title' value={this.state.newTrainer.title} onChange={this.handleChangeFor('title')} />
-                                </Grid>
-                                <Grid item xs={8}>
-                                    <select id='cohortDrop' className='lengthOfInputs' onChange={this.handleChangeFor('cohort')}>
-                                        <option value="">Cohort</option>
-                                        {cohortListArray}
-                                    </select>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <input className='lengthOfInputs' type='text' placeholder='Email' value={this.state.newTrainer.email} onChange={this.handleChangeFor('email')} />
-                                </Grid>
-                                <Grid item xs={8}>
-                                    <input type='submit' value='Submit'/>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <input className='lengthOfInputs' type='text' placeholder='Phone Number' value={this.state.newTrainer.phone_number} onChange={this.handleChangeFor('phone_number')} />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <input className='lengthOfInputs' type='text' placeholder='Organization' value={this.state.newTrainer.organization} onChange={this.handleChangeFor('organization')} />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <input className='lengthOfInputs' type='text' placeholder='District' value={this.state.newTrainer.district} onChange={this.handleChangeFor('district')} />
-                                </Grid>
-                            </Grid>
-                        </form>
+                            </form>
+                        </Grid>
                     </Grid>
-                </Grid>
-                <h2 className='centerHeadings'>Recently Added</h2>
-                {/* {recentListArray} */}
-            </div>
-        );
+                    <h2 className='centerHeadings'>Recently Added</h2>
+                    <Grid container>
+                        <Grid item xs={4}></Grid>
+                        <Grid item xs={8}>
+                            <ul>
+                                {recentListArray}
+                            </ul>
+                        </Grid>
+                    </Grid>
+                </div>
+            );
         }
 
         return (
