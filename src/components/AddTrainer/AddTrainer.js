@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-// import Nav from '../../components/Nav/Nav';
-import { USER_ACTIONS } from '../../redux/actions/userActions';
+// import { USER_ACTIONS } from '../../redux/actions/userActions';
 import Grid from '@material-ui/core/Grid';
 
 const mapStateToProps = state => ({
@@ -45,9 +44,9 @@ class AddTrainer extends Component {
 
     componentDidMount() {
         // this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
-        this.props.dispatch({ type: 'FETCH_STATE_LEVEL_ORG' });
         this.props.dispatch({ type: 'FETCH_STATE_LEAD' });
         this.props.dispatch({ type: 'FETCH_COHORTS' });
+        this.props.dispatch({ type: 'FETCH_STATES' });
     }
 
     componentDidUpdate() {
@@ -75,17 +74,9 @@ class AddTrainer extends Component {
                     [propertyName]: event.target.value
                 }
             })
-            this.props.dispatch({ type: 'FILTER_STATE', payload: event.target.value });
+            this.props.dispatch({ type: 'FETCH_FILTER_STATE', payload: event.target.value });
         }
     }
-
-    // addLog = () => {
-    //     this.props.dispatch({
-    //         type: 'POST_LOG',
-    //         payload: this.state.newLog
-    //     })
-    //     this.props.history.push('patientGraph');
-    // }
 
     addNewTrainer = event => {
         event.preventDefault();
@@ -117,13 +108,11 @@ class AddTrainer extends Component {
         });
     }
 
-
-
     render() {
-        let stateListArray = this.props.cohortReducer.state_and_SLO.map((item, index) => {
-            return <option value={item.state}>{item.state}</option>
+        let stateListArray = this.props.cohortReducer.state_dropDown.map((item, index) => {
+            return <option value={item}>{item}</option>
         })
-        let SLOListArray = this.props.cohortReducer.state_and_SLO.map((item, index) => {
+        let SLOListArray = this.props.cohortReducer.SLO_dropDown.map((item, index) => {
             return <option value={item.name}>{item.name}</option>
         })
         let cohortListArray = this.props.cohortReducer.trainer_cohorts.map((item, index) => {
