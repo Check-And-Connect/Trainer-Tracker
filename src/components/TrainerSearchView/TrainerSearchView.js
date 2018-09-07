@@ -190,24 +190,25 @@ class TrainerSearchView extends Component {
         console.log('handling status checkbox');
     }
 
-    // getLastNext = (requirementsArray) => {
-    //     let lastNext = [null, null, null];
-    //     for (let i=0; i<requirementsArray.length; i++ ){
-    //         for (let j=1; j<6; j++){
-    //             if(requirementsArray[i].requirement_id === j){
-    //                 if (requirementsArray[i].completed !== null){
-    //                     lastNext[0] = requirementsArray[i].requirement_name;
-    //                     if (j === 5){
-    //                         return lastNext
-    //                     }
-    //                     lastNext[1] = requirementsArray[i+1].requirement_name;
-    //                     lastNext[2] = requirementsArray[i+1].requirement_name;
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     return lastNext
-    // }
+    getLastNext = (requirementsArray) => {
+        let lastNext = [null, null, null];
+        requirementsArray.sort((a, b) => {
+            return a.requirement_id - b.requirement_id
+        })
+        for (let i=0; i<requirementsArray.length; i++){
+            if (requirementsArray[i].completed === null){
+                lastNext[1] = requirementsArray[i].requirement_name;
+                lastNext[2] = requirementsArray[i].requirement_due_date;
+                if (i === 0){
+                    lastNext[0] = 'n/a';
+                    return lastNext
+                } else {
+                    lastNext[0] = requirementsArray[i-1].requirement_name;
+                    return lastNext;
+                }
+            }
+        }
+    }
 
 
     render() {
@@ -216,7 +217,7 @@ class TrainerSearchView extends Component {
 
         if (this.state.localTrainers) {
             trainersTableBody = this.state.localTrainers.map((trainer) => {
-                // let lastNext = this.getLastNext(trainer.requirements)
+                let lastNext = this.getLastNext(trainer.requirements)
                 return (
                     <TableRow key={trainer.local_trainers_id}>
                         <TableCell>{trainer.cohort.cohort_name}</TableCell>
@@ -232,9 +233,9 @@ class TrainerSearchView extends Component {
                         </TableCell>
                         <TableCell>{trainer.state}</TableCell>
                         <TableCell>{trainer.state_level_organization.state_level_organization_name}</TableCell>
-                        <TableCell>Last Requirement Completed</TableCell>
-                        <TableCell>Next Requirement Due</TableCell>
-                        <TableCell>Due Date</TableCell>
+                        <TableCell>{lastNext[0]}</TableCell>
+                        <TableCell>{lastNext[1]}</TableCell>
+                        <TableCell>{lastNext[2]}</TableCell>
                     </TableRow>
                 )
             })
@@ -268,7 +269,7 @@ class TrainerSearchView extends Component {
                             <TableCell>Last Name</TableCell>
                             <TableCell>State</TableCell>
                             <TableCell>State-Level Org.</TableCell>
-                            <TableCell>Latest Req.</TableCell>
+                            <TableCell>Last Completed Req.</TableCell>
                             <TableCell>Upcoming Req.</TableCell>
                             <TableCell>Due Date</TableCell>
                         </TableRow>
