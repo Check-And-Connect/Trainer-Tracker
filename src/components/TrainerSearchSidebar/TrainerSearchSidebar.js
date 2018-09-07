@@ -70,12 +70,33 @@ class TrainerSearchSidebar extends Component {
                         value={setElement}
                         name="cohort_name"
                         defaultChecked
-                        onChange={this.props.handleCheckboxClick}
+                        onChange={this.props.handleCohortCheckbox}
                     />
                 </div>
             )
         })
     }
+
+    const statusCheckboxes = 
+        <React.Fragment>
+        <div>
+            <p>Active</p>
+            <input
+                type="checkbox"
+                value="active"
+                name="status"
+                defaultChecked
+            />
+        </div>
+        <div>
+            <p>Inactive</p>
+            <input
+                type="checkbox"
+                value="active"
+                name="status"
+            />
+        </div>
+        </React.Fragment>
 
     return (
       <div>
@@ -112,6 +133,18 @@ class TrainerSearchSidebar extends Component {
           <ExpansionPanelDetails>
             <Typography>
                 {cohortNameCheckboxes}
+            </Typography>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        <ExpansionPanel>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography className={classes.heading}>
+              Status
+            </Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Typography>
+                {statusCheckboxes}
             </Typography>
           </ExpansionPanelDetails>
         </ExpansionPanel>
