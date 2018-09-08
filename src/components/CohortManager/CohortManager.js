@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 
 import { withStyles } from "@material-ui/core";
 
-import Nav from "../../components/Nav/Nav";
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 import { LOCAL_TRAINERS_ACTIONS } from "../../redux/actions/localTrainerActions";
 import { COHORT_ACTIONS } from "../../redux/actions/cohortActions";
@@ -55,7 +54,7 @@ class CohortManager extends Component {
     // this.props.dispatch({type : NATIONAL_TRAINERS_ACTIONS.FETCH_NATIONAL_TRAINERS})
     this.props.dispatch({ type: COHORT_ACTIONS.FETCH_REQUIREMENTS });
     // this.props.dispatch({type : COHORT_ACTIONS.FETCH_COHORTS})
-    // this.props.dispatch({type : COHORT_ACTIONS.FETCH_SLOS})
+    // this.props.dispatch({type : COHORT_ACTIONS.FETCH_STATE_LEVEL_ORG})
     this.setState({
       currentTrainers: this.props.localTrainers.allLocalTrainers
     });

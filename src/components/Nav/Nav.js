@@ -32,7 +32,7 @@ class Nav extends React.Component {
           </Button>
         </Link>
 
-        <Link to="/">
+        <Link to="/trainersearch">
           <Button
             aria-owns={anchorEl ? "simple-menu" : null}
             aria-haspopup="true"
