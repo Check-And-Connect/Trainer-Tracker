@@ -28,8 +28,10 @@ passport.deserializeUser((id, done) => {
 // Does actual work of logging in
 passport.use('local', new LocalStrategy({
   passReqToCallback: true,
-  usernameField: 'username',
+  usernameField: 'username', 
 }, ((req, username, password, done) => {
+  
+  
     pool.query('SELECT * FROM national_trainer WHERE user_name = $1', [username])
       .then((result) => {
         const user = result && result.rows && result.rows[0];

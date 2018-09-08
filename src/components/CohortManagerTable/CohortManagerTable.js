@@ -25,9 +25,7 @@ const styles = {
 };
 
 export class CohortManagerTable extends Component {
-  handleChange = () => {
-    console.log("checkbox clicked");
-  };
+  
 
   formatRequirement = (localTrainerId, reqAry, reqId) => {
     let requirement = reqAry.filter(req => {
@@ -72,7 +70,6 @@ export class CohortManagerTable extends Component {
       content = "n/a";
     }
 
-    // ${moment([requirement[0].requirement_due_date]).format('MM-DD-YYYY')}`}
     return content;
   };
 
@@ -82,9 +79,9 @@ export class CohortManagerTable extends Component {
         <TableRow key={localTrainer.local_trainers_id}>
           <TableCell className={this.props.classes.tableCell}>
             <Checkbox
-              // checked={this.state.checkedA}
-              onChange={() => this.handleChange("checkedA")}
-              value="checkedA"
+              onChange={() => this.props.handleChecked(localTrainer.local_trainers_id)}
+              value={localTrainer.local_trainers_id.toString()}
+              checked={this.props.checkedIDs.includes(localTrainer.local_trainers_id)}
             />
           </TableCell>
           <TableCell className={this.props.classes.tableCell}>
@@ -162,9 +159,9 @@ export class CohortManagerTable extends Component {
               <TableRow>
                 <TableCell className={this.props.classes.tableCell}>
                   <Checkbox
-                    // checked={this.state.checkedA}
-                    onChange={() => this.handleChange("checkedA")}
-                    value="checkedA"
+                    checked={this.props.currentTrainers.length === this.props.checkedIDs.length}
+                    onChange={() => this.props.handleChecked('selectAll')}
+                    value="all"
                   />
                 </TableCell>
                 <TableCell className={this.props.classes.tableCell}>

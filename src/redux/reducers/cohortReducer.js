@@ -39,7 +39,7 @@ const cohort_dropDown = (state = [], action) => {
         case COHORT_ACTIONS.FILTER_SLO:
             let newCohort = [];
             for (let i = 0; i < state.length; i++) {
-                if (state[i].state_level_organization_ref_id == action.payload) {
+                if (state[i].state_level_organization_ref_id === action.payload) {
                     newCohort.push(state[i]);
                 }
             }
@@ -58,10 +58,20 @@ const trainer_cohorts = (state = [], action) => {
     }
 };
 
+const requirements = (state = [] , action) =>{
+    switch (action.type) {
+        case COHORT_ACTIONS.SET_REQUIREMENTS:
+          return action.payload
+        default:
+          return state;
+      }
+}
+
 export default combineReducers({
     state_dropDown,
     SLO_dropDown,
     trainer_cohorts,
-    cohort_dropDown
+    cohort_dropDown,
+    requirements
 }); 
 

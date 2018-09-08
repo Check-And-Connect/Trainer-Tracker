@@ -11,6 +11,9 @@ export function callLogin(payload) {
     withCredentials: true,
   };
 
+  console.log(body);
+  
+
   return axios.post('api/user/login', body, config)
     .then(response => response.data)
     .catch((error) => {
