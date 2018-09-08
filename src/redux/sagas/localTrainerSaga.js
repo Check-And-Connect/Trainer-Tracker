@@ -54,7 +54,9 @@ function* markComplete(action) {
   try {
     let actualPayload = {
       requirement_id: action.payload.requirement_id,
-      date_marked_complete: action.payload.date_marked_complete
+      date_marked_complete: action.payload.date_marked_complete,
+      national_trainer : action.payload.national_trainer,
+      note : action.payload.note
     };
 
     yield all(
@@ -90,8 +92,6 @@ function* scheduleForRequirement(action) {
   } catch (error) {
     console.log(error);
   }
-
-
 }
 
 function* addSaga() {

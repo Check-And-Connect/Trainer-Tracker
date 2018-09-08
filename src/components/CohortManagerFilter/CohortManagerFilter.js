@@ -34,13 +34,13 @@ class CohortManagerFilter extends Component {
 
 
   handleChange = property => event => {
-    if (property == "statePicked") {
+    if (property === "statePicked") {
       this.setState({
         [property]: event.target.value,
         stateOrgPicked: "",
         cohortPicked: ""
       }, () => this.props.filterBy(this.state));
-    } else if (property == "stateOrgPicked") {
+    } else if (property === "stateOrgPicked") {
       this.setState({
         [property]: event.target.value,
         cohortPicked: ""

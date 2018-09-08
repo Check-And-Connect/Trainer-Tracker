@@ -12,7 +12,7 @@ function* getCohorts() {
             payload: cohortResponse.data
         })
     } catch (err) {
-        yield console.log(err);
+        console.log(err);
     }
 }
 
@@ -25,7 +25,7 @@ function* getStates() {
             payload: stateResponse.data
         })
     } catch (err) {
-        yield console.log(err);
+        console.log(err);
     }
 }
 
@@ -41,7 +41,7 @@ function* filterSLO(action) {
             payload: action.payload
         })
     } catch (err) {
-        yield console.log(err);
+         console.log(err);
     }
 }
 
@@ -58,7 +58,7 @@ function* filterState(action) {
             payload: action.payload
         })
     } catch (err) {
-        yield console.log(err);
+         console.log(err);
     }
 }
 
@@ -70,7 +70,7 @@ function* getStateLevelOrgandState() {
             payload: stateLevelResponse.data
         })
     } catch (err) {
-        yield console.log(err);
+         console.log(err);
     }
 }
 

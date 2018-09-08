@@ -6,6 +6,7 @@ import { withStyles } from "@material-ui/core";
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 import { LOCAL_TRAINERS_ACTIONS } from "../../redux/actions/localTrainerActions";
 import { COHORT_ACTIONS } from "../../redux/actions/cohortActions";
+import { NATIONAL_TRAINER_ACTIONS } from '../../redux/actions/nationalTrainerActions'
 import CohortManagerFilter from "../CohortManagerFilter/CohortManagerFilter";
 import Scheduler from "../Scheduler/Scheduler";
 import CohortManagerTable from "../CohortManagerTable/CohortManagerTable";
@@ -51,7 +52,7 @@ class CohortManager extends Component {
   componentDidMount() {
     this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
     this.props.dispatch({ type: LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINERS });
-    // this.props.dispatch({type : NATIONAL_TRAINERS_ACTIONS.FETCH_NATIONAL_TRAINERS})
+    this.props.dispatch({type : NATIONAL_TRAINER_ACTIONS.FETCH_ALL_NATIONAL_TRAINERS})
     this.props.dispatch({ type: COHORT_ACTIONS.FETCH_REQUIREMENTS });
     // this.props.dispatch({type : COHORT_ACTIONS.FETCH_COHORTS})
     // this.props.dispatch({type : COHORT_ACTIONS.FETCH_STATE_LEVEL_ORG})

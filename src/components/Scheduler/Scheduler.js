@@ -23,7 +23,7 @@ const styles = {
     width: "15em"
   },
   mainComponent: {
-    backgroundColor: "grey",
+    
     padding: "1em"
   },
   buttons: {
@@ -107,7 +107,7 @@ class Scheduler extends Component {
           <form>
            
             <FormControl required={true} className={classes.formControl}>
-              <InputLabel htmlFor="age-simple">Select A Requirement</InputLabel>
+              <InputLabel>Select A Requirement</InputLabel>
               <Select
                 className={classes.dropDown}
                 value={this.state.requirement_id}

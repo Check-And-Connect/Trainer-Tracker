@@ -6,7 +6,7 @@ const {
 const router = express.Router();
 
 router.get("/", rejectUnauthenticated, (req, res) => {
-  const getAllLocalTrainersQuery = `SELECT local_trainers.*, local_trainers_requirements.*, national_trainer.first_name as national_trainer_first_name, national_trainer.last_name as national_trainer_last_name, cohort_requirements.*, requirements.name as requirement_name ,cohort.*, state_level_organization.name as slo_name, state_level_organization.state_level_organization_id as state_level_organization_id, state_level_organization.state as state FROM local_trainers
+  const getAllLocalTrainersQuery = `SELECT local_trainers.*, local_trainers_requirements.*, local_trainers_requirements.notes as requirement_notes, national_trainer.first_name as national_trainer_first_name, national_trainer.last_name as national_trainer_last_name, cohort_requirements.*, requirements.name as requirement_name ,cohort.*, state_level_organization.name as slo_name, state_level_organization.state_level_organization_id as state_level_organization_id, state_level_organization.state as state FROM local_trainers
   JOIN local_trainers_requirements ON local_trainers.local_trainers_id = local_trainers_requirements.local_trainers_ref_id
   LEFT OUTER JOIN national_trainer ON local_trainers_requirements.national_trainer_ref_id = national_trainer.national_trainer_id
   JOIN cohort_requirements ON local_trainers_requirements.cohort_requirements_ref_id = cohort_requirements.cohort_req_id
@@ -14,6 +14,8 @@ router.get("/", rejectUnauthenticated, (req, res) => {
   JOIN cohort ON cohort.cohort_id = local_trainers.cohort_ref_id
   JOIN state_level_organization ON state_level_organization.state_level_organization_id = cohort.state_level_organization_ref_id`;
 
+  console.log(req.user);
+  
   const queryForPerson =
     getAllLocalTrainersQuery +
     ` WHERE local_trainers.local_trainers_id = $1 AND cohort_requirements.requirement_id = $2 `;
@@ -27,8 +29,10 @@ router.get("/", rejectUnauthenticated, (req, res) => {
             req.query.requirementId
           ])
           .then(response => {
+            console.log('=====================================');
+            
             console.log(response.rows);
-
+            console.log('=====================================');
             resolve(response);
           })
           .catch(err => {
@@ -57,7 +61,7 @@ router.get("/", rejectUnauthenticated, (req, res) => {
 
   poolQuery()
     .then(results => {
-      console.log(req.query);
+     
 
       let resultAry = [];
 
@@ -90,7 +94,8 @@ router.get("/", rejectUnauthenticated, (req, res) => {
                 national_trainer_id: element.national_trainer_ref_id,
                 national_trainer_first_name:
                   element.national_trainer_first_name,
-                national_trainer_last_name: element.national_trainer_last_name
+                national_trainer_last_name: element.national_trainer_last_name,
+                requirement_note : element.requirement_notes
               }
             ]
           };
@@ -173,7 +178,7 @@ router.post("/markRequirememtComplete/:local_trainer_id", (req, res) => {
   console.log(req.body);
 
   let markCompleteQuery =
-    "UPDATE local_trainers_requirements SET completed = $1 WHERE local_trainers_requirements_id = $2";
+    "UPDATE local_trainers_requirements SET completed = $1 , national_trainer_ref_id = $2 , notes = $3 WHERE local_trainers_requirements_id = $4";
   pool
     .query(getLocalTrainerRequirementIdQuery, [
       req.params.local_trainer_id,
@@ -184,6 +189,8 @@ router.post("/markRequirememtComplete/:local_trainer_id", (req, res) => {
       pool
         .query(markCompleteQuery, [
           req.body.date_marked_complete,
+          req.body.national_trainer? req.body.national_trainer : req.user.national_trainer_id,
+          req.body.note ? req.body.note : null, 
           response.rows[0].local_trainers_requirements_id
         ])
         .then(() => {
