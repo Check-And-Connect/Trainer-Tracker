@@ -19,39 +19,26 @@ router.get("/", rejectUnauthenticated, (req, res) => {
     ` WHERE local_trainers.local_trainers_id = $1 AND cohort_requirements.requirement_id = $2 `;
 
   let poolQuery = () => {
-   
-    console.log('============================');
-      console.log(req.query.hasOwnProperty('requirementId'));
-      console.log(req.query);
-      
-    console.log('============================');
-
-
-    if (req.query.hasOwnProperty('requirementId')) {
-       
+    if (req.query.hasOwnProperty("requirementId")) {
       return new Promise((resolve, reject) => {
-        console.log(req.query);
-      
-        console.log('============================');
         pool
           .query(queryForPerson, [
             req.query.localTrainerId,
             req.query.requirementId
           ])
           .then(response => {
-              console.log(response.rows);
-              
+            console.log(response.rows);
+
             resolve(response);
           })
           .catch(err => {
-              console.log(err);
-              
+            console.log(err);
+
             reject();
             res.sendStatus(500);
           });
       });
     } else {
-       
       return new Promise((resolve, reject) => {
         pool
           .query(getAllLocalTrainersQuery)
@@ -59,15 +46,15 @@ router.get("/", rejectUnauthenticated, (req, res) => {
             resolve(response);
           })
           .catch(err => {
-              console.log(err);
-              
+            console.log(err);
+
             reject();
             res.sendStatus(500);
           });
       });
     }
   };
-  
+
   poolQuery()
     .then(results => {
       console.log(req.query);
@@ -96,7 +83,7 @@ router.get("/", rejectUnauthenticated, (req, res) => {
             requirements: [
               {
                 requirement_id: element.requirement_id,
-                requirement_name : element.requirement_name,
+                requirement_name: element.requirement_name,
                 requirement_due_date: element.due_date,
                 scheduled_date: element.scheduled_date,
                 completed: element.completed,
@@ -112,7 +99,7 @@ router.get("/", rejectUnauthenticated, (req, res) => {
         } else {
           let newReq = {
             requirement_id: element.requirement_id,
-            requirement_name : element.requirement_name,
+            requirement_name: element.requirement_name,
             requirement_due_date: element.due_date,
             scheduled_date: element.scheduled_date,
             completed: element.completed,
@@ -133,10 +120,6 @@ router.get("/", rejectUnauthenticated, (req, res) => {
     });
 });
 
-// router.get('/requirement' , rejectUnauthenticated, (req, res) => {
-//     const queryText =
-// })
-
 router.get("/stateLevelOrganization", (req, res) => {
   // if (req.isAuthenticated) {
   const queryText = `SELECT "state", "name", "id" FROM state_level_organization;`;
@@ -149,25 +132,101 @@ router.get("/stateLevelOrganization", (req, res) => {
     .catch(err => {
       console.log(err);
       res.sendStatus(500);
-  })
+    });
+});
 
-})
+router.post("/addLT", (req, res) => {
+  console.log("got to post", req.body);
+  // if (req.isAuthenticated) {
+  const queryText = `INSERT INTO "local_trainers" ("first_name", "last_name", "title", "email", "phone_number", "organization", "district", "cohort_ref_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8);`;
+  pool
+    .query(queryText, [
+      req.body.first_name,
+      req.body.last_name,
+      req.body.title,
+      req.body.email,
+      req.body.phone_number,
+      req.body.organization,
+      req.body.district,
+      req.body.cohort
+    ])
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(error => {
+      console.log(error);
+      res.sendStatus(500);
+    });
+});
 
-router.post('/addLT', (req, res) => {
-    console.log('got to post', req.body);
-    // if (req.isAuthenticated) {
-        const queryText = `INSERT INTO "local_trainers" ("first_name", "last_name", "title", "email", "phone_number", "organization", "district", "cohort_ref_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8);`
-        pool.query(queryText, [req.body.first_name, req.body.last_name, req.body.title, req.body.email, req.body.phone_number, req.body.organization, req.body.district, req.body.cohort])
-            .then(() => {
-                res.sendStatus(200);
-            })
-            .catch((error) => {
-                console.log(error);
-                res.sendStatus(500)
-            })
-    // } else {
-    //     res.sendStatus(403);
-    // }
-})
+router.post("/markRequirememtComplete/:local_trainer_id", (req, res) => {
+  let getLocalTrainerRequirementIdQuery = `SELECT local_trainers_requirements.local_trainers_requirements_id FROM local_trainers_requirements JOIN cohort_requirements ON cohort_requirements.cohort_req_id = local_trainers_requirements.cohort_requirements_ref_id
+  JOIN cohort ON cohort_requirements.cohort_id = cohort.cohort_id
+  WHERE local_trainers_requirements.local_trainers_ref_id = $1 AND cohort_requirements.requirement_id = $2;`;
+
+  console.log(req.body);
+
+  let markCompleteQuery =
+    "UPDATE local_trainers_requirements SET completed = $1 WHERE local_trainers_requirements_id = $2";
+  pool
+    .query(getLocalTrainerRequirementIdQuery, [
+      req.params.local_trainer_id,
+      req.body.requirement_id
+    ])
+    .then(response => {
+      console.log(response.rows);
+      pool
+        .query(markCompleteQuery, [
+          req.body.date_marked_complete,
+          response.rows[0].local_trainers_requirements_id
+        ])
+        .then(() => {
+          res.sendStatus(201);
+        })
+        .catch(err => {
+          console.log(err);
+          res.sendStatus(500);
+        });
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(500);
+    });
+});
+
+router.post("/scheduleForRequirement/:local_trainer_id", (req, res) => {
+  let getLocalTrainerRequirementIdQuery = `SELECT local_trainers_requirements.local_trainers_requirements_id FROM local_trainers_requirements JOIN cohort_requirements ON cohort_requirements.cohort_req_id = local_trainers_requirements.cohort_requirements_ref_id
+  JOIN cohort ON cohort_requirements.cohort_id = cohort.cohort_id
+  WHERE local_trainers_requirements.local_trainers_ref_id = $1 AND cohort_requirements.requirement_id = $2;`;
+
+  console.log(req.body);
+
+  let markCompleteQuery =
+    "UPDATE local_trainers_requirements SET scheduled_date = $1 WHERE local_trainers_requirements_id = $2";
+  pool
+    .query(getLocalTrainerRequirementIdQuery, [
+      req.params.local_trainer_id,
+      req.body.requirement_id
+    ])
+    .then(response => {
+      console.log(response.rows);
+      pool
+        .query(markCompleteQuery, [
+          req.body.date_scheduled,
+          response.rows[0].local_trainers_requirements_id
+        ])
+        .then(() => {
+          res.sendStatus(201);
+        })
+        .catch(err => {
+          console.log(err);
+          res.sendStatus(500);
+        });
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(500);
+    });
+});
 
 module.exports = router;

@@ -41,7 +41,7 @@ class Nav extends React.Component {
           </Button>
         </Link>
 
-        <Link to="/info">
+        <Link to="/cohort_manager">
           <Button
             aria-owns={anchorEl ? "simple-menu" : null}
             aria-haspopup="true"

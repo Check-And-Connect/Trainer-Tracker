@@ -87,7 +87,7 @@ class CohortManagerModal extends Component {
               {localTrainer.first_name} {localTrainer.last_name}
             </DialogTitle>
             <DialogContent>
-              <DialogContentText>
+    
                 <Typography>
                   Organization :{" "}
                   {
@@ -109,11 +109,11 @@ class CohortManagerModal extends Component {
                     localTrainer.requirements[0].requirement_due_date
                   ).format("MM-DD-YYYY")}
                 </Typography>
-              </DialogContentText>
+
               <form>
                 <FormControl>
                   <InputLabel>Observed By</InputLabel>
-                  <Select className={classes.dropDown}>
+                  <Select className={classes.dropDown} value="someone">
                     <MenuItem value="someone">national_trainer_2 </MenuItem>
                     <MenuItem value="someone">national_trainer_2 </MenuItem>
                     <MenuItem value="someone">national_trainer_2 </MenuItem>

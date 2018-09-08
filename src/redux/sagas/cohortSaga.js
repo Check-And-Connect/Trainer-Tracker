@@ -27,9 +27,26 @@ function* getStateLevelOrgandState() {
     }
 }
 
+function* getRequirements() {
+    try {
+        const requirements = yield call(axios.get, '/api/cohorts/requirements')
+        console.log(requirements);
+        
+        yield dispatch({
+            type : COHORT_ACTIONS.SET_REQUIREMENTS,
+            payload : requirements.data
+        })
+    } catch(err) {
+        console.log(err);
+        
+    }
+    
+}
+
 function* cohortSaga() {
     yield takeEvery(COHORT_ACTIONS.FETCH_STATE_LEVEL_ORG, getStateLevelOrgandState);
     yield takeEvery(COHORT_ACTIONS.FETCH_COHORTS, getCohorts);
+    yield takeLatest(COHORT_ACTIONS.FETCH_REQUIREMENTS, getRequirements)
 }
 
 export default cohortSaga;

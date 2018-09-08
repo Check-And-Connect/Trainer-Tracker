@@ -21,8 +21,18 @@ const trainer_cohorts = (state = [], action) => {
     }
   };
 
+const requirements = (state = [] , action) =>{
+    switch (action.type) {
+        case COHORT_ACTIONS.SET_REQUIREMENTS:
+          return action.payload
+        default:
+          return state;
+      }
+}
+
 export default combineReducers({
     state_and_SLO,
-    trainer_cohorts
+    trainer_cohorts,
+    requirements
 }); 
 
