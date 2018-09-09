@@ -280,7 +280,6 @@ class TrainerSearchView extends Component {
                 </Table>
                 </div>
             </div>
-            {JSON.stringify(this.state.localTrainers)}
             </React.Fragment>
         )
     }
