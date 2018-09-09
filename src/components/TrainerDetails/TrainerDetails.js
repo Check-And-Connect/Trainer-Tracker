@@ -9,7 +9,8 @@ class TrainerDetails extends Component{
             editing: false,
             trainer: null,
             requirements: null,
-            cohort: null
+            cohort: null,
+            slo: null
         }
     }
 
@@ -20,7 +21,8 @@ class TrainerDetails extends Component{
                 this.setState({
                     trainer: res.data.trainer,
                     requirements: res.data.requirements,
-                    cohort: res.data.cohort
+                    cohort: res.data.cohort,
+                    slo: res.data.slo,
                 })
             })
             .catch(err => {
@@ -65,14 +67,14 @@ class TrainerDetails extends Component{
         let notesField;
 
         if (this.state.trainer !== null){
-            fnameField = <p>{this.state.trainer.first_name}</p>;
-            lnameField = <p>{this.state.trainer.last_name}</p>;
-            titleField = <p>{this.state.trainer.title}</p>;
-            emailField = <p>{this.state.trainer.email}</p>;
-            phoneField = <p>{this.state.trainer.phone_number}</p>;
-            organizationField = <p>{this.state.trainer.organization}</p>;
-            districtField = <p>{this.state.trainer.district}</p>;
-            notesField = <p>{this.state.trainer.notes}</p>
+            fnameField = <span>{this.state.trainer.first_name}</span>;
+            lnameField = <span>{this.state.trainer.last_name}</span>;
+            titleField = <span>{this.state.trainer.title}</span>;
+            emailField = <span>{this.state.trainer.email}</span>;
+            phoneField = <span>{this.state.trainer.phone_number}</span>;
+            organizationField = <span>{this.state.trainer.organization}</span>;
+            districtField = <span>{this.state.trainer.district}</span>;
+            notesField = <span>{this.state.trainer.notes}</span>
             if (this.state.editing){
                 fnameField = <input type="text" name="first_name" placeholder="first name" value={this.state.trainer.first_name} onChange={this.handleInputChange}/>
                 lnameField = <input type="text" name="last_name" placeholder="last name" value={this.state.trainer.last_name} onChange={this.handleInputChange}/>

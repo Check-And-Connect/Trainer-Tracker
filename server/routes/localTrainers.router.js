@@ -275,11 +275,13 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
   console.log("local_trainer GET details route", req.params.id);
   let err = false;
   let cohortID = null;
+  let sloID = null;
+
   const getLocalTrainerDetailsQuery = `SELECT * FROM local_trainers WHERE local_trainers_id = $1;`;
   const localTrainerObject = await pool
     .query(getLocalTrainerDetailsQuery, [req.params.id])
     .then(PGres => {
-      cohortID = PGres.rows[0].cohort_ref_id;
+      cohortID = PGres.rows[0].cohort_ref_id || null;
       return PGres.rows[0] || null;
     })
     .catch(err => {
@@ -305,6 +307,7 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
   const trainerCohortObject = await pool
     .query(getTrainerCohortQuery, [cohortID])
     .then(PGres => {
+      sloID = PGres.rows[0].state_level_organization_ref_id || null;
       return PGres.rows[0] || null;
     })
     .catch(err => {
@@ -312,13 +315,25 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
       err = true;
     });
 
+  const getSloDetailsQuery = `SELECT * FROM state_level_organization WHERE state_level_organization_id =$1;`;
+  const sloDetailsObject = await pool
+    .query(getSloDetailsQuery, [sloID])
+    .then(PGres => {
+      return PGres.rows[0] || null
+    })
+    .catch(err => {
+      console.log(err);
+      err = true;
+    })
+
   if (err) {
     res.sendStatus(500);
   } else {
     res.send({
       trainer: localTrainerObject,
       requirements: trainerRequirementsArray,
-      cohort: trainerCohortObject
+      cohort: trainerCohortObject,
+      slo: sloDetailsObject
     });
   }
 });

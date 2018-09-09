@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 import { LOCAL_TRAINERS_ACTIONS } from '../../redux/actions/localTrainerActions';
 import { COHORT_ACTIONS } from '../../redux/actions/cohortActions';
@@ -53,7 +54,7 @@ class TrainerSearchView extends Component {
     }
 
     componentDidUpdate = (prevProps) => {
-        if (prevProps.localTrainersReducer.allLocalTrainers !== this.props.localTrainersReducer.allLocalTrainers) {
+        if (prevProps.localTrainerReducer.allLocalTrainers !== this.props.localTrainerReducer.allLocalTrainers) {
 
             let newDisplayedCheckboxes = {
                 state_name: new Set(),
@@ -61,14 +62,14 @@ class TrainerSearchView extends Component {
                 cohort_name: new Set(),
                 status: new Set()
             }
-            this.props.localTrainersReducer.allLocalTrainers.map((trainer) => {
+            this.props.localTrainerReducer.allLocalTrainers.map((trainer) => {
                 newDisplayedCheckboxes.state_name.add(trainer.state)
                 newDisplayedCheckboxes.state_level_organization_name.add(trainer.state_level_organization.state_level_organization_name)
                 newDisplayedCheckboxes.cohort_name.add(trainer.cohort.cohort_name)
             })
 
             this.setState({
-                localTrainers: this.props.localTrainersReducer.allLocalTrainers,
+                localTrainers: this.props.localTrainerReducer.allLocalTrainers,
                 checkboxesDisplayed: newDisplayedCheckboxes,
                 selections: newDisplayedCheckboxes
             })
@@ -104,7 +105,7 @@ class TrainerSearchView extends Component {
         })
 
         let filteredTrainersList = [];
-        this.props.localTrainersReducer.allLocalTrainers.forEach((trainer) => {
+        this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
             if (newSet.has(trainer.state)){
                 sloSet.add(trainer.state_level_organization.state_level_organization_name);
                 cohortSet.add(trainer.cohort.cohort_name);
@@ -142,7 +143,7 @@ class TrainerSearchView extends Component {
         })
 
         let filteredTrainersList = [];
-        this.props.localTrainersReducer.allLocalTrainers.forEach((trainer) => {
+        this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
             if (newSet.has(trainer.state_level_organization.state_level_organization_name)){
                 cohortSet.add(trainer.cohort.cohort_name);
                 filteredTrainersList.push(trainer)
@@ -175,7 +176,7 @@ class TrainerSearchView extends Component {
         })
 
         let filteredTrainersList = [];
-        this.props.localTrainersReducer.allLocalTrainers.forEach((trainer) => {
+        this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
             if (newSet.has(trainer.cohort.cohort_name)){
                 filteredTrainersList.push(trainer)
             }
@@ -198,7 +199,7 @@ class TrainerSearchView extends Component {
         for (let i=0; i<requirementsArray.length; i++){
             if (requirementsArray[i].completed === null){
                 lastNext[1] = requirementsArray[i].requirement_name;
-                lastNext[2] = requirementsArray[i].requirement_due_date;
+                lastNext[2] = moment(requirementsArray[i].requirement_due_date).format("MM-DD-YYYY");
                 if (i === 0){
                     lastNext[0] = 'n/a';
                     return lastNext
