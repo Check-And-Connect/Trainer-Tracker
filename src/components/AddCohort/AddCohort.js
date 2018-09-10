@@ -6,6 +6,11 @@ import { COHORT_ACTIONS } from '../../redux/actions/cohortActions';
 
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+import { withStyles } from '@material-ui/core/styles';
+import { Save } from '@material-ui/icons';
+
+
+const moment = require('moment');
 
 const mapStateToProps = state => ({
     user: state.user,
@@ -14,6 +19,17 @@ const mapStateToProps = state => ({
     stateLeadReducer: state.stateLeadReducer
 });
 
+const styles = theme => ({
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        width: 200,
+    },
+});
 class AddCohort extends Component {
 
     constructor(props) {
@@ -37,7 +53,7 @@ class AddCohort extends Component {
     }
 
     componentDidMount() {
-        // this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+        this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
         // this.props.dispatch({ type: COHORT_ACTIONS.FETCH_STATES });
     }
 
@@ -122,28 +138,20 @@ class AddCohort extends Component {
 
         let content = null;
         if (this.props.user.userName) {
+            const date = moment().format().split('T', 1);
             content = (
                 <div>
                     <h2 className='centerHeadings'>Create New Cohort</h2>
                     <Grid container>
                         <Grid item xs={5}></Grid>
-                        <Grid item xs={7}>
+                        <Grid item xs={6}>
                             <form className='trainerForm' onSubmit={this.addNewTrainer}>
                                 <Grid container>
-                                    <Grid item xs={12}>
+                                    <Grid item xs={9}>
                                         <input className='lengthOfInputsCohort' type='text' placeholder='Name of Cohort' value={this.state.newTrainer.first_name} onChange={this.handleChangeFor('name_of_cohort')} />
                                     </Grid>
-                                    <Grid item xs={12}>
-                                        <input className='lengthOfInputsCohort' type='text' placeholder='Initial TTT Workshop Date' value={this.state.newTrainer.last_name} onChange={this.handleChangeFor('initial_TTT')} />
-                                        <form className={this.props.classes.container} noValidate>
-                                    <TextField
-                                        // id="date"
-                                        label="Initial TTT Workshop Date"
-                                        // type="date"
-                                        defaultValue={date}
-                                        onChange={this.handleChangeFor("choosenDate")}
-                                    />
-                                </form>
+                                    <Grid item xs={3}>
+                                        <Save />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <select id='stateDrop' className='lengthOfInputsCohort' onChange={this.handleChangeForState('state')}>
@@ -163,9 +171,17 @@ class AddCohort extends Component {
                                             {/* {cohortListArray} */}
                                         </select>
                                     </Grid>
-                                    {/* <Grid item xs={12}>
-                                        <input type='submit' value='Submit' />
-                                    </Grid> */}
+                                    <Grid item xs={12}>
+                                        <form className={this.props.classes.container} noValidate>
+                                            <TextField
+                                                id="date"
+                                                label="Initial TTT Workshop"
+                                                type="date"
+                                                defaultValue={date}
+                                                onChange={this.handleChangeFor("choosenDate")}
+                                            />
+                                        </form>
+                                    </Grid>
                                 </Grid>
                             </form>
                         </Grid>
@@ -173,11 +189,208 @@ class AddCohort extends Component {
                     <h2 className='centerHeadings'>Cohort Deadlines</h2>
                     <Grid container>
                         <Grid item xs={4}></Grid>
+                        <Grid item xs={2}><p>Due Date</p></Grid>
+                        <Grid item xs={2}><p>Notification Email 1</p></Grid>
+                        <Grid item xs={4}><p>Notification Email 2</p></Grid>
+                        <Grid item xs={1}></Grid>
+                        <Grid item xs={3}><p>Train the Trainers</p></Grid>
+                        <Grid item xs={2}>
+                            <form className={this.props.classes.container} noValidate>
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    defaultValue={date}
+                                    onChange={this.handleChangeFor("choosenDate")}
+                                />
+                            </form>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <form className={this.props.classes.container} noValidate>
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    defaultValue={date}
+                                    onChange={this.handleChangeFor("choosenDate")}
+                                />
+                            </form>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <form className={this.props.classes.container} noValidate>
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    defaultValue={date}
+                                    onChange={this.handleChangeFor("choosenDate")}
+                                />
+                            </form>
+                        </Grid>
+                        <Grid item xs={1}></Grid>
+                        <Grid item xs={3}><p>Signed TTT Terms Agreement</p></Grid>
+                        <Grid item xs={2}>
+                            <form className={this.props.classes.container} noValidate>
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    defaultValue={date}
+                                    onChange={this.handleChangeFor("choosenDate")}
+                                />
+                            </form>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <form className={this.props.classes.container} noValidate>
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    defaultValue={date}
+                                    onChange={this.handleChangeFor("choosenDate")}
+                                />
+                            </form>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <form className={this.props.classes.container} noValidate>
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    defaultValue={date}
+                                    onChange={this.handleChangeFor("choosenDate")}
+                                />
+                            </form>
+                        </Grid>
+                        <Grid item xs={1}></Grid>
+                        <Grid item xs={3}><p>Observed Training</p></Grid>
+                        <Grid item xs={2}>
+                            <form className={this.props.classes.container} noValidate>
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    defaultValue={date}
+                                    onChange={this.handleChangeFor("choosenDate")}
+                                />
+                            </form>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <form className={this.props.classes.container} noValidate>
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    defaultValue={date}
+                                    onChange={this.handleChangeFor("choosenDate")}
+                                />
+                            </form>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <form className={this.props.classes.container} noValidate>
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    defaultValue={date}
+                                    onChange={this.handleChangeFor("choosenDate")}
+                                />
+                            </form>
+                        </Grid>
+                        <Grid item xs={1}></Grid>
+                        <Grid item xs={3}><p>Certification Workshop</p></Grid>
+                        <Grid item xs={2}>
+                            <form className={this.props.classes.container} noValidate>
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    defaultValue={date}
+                                    onChange={this.handleChangeFor("choosenDate")}
+                                />
+                            </form>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <form className={this.props.classes.container} noValidate>
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    defaultValue={date}
+                                    onChange={this.handleChangeFor("choosenDate")}
+                                />
+                            </form>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <form className={this.props.classes.container} noValidate>
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    defaultValue={date}
+                                    onChange={this.handleChangeFor("choosenDate")}
+                                />
+                            </form>
+                        </Grid>
+                        <Grid item xs={1}></Grid>
+                        <Grid item xs={3}><p>C & C Training</p></Grid>
+                        <Grid item xs={2}>
+                            <form className={this.props.classes.container} noValidate>
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    defaultValue={date}
+                                    onChange={this.handleChangeFor("choosenDate")}
+                                />
+                            </form>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <form className={this.props.classes.container} noValidate>
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    defaultValue={date}
+                                    onChange={this.handleChangeFor("choosenDate")}
+                                />
+                            </form>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <form className={this.props.classes.container} noValidate>
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    defaultValue={date}
+                                    onChange={this.handleChangeFor("choosenDate")}
+                                />
+                            </form>
+                        </Grid>
+                        <Grid item xs={1}></Grid>
+                        <Grid item xs={3}><p>Recertification</p></Grid>
+                        <Grid item xs={2}>
+                            <form className={this.props.classes.container} noValidate>
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    defaultValue={date}
+                                    onChange={this.handleChangeFor("choosenDate")}
+                                />
+                            </form>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <form className={this.props.classes.container} noValidate>
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    defaultValue={date}
+                                    onChange={this.handleChangeFor("choosenDate")}
+                                />
+                            </form>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <form className={this.props.classes.container} noValidate>
+                                <TextField
+                                    id="date"
+                                    type="date"
+                                    defaultValue={date}
+                                    onChange={this.handleChangeFor("choosenDate")}
+                                />
+                            </form>
+                        </Grid>
+
+                        {/* <Grid item xs={4}></Grid>
                         <Grid item xs={8}>
                             <ul>
-                                {/* {recentListArray} */}
+                                {recentListArray}
                             </ul>
-                        </Grid>
+                        </Grid> */}
                     </Grid>
                 </div>
             );
@@ -191,4 +404,5 @@ class AddCohort extends Component {
     }
 }
 
-export default connect(mapStateToProps)(AddCohort);
+const styleGraph = withStyles(styles)(AddCohort)
+export default connect(mapStateToProps)(styleGraph);
