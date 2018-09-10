@@ -54,7 +54,8 @@ class TrainerSearchView extends Component {
         super(props)
         this.state = {
             localTrainers: [],
-            searchInput: '',
+            trainersBeforeSearch: [],
+            searchKey: '',
             // Using sets instead of arrays for the selections, since they are limited to 
             // unique values by default.
             selections: {
@@ -90,6 +91,7 @@ class TrainerSearchView extends Component {
 
             this.setState({
                 localTrainers: this.props.localTrainerReducer.allLocalTrainers,
+                trainersBeforeSearch: this.props.localTrainerReducer.allLocalTrainers,
                 checkboxesDisplayed: newDisplayedCheckboxes,
                 selections: newDisplayedCheckboxes
             })
@@ -211,6 +213,63 @@ class TrainerSearchView extends Component {
         console.log('handling status checkbox');
     }
 
+    handleSearchTable = searchKey => {
+        if (this.state.searchKey === "") {
+          this.setState({
+            trainersBeforeSearch: this.state.localTrainers
+          });
+        }
+    
+        this.setState(
+          {
+            searchKey: searchKey
+          },
+          () => {
+            this.handleSearchTableWithKey();
+          }
+        );
+      };
+
+    handleSearchTableWithKey = () => {
+        let flag = false;
+        console.log(this.state.trainersBeforeSearch);
+    
+        let filteredTrainers = this.state.trainersBeforeSearch.filter(
+          localTrainer => {
+            flag = false;
+            let checkStringEquality = object => {
+              Object.keys(object).forEach(key => {
+                if (typeof object[key] === "string" || typeof object[key] === 'number') {
+
+                  if (object[key].toString().toLowerCase().includes(this.state.searchKey.toLowerCase())) {
+                    console.log(object[key].toString().toLowerCase() + ' includes ' + this.state.searchKey);
+                    
+                    flag = true;
+                    
+                  }
+                } else if (Array.isArray(object[key])) {
+    
+                  object[key].forEach(objectInKey => {
+                    checkStringEquality(objectInKey);
+                  });
+                } else if (typeof object[key] === "object" && object[key] !== null) {
+    
+                  checkStringEquality(object[key]);
+                }
+              });
+            };
+    
+            checkStringEquality(localTrainer);
+            
+            return flag;
+          }
+        );
+    
+        this.setState({
+          localTrainers : filteredTrainers
+        })
+      };
+
     getLastNext = (requirementsArray) => {
         let lastNext = [null, null, null];
         requirementsArray.sort((a, b) => {
@@ -289,7 +348,10 @@ class TrainerSearchView extends Component {
                 </div>
                 <div className={classes.rightPanel}>
                     <div className={classes.searchAndExport}>
-                        <TrainerTableSearch search={this.handleSearchTable}/>
+                        <TrainerTableSearch 
+                            search={this.handleSearchTable}
+                            searchKey={this.state.searchKey} 
+                        />
                             <div>
                                 <Button className={classes.export}>Export</Button>
                             </div>
