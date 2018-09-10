@@ -5,6 +5,21 @@ import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { COHORT_ACTIONS } from '../../redux/actions/cohortActions';
 
 import Grid from '@material-ui/core/Grid';
+import {
+    TextField,
+    withStyles,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    Button,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Paper
+} from '@material-ui/core';
 
 const mapStateToProps = state => ({
     user: state.user,
@@ -12,6 +27,22 @@ const mapStateToProps = state => ({
     cohortReducer: state.cohortReducer,
     stateLeadReducer: state.stateLeadReducer
 });
+
+const styles = {
+    textField: {
+        margin: '0em 0em 0.5em 1em',
+    },
+    dropDown: {
+        width: "10em"
+    },
+    formControl: {
+        margin: '0em 0em 0.5em 1em',
+        width: "12em"
+    },
+    selectEmpty: {
+        marginTop: '0em 0em 0.5em 1em' * 2,
+    }
+}
 
 class AddTrainer extends Component {
 
@@ -29,7 +60,7 @@ class AddTrainer extends Component {
                 state: '',
                 state_level_organization: '',
                 district: '',
-                cohort: 0
+                cohort: ''
             },
             recentlyAdded: []
         }
@@ -110,16 +141,29 @@ class AddTrainer extends Component {
 
     render() {
         let stateListArray = this.props.cohortReducer.state_dropDown.map((item, index) => {
-            return <option value={item}>{item}</option>
+            return <MenuItem key={index} value={item}>{item}</MenuItem>
         })
         let SLOListArray = this.props.cohortReducer.SLO_dropDown.map((item, index) => {
-            return <option value={item.state_level_organization_id}>{item.name}</option>
+            return <MenuItem key={index} value={item.state_level_organization_id}>{item.name}</MenuItem>
         })
         let cohortListArray = this.props.cohortReducer.cohort_dropDown.map((item, index) => {
-            return <option value={item.cohort_id}>{item.name}</option>
+            return <MenuItem key={index} value={item.cohort_id}>{item.name}</MenuItem>
         })
         let recentListArray = this.state.recentlyAdded.map((item, index) => {
-            return <li>NAME: {item.first_name} {item.last_name} STATE: {item.state}</li>
+            // return <li key={index}>NAME: {item.first_name} {item.last_name} STATE: {item.state}</li>
+            return
+            <TableRow key={index}>
+                <TableCell>
+                    {item.first_name}
+                </TableCell>
+                <TableCell>
+                    {item.last_name}
+                </TableCell>
+                <TableCell>
+                    {item.state}
+                </TableCell>
+            </TableRow>
+
         })
 
         let content = null;
@@ -130,49 +174,118 @@ class AddTrainer extends Component {
                     <Grid container>
                         <Grid item xs={4}></Grid>
                         <Grid item xs={8}>
-                            <form className='trainerForm' onSubmit={this.addNewTrainer}>
+                            <form className='trainerForm'>
                                 <Grid container>
                                     <Grid item xs={4}>
-                                        <input className='lengthOfInputs' type='text' placeholder='First Name' value={this.state.newTrainer.first_name} onChange={this.handleChangeFor('first_name')} />
+                                        <TextField
+                                            className={this.props.classes.textField}
+                                            label="First Name"
+                                            value={this.state.newTrainer.first_name}
+                                            onChange={this.handleChangeFor('first_name')}
+                                            margin="normal"
+                                        />
                                     </Grid>
                                     <Grid item xs={8}>
-                                        <select id='stateDrop' className='lengthOfInputs' onChange={this.handleChangeForState('state')}>
-                                            <option value="state">State</option>
-                                            {stateListArray}
-                                        </select>
+                                        <FormControl className={this.props.classes.formControl}>
+                                            <InputLabel>State</InputLabel>
+                                            <Select
+                                                value={this.state.newTrainer.state}
+                                                onChange={this.handleChangeForState('state')}
+                                                id='stateDrop'
+                                            >
+                                                <MenuItem value="">
+                                                    <em>None</em>
+                                                </MenuItem>
+                                                {stateListArray}
+                                            </Select>
+                                        </FormControl>
                                     </Grid>
                                     <Grid item xs={4}>
-                                        <input className='lengthOfInputs' type='text' placeholder='Last Name' value={this.state.newTrainer.last_name} onChange={this.handleChangeFor('last_name')} />
+                                        <TextField
+                                            className={this.props.classes.textField}
+                                            label="Last Name"
+                                            value={this.state.newTrainer.last_name}
+                                            onChange={this.handleChangeFor('last_name')}
+                                            margin="normal"
+                                        />
                                     </Grid>
                                     <Grid item xs={8}>
-                                        <select id='SLODrop' className='lengthOfInputs' onChange={this.handleChangeForSLO('state_level_organization')}>
-                                            <option value="">State Level Organization</option>
-                                            {SLOListArray}
-                                        </select>
+                                        <FormControl className={this.props.classes.formControl}>
+                                            <InputLabel>State Level Organization</InputLabel>
+                                            <Select
+                                                value={this.state.newTrainer.state_level_organization}
+                                                onChange={this.handleChangeForSLO('state_level_organization')}
+                                                id='SLODrop'
+                                            >
+                                                <MenuItem value="">
+                                                    <em>None</em>
+                                                </MenuItem>
+                                                {SLOListArray}
+                                            </Select>
+                                        </FormControl>
                                     </Grid>
                                     <Grid item xs={4}>
-                                        <input className='lengthOfInputs' type='text' placeholder='Title' value={this.state.newTrainer.title} onChange={this.handleChangeFor('title')} />
+                                        <TextField
+                                            className={this.props.classes.textField}
+                                            label="Title"
+                                            value={this.state.newTrainer.title}
+                                            onChange={this.handleChangeFor('title')}
+                                            margin="normal"
+                                        />
                                     </Grid>
                                     <Grid item xs={8}>
-                                        <select id='cohortDrop' className='lengthOfInputs' onChange={this.handleChangeFor('cohort')}>
-                                            <option value="">Cohort</option>
-                                            {cohortListArray}
-                                        </select>
+                                        <FormControl className={this.props.classes.formControl}>
+                                            <InputLabel>Cohort</InputLabel>
+                                            <Select
+                                                value={this.state.newTrainer.cohort}
+                                                onChange={this.handleChangeFor('cohort')}
+                                                id='cohortDrop'
+                                            >
+                                                <MenuItem value="">
+                                                    <em>None</em>
+                                                </MenuItem>
+                                                {cohortListArray}
+                                            </Select>
+                                        </FormControl>
                                     </Grid>
-                                    <Grid item xs={4}>
-                                        <input className='lengthOfInputs' type='text' placeholder='Email' value={this.state.newTrainer.email} onChange={this.handleChangeFor('email')} />
+                                    <Grid item xs={5}>
+                                        <TextField
+                                            className={this.props.classes.textField}
+                                            label="Email"
+                                            value={this.state.newTrainer.email}
+                                            onChange={this.handleChangeFor('email')}
+                                            margin="normal"
+                                        />
                                     </Grid>
-                                    <Grid item xs={8}>
-                                        <input type='submit' value='Submit' />
+                                    <Grid item xs={7}>
+                                        <Button variant="raised" onClick={this.addNewTrainer}>Submit</Button>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <input className='lengthOfInputs' type='text' placeholder='Phone Number' value={this.state.newTrainer.phone_number} onChange={this.handleChangeFor('phone_number')} />
+                                        <TextField
+                                            className={this.props.classes.textField}
+                                            label="Phone Number"
+                                            value={this.state.newTrainer.phone_number}
+                                            onChange={this.handleChangeFor('phone_number')}
+                                            margin="normal"
+                                        />
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <input className='lengthOfInputs' type='text' placeholder='Organization' value={this.state.newTrainer.organization} onChange={this.handleChangeFor('organization')} />
+                                        <TextField
+                                            className={this.props.classes.textField}
+                                            label="Organization"
+                                            value={this.state.newTrainer.organization}
+                                            onChange={this.handleChangeFor('organization')}
+                                            margin="normal"
+                                        />
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <input className='lengthOfInputs' type='text' placeholder='District' value={this.state.newTrainer.district} onChange={this.handleChangeFor('district')} />
+                                        <TextField
+                                            className={this.props.classes.textField}
+                                            label="District"
+                                            value={this.state.newTrainer.district}
+                                            onChange={this.handleChangeFor('district')}
+                                            margin="normal"
+                                        />
                                     </Grid>
                                 </Grid>
                             </form>
@@ -180,11 +293,31 @@ class AddTrainer extends Component {
                     </Grid>
                     <h2 className='centerHeadings'>Recently Added</h2>
                     <Grid container>
-                        <Grid item xs={4}></Grid>
-                        <Grid item xs={8}>
-                            <ul>
+                        <Grid item xs={2}></Grid>
+                        <Grid item xs={10}>
+                            {/* <ul>
                                 {recentListArray}
-                            </ul>
+                            </ul> */}
+                            <Paper>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>
+                                                First Name
+                                            </TableCell>
+                                            <TableCell>
+                                                Last Name
+                                            </TableCell>
+                                            <TableCell>
+                                                State
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {recentListArray}
+                                    </TableBody>
+                                </Table>
+                            </Paper>
                         </Grid>
                     </Grid>
                 </div>
@@ -199,4 +332,5 @@ class AddTrainer extends Component {
     }
 }
 
-export default connect(mapStateToProps)(AddTrainer);
+const styleTrainer = withStyles(styles)(AddTrainer)
+export default connect(mapStateToProps)(styleTrainer);
