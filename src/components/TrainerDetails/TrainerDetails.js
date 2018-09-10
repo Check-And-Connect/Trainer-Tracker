@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import axios from 'axios'
 
+import {Stepper, Step, StepLabel, StepContent} from '@material-ui/core';
+import TrainerHistoryStepper from '../TrainerHistoryStepper/TrainerHistoryStepper';
+
 class TrainerDetails extends Component{
     constructor(props){
         super(props)
@@ -123,6 +126,7 @@ class TrainerDetails extends Component{
             <div className="trainerHistory">
                 <h3>History</h3>
                 {requirementsHistory}
+                <TrainerHistoryStepper />
             </div>
             </React.Fragment>
         )

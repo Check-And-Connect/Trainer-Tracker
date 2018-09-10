@@ -19,11 +19,11 @@ const styles = {
     },
     leftPanel: {
       display: "Grid",
-      gridTemplateRows: "0.3fr 9fr",
+      gridTemplateRows: "0.3fr 8fr",
     },
     rightPanel: {
       display : "Grid",
-      gridTemplateRows: "0.3fr 9fr",
+      gridTemplateRows: "0.3fr 8fr",
       margin: "0em 1em"
     },
     tableCell: {
@@ -242,7 +242,7 @@ class TrainerSearchView extends Component {
                 if (typeof object[key] === "string" || typeof object[key] === 'number') {
 
                   if (object[key].toString().toLowerCase().includes(this.state.searchKey.toLowerCase())) {
-                    console.log(object[key].toString().toLowerCase() + ' includes ' + this.state.searchKey);
+                    // console.log(object[key].toString().toLowerCase() + ' includes ' + this.state.searchKey);
                     
                     flag = true;
                     

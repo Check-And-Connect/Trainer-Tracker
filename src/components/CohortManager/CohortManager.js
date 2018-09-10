@@ -360,7 +360,7 @@ class CohortManager extends Component {
             {this.state.dialogOpen && (
               <CohortManagerModal
                 dialogOpen={this.state.dialogOpen}
-                handleDialgClose={this.handleDialogClose}
+                handleDialogClose={this.handleDialogClose}
                 cellInfo={this.state.cellInfo}
               />
             )}
