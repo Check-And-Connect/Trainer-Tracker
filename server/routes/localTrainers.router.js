@@ -143,12 +143,21 @@ router.get("/stateLevelOrganization", (req, res) => {
   }
 });
 
-router.post("/addLT", (req, res) => {
+router.post("/addLT", async (req, res) => {
   console.log("got to post", req.body);
   if (req.isAuthenticated) {
-    const queryText = `INSERT INTO "local_trainers" ("first_name", "last_name", "title", "email", "phone_number", "organization", "district", "cohort_ref_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8);`;
-    pool
-      .query(queryText, [
+    const postQuery = `INSERT INTO "local_trainers" (
+                        "first_name", 
+                        "last_name", 
+                        "title", 
+                        "email", 
+                        "phone_number", 
+                        "organization", 
+                        "district", 
+                        "cohort_ref_id") 
+                        VALUES ($1,$2,$3,$4,$5,$6,$7,$8);`;
+    await pool
+      .query(postQuery, [
         req.body.first_name,
         req.body.last_name,
         req.body.title,
@@ -165,6 +174,40 @@ router.post("/addLT", (req, res) => {
         console.log(error);
         res.sendStatus(500);
       });
+      const getTrainerID = `SELECT "local_trainers_id" FROM local_trainers WHERE
+                              "first_name" = $1 AND 
+                              "last_name" = $2 AND  
+                              "title" = $3 AND 
+                              "email" = $4 AND  
+                              "phone_number" = $5 AND  
+                              "phone_number" = $6 AND  
+                              "organization" = $7 AND  
+                              "district" = $8 AND  
+                              "cohort_ref_id" = $9) 
+                            VALUES ($1,$2,$3,$4,$5,$6,$7,$8);`;
+      await pool
+        .query(getTrainerID, [
+          req.body.first_name,
+          req.body.last_name,
+          req.body.title,
+          req.body.email,
+          req.body.phone_number,
+          req.body.organization,
+          req.body.district,
+          req.body.cohort
+        ])
+        .then(() => {
+          res.sendStatus(200);
+        })
+        .catch(error => {
+          console.log(error);
+          res.sendStatus(500);
+        });
+
+
+
+
+
   } else {
     res.sendStatus(403);
   }
