@@ -15,7 +15,7 @@ import CohortManager from './components/CohortManager/CohortManager'
 import AddTrainer from './components/AddTrainer/AddTrainer';
 import TrainerSearchView from './components/TrainerSearchView/TrainerSearchView';
 import TrainerDetails from './components/TrainerDetails/TrainerDetails';
-
+import NationalTrainer from './components/NationalTrainer/NationalTrainer';
 import './styles/main.css';
 
 const App = () => (
@@ -31,8 +31,8 @@ const App = () => (
           component={LoginPage}
         />
         <Route
-          path="/register"
-          component={RegisterPage}
+          path="/national_trainer"
+          component={NationalTrainer}
         />
         <Route
           path="/user"
