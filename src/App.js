@@ -16,11 +16,11 @@ import AddTrainer from './components/AddTrainer/AddTrainer';
 import TrainerSearchView from './components/TrainerSearchView/TrainerSearchView';
 import TrainerDetails from './components/TrainerDetails/TrainerDetails';
 import NationalTrainer from './components/NationalTrainer/NationalTrainer';
+import AddCohort from './components/AddCohort/AddCohort';
 import './styles/main.css';
-
 const App = () => (
   <div>
-    
+
     <Router>
       <div>
     <Header title="" />
@@ -54,10 +54,13 @@ const App = () => (
           path="/trainerdetails/:id"
           component={TrainerDetails}
         />
+        <Route
+          path="/addcohort"
+          component={AddCohort}
+        />
         {/* OTHERWISE (no path!) */}
         <Route render={() => <h1>404</h1>} />
-
-      </Switch>
+        </Switch>
       </div>
     </Router>
   </div>

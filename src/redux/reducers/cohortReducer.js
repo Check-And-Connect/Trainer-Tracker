@@ -39,7 +39,7 @@ const cohort_dropDown = (state = [], action) => {
         case COHORT_ACTIONS.FILTER_SLO:
             let newCohort = [];
             for (let i = 0; i < state.length; i++) {
-                if (state[i].state_level_organization_ref_id === action.payload) {
+                if (state[i].state_level_organization_ref_id == action.payload) {
                     newCohort.push(state[i]);
                 }
             }
