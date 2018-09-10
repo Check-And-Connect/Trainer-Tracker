@@ -64,7 +64,8 @@ router.get("/", rejectUnauthenticated, (req, res) => {
      
 
       let resultAry = [];
-
+      console.log('POOL QUERY RESULTS.ROWS:');
+      console.log(results.rows);
       results.rows.forEach(element => {
         let indexOfLC = resultAry.findIndex(localTrainer => {
           return localTrainer.local_trainers_id == element.local_trainers_id;
@@ -116,7 +117,6 @@ router.get("/", rejectUnauthenticated, (req, res) => {
           resultAry[indexOfLC].requirements.push(newReq);
         }
       });
-
       res.send(resultAry);
     })
     .catch(err => {

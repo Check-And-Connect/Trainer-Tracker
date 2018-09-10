@@ -25,10 +25,6 @@ const styles = theme => ({
   },
 });
 
-function getSteps() {
-  return ['Select campaign settings', 'Create an ad group', 'Create an ad'];
-}
-
 function getStepContent(step) {
   switch (step) {
     case 0:
@@ -52,80 +48,40 @@ class VerticalLinearStepper extends React.Component {
     activeStep: 0,
   };
 
-  handleNext = () => {
-    this.setState(state => ({
-      activeStep: state.activeStep + 1,
-    }));
-  };
-
-  handleBack = () => {
-    this.setState(state => ({
-      activeStep: state.activeStep - 1,
-    }));
-  };
-
-  handleReset = () => {
+  handleClick = (e) => {
+    console.log('click');
+    console.log(e.target);
     this.setState({
-      activeStep: 0,
-    });
-  };
+      activeStep: e.target.key
+    })
+  }
 
   render() {
     const { classes } = this.props;
-    const steps = getSteps();
     const { activeStep } = this.state;
 
-    let testJSX = <div>
-        <p>Hello friend<button>hi</button></p>
-    </div>
+    let requirementHistory = null;
+
+    if (this.props.requirements !== null){
+      requirementHistory = this.props.requirements.map((req, index) => {
+        let stepContent = <span><p>Completed: {req.completed}</p><p>Notes: {req.notes}</p></span>
+        return (
+          <Step key={index} onClick={this.handleClick}>
+            <StepLabel>{req.name}</StepLabel>
+            <StepContent>{stepContent}</StepContent>
+          </Step>
+        );
+      })
+    }
     return (
       <div className={classes.root}>
-        <Stepper activeStep={activeStep} orientation="vertical">
-          {steps.map((label, index) => {
-            return (
-              <Step key={label}>
-                <StepLabel>{testJSX}</StepLabel>
-                {/* <StepContent>
-                  <Typography>{getStepContent(index)}</Typography>
-                  <div className={classes.actionsContainer}>
-                    <div>
-                      <Button
-                        disabled={activeStep === 0}
-                        onClick={this.handleBack}
-                        className={classes.button}
-                      >
-                        Back
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={this.handleNext}
-                        className={classes.button}
-                      >
-                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                      </Button>
-                    </div>
-                  </div>
-                </StepContent> */}
-              </Step>
-            );
-          })}
+        <Stepper activeStep={4} nonLinear={true} orientation="vertical">
+          {requirementHistory}
         </Stepper>
-        {activeStep === steps.length && (
-          <Paper square elevation={0} className={classes.resetContainer}>
-            <Typography>All steps completed - you&quot;re finished</Typography>
-            <Button onClick={this.handleReset} className={classes.button}>
-              Reset
-            </Button>
-          </Paper>
-        )}
+        {JSON.stringify(this.props.requirements)}
       </div>
     );
   }
 }
-
-VerticalLinearStepper.propTypes = {
-  classes: PropTypes.object,
-};
 
 export default withStyles(styles)(VerticalLinearStepper);
