@@ -121,6 +121,14 @@ li a:hover {
     text-align: center;
 }
 
+.lengthOfInputs {
+    width: 150px;
+}
+
+.lengthOfInputsCohort {
+    width: 150px;
+}
+
 .wrapper {
     display: grid;
     grid-template-columns: 3fr 9fr;
@@ -175,4 +183,8 @@ li a:hover {
 .item4 {
     display: grid;
     justify-content: right;
+}
+
+#TTTdate{
+    padding: 15px 0px;
 }

@@ -126,7 +126,7 @@ class AddTrainer extends Component {
         if (this.props.user.userName) {
             content = (
                 <div>
-                    <h2 className='centerHeadings'>Add New Trainer</h2>
+                    <h2 className='centerHeadings'>Create New Trainer</h2>
                     <Grid container>
                         <Grid item xs={4}></Grid>
                         <Grid item xs={8}>
