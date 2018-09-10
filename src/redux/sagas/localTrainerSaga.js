@@ -18,6 +18,9 @@ function* addNewLT(action) {
 
 function* fetchLocalTrainers() {
   try {
+    yield dispatch({
+      type : LOCAL_TRAINERS_ACTIONS.UNSET_LOCAL_TRAINERS
+    })
     let allTrainers = yield call(axios.get, "/api/localTrainers/");
 
     console.log(allTrainers);
@@ -52,6 +55,9 @@ function* fetchRequirementForLocalTrainer(action) {
 
 function* markComplete(action) {
   try {
+    yield dispatch({
+      type : LOCAL_TRAINERS_ACTIONS.UNSET_TRAINER_REQUIREMENT_SINGLE
+    })
     let actualPayload = {
       requirement_id: action.payload.requirement_id,
       date_marked_complete: action.payload.date_marked_complete,
@@ -68,6 +74,22 @@ function* markComplete(action) {
         )
       )
     );
+
+    console.log(action.payload);
+    
+    yield dispatch({
+      type : LOCAL_TRAINERS_ACTIONS.FETCH_TRAINER_REQUIREMENT_SINGLE,
+      payload : {
+        requirementId: action.payload.requirement_id,
+        localTrainerId : action.payload.localTrainerIDs[0]
+      }
+    })
+
+    yield dispatch({
+      type : LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINERS
+    })
+
+    
   } catch (error) {
     console.log(error);
   }
@@ -89,6 +111,10 @@ function* scheduleForRequirement(action) {
         )
       )
     );
+
+    yield dispatch({
+      type : LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINERS
+    })
   } catch (error) {
     console.log(error);
   }

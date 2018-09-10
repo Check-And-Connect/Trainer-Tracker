@@ -215,7 +215,7 @@ router.post("/scheduleForRequirement/:local_trainer_id", (req, res) => {
   console.log(req.body);
 
   let markCompleteQuery =
-    "UPDATE local_trainers_requirements SET scheduled_date = $1 WHERE local_trainers_requirements_id = $2";
+    "UPDATE local_trainers_requirements SET scheduled_date = $1 , national_trainer_ref_id = $2 WHERE local_trainers_requirements_id = $3";
   pool
     .query(getLocalTrainerRequirementIdQuery, [
       req.params.local_trainer_id,
@@ -226,6 +226,7 @@ router.post("/scheduleForRequirement/:local_trainer_id", (req, res) => {
       pool
         .query(markCompleteQuery, [
           req.body.date_scheduled,
+          req.body.national_trainer? req.body.national_trainer : req.user.national_trainer_id,
           response.rows[0].local_trainers_requirements_id
         ])
         .then(() => {
