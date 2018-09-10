@@ -10,6 +10,9 @@ import { NATIONAL_TRAINER_ACTIONS } from "../actions/nationalTrainerActions";
 
 function* getAllNationalTrainers() {
   try {
+    yield dispatch({
+      type : NATIONAL_TRAINER_ACTIONS.UNSET_NATIONAL_TRAINERS
+    })
     let allLTs = yield call(axios.get, "api/nationalTrainers/");
     console.log(allLTs);
     yield dispatch({
@@ -24,6 +27,7 @@ function* getAllNationalTrainers() {
 function* addNewTrainer(action) {
   
   try {
+    
     yield call(axios.post, "api/nationalTrainers/addNew", action.payload);
 
     yield dispatch({

@@ -36,7 +36,7 @@ export class NationalTrainerAdd extends Component {
   handleSubmit = (event) => {
       event.preventDefault();
 
-      this.dispatch({
+      this.props.dispatch({
           type : NATIONAL_TRAINER_ACTIONS.ADD_NATIONAL_TRAINER,
           payload : this.state
       })

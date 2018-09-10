@@ -32,14 +32,16 @@ export class NationalTrainerList extends Component {
   handleStatus = id => {
     this.props.dispatch({
       type: NATIONAL_TRAINER_ACTIONS.CHANGE_STATUS,
-      id: id
+      payload: {
+        id: id
+      }
     });
   };
   render() {
     let { classes } = this.props;
 
     let nationalTrainers = this.props.nationalTrainers.allNationalTrainers.map(
-      (nationalTrainer , index) => {
+      (nationalTrainer, index) => {
         return (
           <ExpansionPanel key={index}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -57,9 +59,9 @@ export class NationalTrainerList extends Component {
               {nationalTrainer.status && (
                 <Button
                   variant="outlined"
-                  onClick={() => this.handleStatus(
-                    nationalTrainer.national_trainer_id
-                  )}
+                  onClick={() =>
+                    this.handleStatus(nationalTrainer.national_trainer_id)
+                  }
                 >
                   Deactivate
                 </Button>
@@ -67,9 +69,9 @@ export class NationalTrainerList extends Component {
               {!nationalTrainer.status && (
                 <Button
                   variant="outlined"
-                  onClick={() => this.handleStatus(
-                    nationalTrainer.national_trainer_id
-                  )}
+                  onClick={() =>
+                    this.handleStatus(nationalTrainer.national_trainer_id)
+                  }
                 >
                   Activate
                 </Button>
