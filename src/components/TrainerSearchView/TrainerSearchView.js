@@ -7,6 +7,7 @@ import { LOCAL_TRAINERS_ACTIONS } from '../../redux/actions/localTrainerActions'
 import { COHORT_ACTIONS } from '../../redux/actions/cohortActions';
 
 import TrainerSearchSidebar from '../TrainerSearchSidebar/TrainerSearchSidebar';
+import TrainerTableSearch from '../TrainerTableSearch/TrainerTableSearch';
 
 import { withStyles, Button, Paper, TextField } from "@material-ui/core";
 import { Table, TableBody, TableHead, TableRow, TableCell } from '@material-ui/core';
@@ -28,9 +29,10 @@ const styles = {
     tableCell: {
         padding: 0,
         textAlign: "center",
+        fontSize: "0.8em"
       },
       buttonInCell: {
-        fontSize: "0.9em",
+        fontSize: "0.8em",
         textDecoration: 'none',
       },
       textField : {
@@ -40,6 +42,10 @@ const styles = {
         display: "Grid",
         gridTemplateColumns: "7fr 1fr"
       },
+      export: {
+        marginTop: "1em",
+        textAlign: "center"
+      }
 
   };
 
@@ -235,15 +241,28 @@ class TrainerSearchView extends Component {
                 let lastNext = this.getLastNext(trainer.requirements)
                 return (
                     <TableRow key={trainer.local_trainers_id}>
-                        <TableCell className={classes.tableCell} >{trainer.cohort.cohort_name}</TableCell>
-                        <TableCell>
-                            <Link to={"/trainerdetails/" + trainer.local_trainers_id}>
-                                <Button className={classes.buttonInCell} >{trainer.first_name}</Button>
+                        <TableCell className={classes.tableCell}>
+                            <Link 
+                                to={"/cohort" + trainer.cohort.cohort_id}
+                                className={classes.buttonInCell}
+                            >
+                                <Button>{trainer.cohort.cohort_name}</Button>
+                            </Link>
+                        </TableCell>
+                        <TableCell className={classes.tableCell}>
+                            <Link 
+                                to={"/trainerdetails/" + trainer.local_trainers_id}
+                                className={classes.buttonInCell}
+                            >
+                                <Button>{trainer.first_name}</Button>
                             </Link>
                         </TableCell>
                         <TableCell className={classes.tableCell} >
-                            <Link to={"/trainerdetails/" + trainer.local_trainers_id}>
-                                <Button className={classes.buttonInCell} >{trainer.last_name}</Button>
+                            <Link 
+                                to={"/trainerdetails/" + trainer.local_trainers_id}
+                                className={classes.buttonInCell}
+                            >
+                                <Button>{trainer.last_name}</Button>
                             </Link>
                         </TableCell>
                         <TableCell className={classes.tableCell} >{trainer.state}</TableCell>
@@ -269,14 +288,12 @@ class TrainerSearchView extends Component {
                     />                 
                 </div>
                 <div className={classes.rightPanel}>
-
-                    <TextField
-                        className={classes.textField}
-                        label="Search Table"
-                        value={this.props.searchKey}
-                        onChange={this.handleSearchInputChange}
-                        margin="normal"
-                    />
+                    <div className={classes.searchAndExport}>
+                        <TrainerTableSearch search={this.handleSearchTable}/>
+                            <div>
+                                <Button className={classes.export}>Export</Button>
+                            </div>
+                    </div>
                 <Paper>
                 <Table id="trainer-search-table">
                     <TableHead>
