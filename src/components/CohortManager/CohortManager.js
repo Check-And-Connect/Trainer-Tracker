@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { withStyles } from "@material-ui/core";
+import { withStyles, Button, Typography } from "@material-ui/core";
 
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 import { LOCAL_TRAINERS_ACTIONS } from "../../redux/actions/localTrainerActions";
 import { COHORT_ACTIONS } from "../../redux/actions/cohortActions";
-import { NATIONAL_TRAINER_ACTIONS } from '../../redux/actions/nationalTrainerActions'
+import { NATIONAL_TRAINER_ACTIONS } from "../../redux/actions/nationalTrainerActions";
 import CohortManagerFilter from "../CohortManagerFilter/CohortManagerFilter";
 import Scheduler from "../Scheduler/Scheduler";
 import CohortManagerTable from "../CohortManagerTable/CohortManagerTable";
-import SearchCohortTable from "../SearchCohortTable/SearchCohortTable";
+import CohortManagerTableSearch from "../CohortManagerTableSearch/CohortManagerTableSearch";
 import CohortManagerModal from "../CohortManagerModal/CohortManagerModal";
 
 const mapStateToProps = state => ({
@@ -25,17 +25,29 @@ const styles = {
   },
   leftPanel: {
     display: "Grid",
-    gridTemplateRows: "0.3fr 1fr"
+    gridTemplateRows: "0.3fr 9fr",
   },
   rightPanel: {
     display: "Grid",
-    gridTemplateRows: "1fr 9fr",
-    backgroundColor: "yellow"
+    gridTemplateRows: "0.3fr 9fr",
+    margin: "0em 1em"
+  },
+  searchAndExport: {
+    display: "Grid",
+    gridTemplateColumns: "7fr 1fr"
+  },
+  export: {
+    marginTop: "1em",
+    textAlign: "center"
+  },
+  note : {
+    margin : '1em'
   }
 };
 class CohortManager extends Component {
   state = {
     currentTrainers: [],
+    trainersBeforeSearch: [],
     cellInfo: {
       localTrainerId: 0,
       requirementId: 0
@@ -46,16 +58,17 @@ class CohortManager extends Component {
       cohortPicked: ""
     },
     dialogOpen: false,
-    checkedIDs: []
+    checkedIDs: [],
+    searchKey: ""
   };
 
   componentDidMount() {
     this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
     this.props.dispatch({ type: LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINERS });
-    this.props.dispatch({type : NATIONAL_TRAINER_ACTIONS.FETCH_ALL_NATIONAL_TRAINERS})
+    this.props.dispatch({
+      type: NATIONAL_TRAINER_ACTIONS.FETCH_ALL_NATIONAL_TRAINERS
+    });
     this.props.dispatch({ type: COHORT_ACTIONS.FETCH_REQUIREMENTS });
-    // this.props.dispatch({type : COHORT_ACTIONS.FETCH_COHORTS})
-    // this.props.dispatch({type : COHORT_ACTIONS.FETCH_STATE_LEVEL_ORG})
     this.setState({
       currentTrainers: this.props.localTrainers.allLocalTrainers
     });
@@ -67,19 +80,37 @@ class CohortManager extends Component {
     }
 
     if (
-      prevProps.localTrainers.allLocalTrainers.length !==
-      this.props.localTrainers.allLocalTrainers.length
+      prevProps.localTrainers.allLocalTrainers.length === 0 &&
+      this.props.localTrainers.allLocalTrainers.length !== 0
     ) {
-      this.setState({
-        currentTrainers: this.props.localTrainers.allLocalTrainers
-      });
+
+      if(this.state.currentTrainers.length !== 0){
+        let filteredTrainers = this.props.localTrainers.allLocalTrainers.filter(localTrainer => {
+          let lcFoundInCurrent = this.state.currentTrainers.find(lc => {
+           return  lc.local_trainers_id === localTrainer.local_trainers_id
+          })
+
+          if(lcFoundInCurrent){
+            return true;
+          }else {
+            return false;
+          }
+        })
+
+        this.setState({
+          currentTrainers : filteredTrainers
+        })
+      }else {
+        this.setState({
+          currentTrainers: this.props.localTrainers.allLocalTrainers
+        });
+      }
+
+      
     }
   }
 
   handleCellClick = (localTrainerId, requirementId) => {
-    console.log("trainer id " + localTrainerId);
-    console.log("req id " + requirementId);
-
     this.setState({
       cellInfo: {
         localTrainerId: localTrainerId,
@@ -87,11 +118,13 @@ class CohortManager extends Component {
       },
       dialogOpen: true
     });
-
-    console.log("cell clicked");
   };
 
   handleDialogClose = () => {
+    this.props.dispatch({
+      type : LOCAL_TRAINERS_ACTIONS.UNSET_TRAINER_REQUIREMENT_SINGLE
+    })
+    
     this.setState({
       dialogOpen: false
     });
@@ -159,7 +192,6 @@ class CohortManager extends Component {
       }
     );
 
-
     this.setState({
       currentTrainers: filteredLocalTrainers,
       checkedIDs: []
@@ -198,37 +230,88 @@ class CohortManager extends Component {
     }
   };
 
-  handleMarkComplete = (data) => {
-    console.log('mark mark');
-    console.log(data);
-
+  handleMarkComplete = data => {
     let payload = {
       ...data,
-      localTrainerIDs : this.state.checkedIDs
-    }
+      localTrainerIDs: this.state.checkedIDs
+    };
 
     this.props.dispatch({
-      type : LOCAL_TRAINERS_ACTIONS.MARK_COMPLETE,
-      payload : payload
-    })
-    
-  }
+      type: LOCAL_TRAINERS_ACTIONS.MARK_COMPLETE,
+      payload: payload
+    });
+  };
 
-  handleScheduling = (data) => {
-    console.log('mark schedule');
-    
+  handleScheduling = data => {
     let payload = {
       ...data,
-      localTrainerIDs : this.state.checkedIDs
-    }
+      localTrainerIDs: this.state.checkedIDs
+    };
 
     this.props.dispatch({
-      type : LOCAL_TRAINERS_ACTIONS.SCHEDULE_FOR_REQUIREMENT,
-      payload : payload
+      type: LOCAL_TRAINERS_ACTIONS.SCHEDULE_FOR_REQUIREMENT,
+      payload: payload
+    });
+  };
+
+  handleSearch = searchKey => {
+    if (this.state.searchKey === "") {
+      this.setState({
+        trainersBeforeSearch: this.state.currentTrainers
+      });
+    }
+
+    this.setState(
+      {
+        searchKey: searchKey
+      },
+      () => {
+        this.filterCurrentTrainersWithSearchKey();
+      }
+    );
+  };
+
+  filterCurrentTrainersWithSearchKey = () => {
+    let flag = false;
+    console.log(this.state.trainersBeforeSearch);
+
+    let filteredTrainers = this.state.trainersBeforeSearch.filter(
+      localTrainer => {
+        flag = false;
+        let checkStringEquality = object => {
+          Object.keys(object).forEach(key => {
+            if (typeof object[key] === "string" || typeof object[key] === 'number') {
+              // console.log("=============String=============");
+              // console.log(object[key]);
+              if (object[key].toString().toLowerCase().includes(this.state.searchKey.toLowerCase())) {
+                console.log(object[key].toString().toLowerCase() + ' includes ' + this.state.searchKey);
+                
+                flag = true;
+                
+              }
+            } else if (Array.isArray(object[key])) {
+
+              object[key].forEach(objectInKey => {
+                checkStringEquality(objectInKey);
+              });
+            } else if (typeof object[key] === "object" && object[key] !== null) {
+
+              checkStringEquality(object[key]);
+            }
+          });
+        };
+
+        checkStringEquality(localTrainer);
+        
+        return flag;
+      }
+    );
+
+    this.setState({
+      currentTrainers : filteredTrainers
     })
-    console.log(data);
-    
-  }
+  };
+
   render() {
     let { classes } = this.props;
     let states, cohorts, stateOrgs;
@@ -249,6 +332,8 @@ class CohortManager extends Component {
                 handleScheduling={this.handleScheduling}
               />
             )}
+           
+            {this.state.checkedIDs.length === 0 &&  <Typography className={classes.note}>*Note <br/> Click on Checkboxes to Schedule or Mark Complete</Typography>}
             <CohortManagerFilter
               states={states}
               stateOrgs={stateOrgs}
@@ -257,7 +342,15 @@ class CohortManager extends Component {
             />
           </div>
           <div className={classes.rightPanel}>
-            <SearchCohortTable />
+            <div className={classes.searchAndExport}>
+              <CohortManagerTableSearch
+                searchKey={this.state.searchKey}
+                search={this.handleSearch}
+              />
+              <div>
+                <Button className={classes.export}>Export</Button>
+              </div>
+            </div>
             <CohortManagerTable
               onCellClick={this.handleCellClick}
               currentTrainers={this.state.currentTrainers}
