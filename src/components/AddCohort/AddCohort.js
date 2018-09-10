@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { COHORT_ACTIONS } from '../../redux/actions/cohortActions';
+import { STATE_LEAD_ACTIONS } from '../../redux/actions/stateLeadActions';
 
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -14,7 +15,7 @@ const moment = require('moment');
 
 const mapStateToProps = state => ({
     user: state.user,
-    localTrainerReducer: state.localTrainerReducer,
+    // localTrainerReducer: state.localTrainerReducer,
     cohortReducer: state.cohortReducer,
     stateLeadReducer: state.stateLeadReducer
 });
@@ -54,7 +55,8 @@ class AddCohort extends Component {
 
     componentDidMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
-        // this.props.dispatch({ type: COHORT_ACTIONS.FETCH_STATES });
+        this.props.dispatch({ type: COHORT_ACTIONS.FETCH_STATES });
+        // this.props.dispatch({ type: STATE_LEAD_ACTIONS.STATE_LEAD });
     }
 
     componentDidUpdate() {
@@ -94,7 +96,7 @@ class AddCohort extends Component {
                     [propertyName]: event.target.value
                 }
             })
-            this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_SLO, payload: event.target.value });
+            this.props.dispatch({ type: STATE_LEAD_ACTIONS.FILTER_STATE_LEAD, payload: event.target.value });
         }
     }
 
@@ -132,7 +134,7 @@ class AddCohort extends Component {
         let SLOListArray = this.props.cohortReducer.SLO_dropDown.map((item, index) => {
             return <option value={item.state_level_organization_id}>{item.name}</option>
         })
-        let cohortListArray = this.props.cohortReducer.cohort_dropDown.map((item, index) => {
+        let stateLeadListArray = this.props.stateLeadReducer.stateLead_dropDown.map((item, index) => {
             return <option value={item.cohort_id}>{item.name}</option>
         })
 
@@ -156,25 +158,24 @@ class AddCohort extends Component {
                                     <Grid item xs={12}>
                                         <select id='stateDrop' className='lengthOfInputsCohort' onChange={this.handleChangeForState('state')}>
                                             <option value="state">State</option>
-                                            {/* {stateListArray} */}
+                                            {stateListArray}
                                         </select>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <select id='SLODrop' className='lengthOfInputsCohort' onChange={this.handleChangeForSLO('state_level_organization')}>
                                             <option value="">State Level Organization</option>
-                                            {/* {SLOListArray} */}
+                                            {SLOListArray}
                                         </select>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <select id='cohortDrop' className='lengthOfInputsCohort' onChange={this.handleChangeFor('cohort')}>
                                             <option value="">State Lead</option>
-                                            {/* {cohortListArray} */}
+                                            {stateLeadListArray}
                                         </select>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <form className={this.props.classes.container} noValidate>
-                                            <TextField
-                                                id="date"
+                                        <form id="TTTdate" className={this.props.classes.container} noValidate>
+                                            <TextField 
                                                 label="Initial TTT Workshop"
                                                 type="date"
                                                 defaultValue={date}
@@ -199,7 +200,7 @@ class AddCohort extends Component {
                                 <TextField
                                     id="date"
                                     type="date"
-                                    defaultValue={date}
+                                    // defaultValue={date}
                                     onChange={this.handleChangeFor("choosenDate")}
                                 />
                             </form>
@@ -209,7 +210,7 @@ class AddCohort extends Component {
                                 <TextField
                                     id="date"
                                     type="date"
-                                    defaultValue={date}
+                                    // defaultValue={date}
                                     onChange={this.handleChangeFor("choosenDate")}
                                 />
                             </form>
@@ -219,7 +220,7 @@ class AddCohort extends Component {
                                 <TextField
                                     id="date"
                                     type="date"
-                                    defaultValue={date}
+                                    // defaultValue={date}
                                     onChange={this.handleChangeFor("choosenDate")}
                                 />
                             </form>
@@ -231,7 +232,7 @@ class AddCohort extends Component {
                                 <TextField
                                     id="date"
                                     type="date"
-                                    defaultValue={date}
+                                    // defaultValue={date}
                                     onChange={this.handleChangeFor("choosenDate")}
                                 />
                             </form>
@@ -241,7 +242,7 @@ class AddCohort extends Component {
                                 <TextField
                                     id="date"
                                     type="date"
-                                    defaultValue={date}
+                                    // defaultValue={date}
                                     onChange={this.handleChangeFor("choosenDate")}
                                 />
                             </form>
@@ -251,7 +252,7 @@ class AddCohort extends Component {
                                 <TextField
                                     id="date"
                                     type="date"
-                                    defaultValue={date}
+                                    // defaultValue={date}
                                     onChange={this.handleChangeFor("choosenDate")}
                                 />
                             </form>
@@ -263,7 +264,7 @@ class AddCohort extends Component {
                                 <TextField
                                     id="date"
                                     type="date"
-                                    defaultValue={date}
+                                    // defaultValue={date}
                                     onChange={this.handleChangeFor("choosenDate")}
                                 />
                             </form>
@@ -273,7 +274,7 @@ class AddCohort extends Component {
                                 <TextField
                                     id="date"
                                     type="date"
-                                    defaultValue={date}
+                                    // defaultValue={date}
                                     onChange={this.handleChangeFor("choosenDate")}
                                 />
                             </form>
@@ -283,7 +284,7 @@ class AddCohort extends Component {
                                 <TextField
                                     id="date"
                                     type="date"
-                                    defaultValue={date}
+                                    // defaultValue={date}
                                     onChange={this.handleChangeFor("choosenDate")}
                                 />
                             </form>
@@ -295,7 +296,7 @@ class AddCohort extends Component {
                                 <TextField
                                     id="date"
                                     type="date"
-                                    defaultValue={date}
+                                    // defaultValue={date}
                                     onChange={this.handleChangeFor("choosenDate")}
                                 />
                             </form>
@@ -305,7 +306,7 @@ class AddCohort extends Component {
                                 <TextField
                                     id="date"
                                     type="date"
-                                    defaultValue={date}
+                                    // defaultValue={date}
                                     onChange={this.handleChangeFor("choosenDate")}
                                 />
                             </form>
@@ -315,7 +316,7 @@ class AddCohort extends Component {
                                 <TextField
                                     id="date"
                                     type="date"
-                                    defaultValue={date}
+                                    // defaultValue={date}
                                     onChange={this.handleChangeFor("choosenDate")}
                                 />
                             </form>
@@ -327,7 +328,7 @@ class AddCohort extends Component {
                                 <TextField
                                     id="date"
                                     type="date"
-                                    defaultValue={date}
+                                    // defaultValue={date}
                                     onChange={this.handleChangeFor("choosenDate")}
                                 />
                             </form>
@@ -337,7 +338,7 @@ class AddCohort extends Component {
                                 <TextField
                                     id="date"
                                     type="date"
-                                    defaultValue={date}
+                                    // defaultValue={date}
                                     onChange={this.handleChangeFor("choosenDate")}
                                 />
                             </form>
@@ -347,7 +348,7 @@ class AddCohort extends Component {
                                 <TextField
                                     id="date"
                                     type="date"
-                                    defaultValue={date}
+                                    // defaultValue={date}
                                     onChange={this.handleChangeFor("choosenDate")}
                                 />
                             </form>
@@ -359,7 +360,7 @@ class AddCohort extends Component {
                                 <TextField
                                     id="date"
                                     type="date"
-                                    defaultValue={date}
+                                    // defaultValue={date}
                                     onChange={this.handleChangeFor("choosenDate")}
                                 />
                             </form>
@@ -369,7 +370,7 @@ class AddCohort extends Component {
                                 <TextField
                                     id="date"
                                     type="date"
-                                    defaultValue={date}
+                                    // defaultValue={date}
                                     onChange={this.handleChangeFor("choosenDate")}
                                 />
                             </form>
@@ -379,18 +380,11 @@ class AddCohort extends Component {
                                 <TextField
                                     id="date"
                                     type="date"
-                                    defaultValue={date}
+                                    // defaultValue={date}
                                     onChange={this.handleChangeFor("choosenDate")}
                                 />
                             </form>
                         </Grid>
-
-                        {/* <Grid item xs={4}></Grid>
-                        <Grid item xs={8}>
-                            <ul>
-                                {recentListArray}
-                            </ul>
-                        </Grid> */}
                     </Grid>
                 </div>
             );
