@@ -53,4 +53,19 @@ router.get('/cohort', (req, res) => {
     }
 });
 
+router.get('/requirements', (req, res) => {
+    const queryText =  'SELECT * FROM requirements';
+    pool.query(queryText)
+        .then(results => {
+            console.log(results.rows);
+            res.send(results.rows);
+        })
+        .catch(err => {
+            console.log(err);
+            
+            res.sendStatus(500);
+            
+        })
+})
+
 module.exports = router;

@@ -2,7 +2,7 @@ import { all } from 'redux-saga/effects';
 import userSaga from './userSaga';
 import loginSaga from './loginSaga';
 import localTrainerSaga from './localTrainerSaga';
-// import nationalTrainerSaga from './nationalTrainerSaga';
+import nationalTrainerSaga from './nationalTrainerSaga';
 import cohortSaga from './cohortSaga';
 import stateLeadSaga from './stateLeadSaga';
 
@@ -14,7 +14,7 @@ export default function* rootSaga() {
     userSaga(),
     loginSaga(),
     localTrainerSaga(),
-    // nationalTrainerSaga(),
+    nationalTrainerSaga(),
     cohortSaga(),
 
     stateLeadSaga()

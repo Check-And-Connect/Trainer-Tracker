@@ -1,18 +1,23 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+
+import MomentUtils from "material-ui-pickers/utils/moment-utils";
+import MuiPickersUtilsProvider from "material-ui-pickers/utils/MuiPickersUtilsProvider";
+import { InlineDatePicker } from "material-ui-pickers/DatePicker";
+import moment from "moment";
+
 import { LOCAL_TRAINERS_ACTIONS } from "../../redux/actions/localTrainerActions";
+import EditIcon from "@material-ui/icons/Edit";
+import SaveIcon from "@material-ui/icons/Save";
 
 import {
   Button,
   TextField,
   Dialog,
-  DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   Typography,
   FormControl,
-  Input,
   InputLabel,
   MenuItem,
   Select,
@@ -21,10 +26,9 @@ import {
   withStyles
 } from "@material-ui/core";
 
-import moment from "moment";
-
 const mapStateToProps = state => ({
-  localTrainers: state.localTrainerReducer
+  localTrainers: state.localTrainerReducer,
+  nationalTrainers: state.nationalTrainerReducer
 });
 
 const styles = {
@@ -35,12 +39,24 @@ const styles = {
     width: "10em"
   },
   textField: {
-    width: "25em"
+    width: "20em"
+  },
+  editIcon: {
+    textAlign: "right"
+  },
+  editable: {
+    display: "Grid",
+    gridTemplateColumns: "1fr 0.5fr"
   }
 };
 class CohortManagerModal extends Component {
   state = {
-    localTrainer: null
+    localTrainer: null,
+    nationalTrainer: "",
+    completed: null,
+    editInfo: false,
+    selectedDate: moment().format("ddd, DD MMM YYYY HH:mm:ss ZZ"),
+    note: null
   };
 
   componentDidMount() {
@@ -55,24 +71,134 @@ class CohortManagerModal extends Component {
   }
 
   componentDidUpdate(prevProps) {
+
+    console.log(prevProps.localTrainers );
+    console.log(this.props.localTrainers);
+    
     if (
-      prevProps.localTrainers.singleTrainerReqInfo[0] !==
-      this.props.localTrainers.singleTrainerReqInfo[0]
+      prevProps.localTrainers.singleTrainerReqInfo.length === 0 &&
+      this.props.localTrainers.singleTrainerReqInfo.length !== 0
     ) {
       this.setState({
-        localTrainer: this.props.localTrainers.singleTrainerReqInfo[0]
+        localTrainer: this.props.localTrainers.singleTrainerReqInfo[0],
+        completed: this.props.localTrainers.singleTrainerReqInfo[0]
+          .requirements[0].completed,
+        selectedDate: this.props.localTrainers.singleTrainerReqInfo[0]
+          .requirements[0].completed
+          ? this.props.localTrainers.singleTrainerReqInfo[0].requirements[0]
+              .completed
+          : this.state.selectedDate,
+        note: this.props.localTrainers.singleTrainerReqInfo[0].requirements[0]
+          .requirement_note
+      });
+
+      let nt = this.props.nationalTrainers.allNationalTrainers.filter(
+        nationalTrainer => {
+          return (
+            nationalTrainer.national_trainer_id ===
+            this.props.localTrainers.singleTrainerReqInfo[0].requirements[0]
+              .national_trainer_id
+          );
+        }
+      );
+
+      console.log(
+        this.props.localTrainers.singleTrainerReqInfo[0].requirements[0]
+          .national_trainer_id
+      );
+
+      this.setState({
+        nationalTrainer: nt.length > 0 ? nt[0].national_trainer_id : ""
       });
     }
   }
 
+  toggleEdit = () => {
+    this.setState({
+      editInfo: !this.state.editInfo
+    });
+  };
+
   handleClose = () => {
+    
     this.props.handleDialgClose();
+    
+  };
+
+  handleNationalTrainers = event => {
+    console.log(event.target);
+
+    this.setState({
+      nationalTrainer: event.target.value
+    });
+  };
+
+  handleDateChange = date => {
+    console.log(date);
+    this.setState({
+      selectedDate: date.toISOString(),
+      completed: date.toISOString()
+    });
+  };
+
+  handleMarkDone = () => {
+    this.setState({
+      completed: this.state.completed ? null : this.state.selectedDate
+    });
+  };
+
+  handleNote = event => {
+    this.setState({
+      note: event.target.value
+    });
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+    console.log(this.state);
+
+    let payload = {
+      requirement_id: this.state.localTrainer.requirements[0].requirement_id,
+      date_marked_complete: this.state.completed,
+      national_trainer: this.state.nationalTrainer,
+      note: this.state.note,
+      localTrainerIDs: [this.state.localTrainer.local_trainers_id]
+    };
+    this.props.dispatch({
+      type: LOCAL_TRAINERS_ACTIONS.MARK_COMPLETE,
+      payload: payload
+    });
+    this.toggleEdit();
   };
 
   render() {
-    let { localTrainer } = this.state;
-    console.log(localTrainer);
     let { classes } = this.props;
+    let { localTrainer } = this.state;
+    let observerNationalTrainer = "";
+    console.log(this.state);
+
+    let nationalTrainers = this.props.nationalTrainers.allNationalTrainers.map(
+      nationalTrainer => {
+        if (
+          localTrainer &&
+          nationalTrainer.national_trainer_id ===
+            localTrainer.requirements[0].national_trainer_id
+        ) {
+          observerNationalTrainer =
+            nationalTrainer.first_name + " " + nationalTrainer.last_name;
+        }
+
+        return (
+          <MenuItem
+            key={nationalTrainer.national_trainer_id}
+            value={nationalTrainer.national_trainer_id}
+          >
+            {nationalTrainer.first_name} {nationalTrainer.last_name}
+          </MenuItem>
+        );
+      }
+    );
+
     return (
       <Dialog
         className={classes.mainContent}
@@ -81,13 +207,13 @@ class CohortManagerModal extends Component {
           this.props.handleDialgClose();
         }}
       >
-        {localTrainer && (
-          <div>
-            <DialogTitle>
-              {localTrainer.first_name} {localTrainer.last_name}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText>
+        <div>
+          {localTrainer && (
+            <div>
+              <DialogTitle>
+                {localTrainer.first_name} {localTrainer.last_name}
+              </DialogTitle>
+              <DialogContent>
                 <Typography>
                   Organization :{" "}
                   {
@@ -100,7 +226,14 @@ class CohortManagerModal extends Component {
                 </Typography>
 
                 <Typography>
-                  Scheduled : {localTrainer.requirements[0].schdueled || "No"}
+                  Scheduled :{" "}
+                  {(moment(
+                    localTrainer.requirements[0].scheduled_date
+                  ).isValid() &&
+                    moment(localTrainer.requirements[0].scheduled_date).format(
+                      "MM-DD-YYYY"
+                    )) ||
+                    "No"}
                 </Typography>
 
                 <Typography>
@@ -109,39 +242,108 @@ class CohortManagerModal extends Component {
                     localTrainer.requirements[0].requirement_due_date
                   ).format("MM-DD-YYYY")}
                 </Typography>
-              </DialogContentText>
-              <form>
-                <FormControl>
-                  <InputLabel>Observed By</InputLabel>
-                  <Select className={classes.dropDown}>
-                    <MenuItem value="someone">national_trainer_2 </MenuItem>
-                    <MenuItem value="someone">national_trainer_2 </MenuItem>
-                    <MenuItem value="someone">national_trainer_2 </MenuItem>
-                  </Select>
-                </FormControl>
                 <br />
-                <FormControlLabel
-                  control={<Checkbox value="checkedA" />}
-                  label="Mark Done"
-                />
-                <br />
-                <TextField
-                  id="multiline-static"
-                  label="Leave a Note"
-                  multiline
-                  rows="4"
-                  className={classes.textField}
-                  margin="normal"
-                />
-                <br />
-                <br />
-                <Button onClick={this.handleClose} color="primary">
-                  Submit
-                </Button>
-              </form>
-            </DialogContent>
-          </div>
-        )}
+                <hr />
+
+                <form onSubmit={this.handleSubmit}>
+                  <MuiPickersUtilsProvider utils={MomentUtils}>
+                    <div className={classes.editable}>
+                      {!this.state.editInfo && (
+                        <div>
+                          <Typography>
+                            Comleted :{" "}
+                            {(moment(
+                              localTrainer.requirements[0].completed
+                            ).isValid() &&
+                              moment(
+                                localTrainer.requirements[0].completed
+                              ).format("MM-DD-YYYY")) ||
+                              "No"}
+                          </Typography>
+                          <Typography>
+                            Confirmed By : {observerNationalTrainer}
+                          </Typography>
+                          {localTrainer.requirements[0].requirement_note && (
+                            <Typography>
+                              Note :{" "}
+                              {localTrainer.requirements[0].requirement_note}
+                            </Typography>
+                          )}
+                        </div>
+                      )}
+                      {this.state.editInfo && (
+                        <div>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                value={
+                                  this.state.completed
+                                    ? this.state.completed
+                                    : ""
+                                }
+                                checked={this.state.completed ? true : false}
+                                onClick={this.handleMarkDone}
+                              />
+                            }
+                            label="Mark Complete"
+                          />
+                          <br />
+                          <div className="picker">
+                            <InlineDatePicker
+                              className={classes.dropDown}
+                              keyboard
+                              format="MM/DD/YYYY"
+                              label="Pick Date"
+                              value={this.state.selectedDate}
+                              onChange={this.handleDateChange}
+                            />
+                          </div>
+                          <br />
+                          <FormControl>
+                            <InputLabel>Confirmed By</InputLabel>
+                            <Select
+                              className={classes.dropDown}
+                              value={this.state.nationalTrainer}
+                              onChange={this.handleNationalTrainers}
+                              displayEmpty
+                            >
+                              {nationalTrainers}
+                            </Select>
+                          </FormControl>
+                          <br />
+                          <TextField
+                            id="multiline-static"
+                            label="Leave a Note"
+                            multiline
+                            rows="4"
+                            className={classes.textField}
+                            margin="normal"
+                            onChange={this.handleNote}
+                            value={this.state.note ? this.state.note : ""}
+                          />
+                          <br />
+                          <br />
+                        </div>
+                      )}
+                      <div className={classes.editIcon}>
+                        {!this.state.editInfo && (
+                          <Button onClick={this.toggleEdit}>
+                            <EditIcon />
+                          </Button>
+                        )}
+                        {this.state.editInfo && (
+                          <Button type="submit">
+                            <SaveIcon />
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </MuiPickersUtilsProvider>
+                </form>
+              </DialogContent>
+            </div>
+          )}
+        </div>
       </Dialog>
     );
   }

@@ -1,16 +1,16 @@
-import React, {Component} from 'react';
+// import React, {Component} from 'react';
 
-class TrainerSearchSidebarField extends Component{
+// class TrainerSearchSidebarField extends Component{
 
-    render(){
-        const allCheckboxes = this.props.checkboxes.map((checkbox, index) => {
+//     render(){
+//         const allCheckboxes = this.props.checkboxes.map((checkbox, index) => {
             
-            return (
-                <input
-                    name={check}
-            )
-        })
-    }
-};
+//             return (
+//                 <input
+//                     name={check}
+//             )
+//         })
+//     }
+// };
 
-export default TrainerSearchSidebarField;
+// export default TrainerSearchSidebarField;
