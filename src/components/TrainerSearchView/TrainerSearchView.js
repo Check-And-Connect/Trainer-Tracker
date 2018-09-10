@@ -8,7 +8,7 @@ import { COHORT_ACTIONS } from '../../redux/actions/cohortActions';
 
 import TrainerSearchSidebar from '../TrainerSearchSidebar/TrainerSearchSidebar';
 
-import { withStyles } from "@material-ui/core";
+import { withStyles, Button, Paper, TextField } from "@material-ui/core";
 import { Table, TableBody, TableHead, TableRow, TableCell } from '@material-ui/core';
 
 const styles = {
@@ -18,16 +18,30 @@ const styles = {
     },
     leftPanel: {
       display: "Grid",
-      gridTemplateRows: "3fr 1fr",
-      backgroundColor: "red"
+      gridTemplateRows: "0.3fr 9fr",
     },
     rightPanel: {
       display : "Grid",
-      gridTemplateRows:"1fr 9fr",
-      backgroundColor: "yellow"
-    }
-  };
+      gridTemplateRows: "0.3fr 9fr",
+      margin: "0em 1em"
+    },
+    tableCell: {
+        padding: 0,
+        textAlign: "center",
+      },
+      buttonInCell: {
+        fontSize: "0.9em",
+        textDecoration: 'none',
+      },
+      textField : {
+        margin : '0em 0em 0.5em 1em',
+      },
+      searchAndExport: {
+        display: "Grid",
+        gridTemplateColumns: "7fr 1fr"
+      },
 
+  };
 
 class TrainerSearchView extends Component {
     constructor(props) {
@@ -221,22 +235,22 @@ class TrainerSearchView extends Component {
                 let lastNext = this.getLastNext(trainer.requirements)
                 return (
                     <TableRow key={trainer.local_trainers_id}>
-                        <TableCell>{trainer.cohort.cohort_name}</TableCell>
+                        <TableCell className={classes.tableCell} >{trainer.cohort.cohort_name}</TableCell>
                         <TableCell>
                             <Link to={"/trainerdetails/" + trainer.local_trainers_id}>
-                                {trainer.first_name}
+                                <Button className={classes.buttonInCell} >{trainer.first_name}</Button>
                             </Link>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className={classes.tableCell} >
                             <Link to={"/trainerdetails/" + trainer.local_trainers_id}>
-                                {trainer.last_name}
+                                <Button className={classes.buttonInCell} >{trainer.last_name}</Button>
                             </Link>
                         </TableCell>
-                        <TableCell>{trainer.state}</TableCell>
-                        <TableCell>{trainer.state_level_organization.state_level_organization_name}</TableCell>
-                        <TableCell>{lastNext[0]}</TableCell>
-                        <TableCell>{lastNext[1]}</TableCell>
-                        <TableCell>{lastNext[2]}</TableCell>
+                        <TableCell className={classes.tableCell} >{trainer.state}</TableCell>
+                        <TableCell className={classes.tableCell} >{trainer.state_level_organization.state_level_organization_name}</TableCell>
+                        <TableCell className={classes.tableCell} >{lastNext[0]}</TableCell>
+                        <TableCell className={classes.tableCell} >{lastNext[1]}</TableCell>
+                        <TableCell className={classes.tableCell} >{lastNext[2]}</TableCell>
                     </TableRow>
                 )
             })
@@ -256,29 +270,32 @@ class TrainerSearchView extends Component {
                 </div>
                 <div className={classes.rightPanel}>
 
-                    <input
-                    onChange={this.handleSearchInputChange}
-                    placeholder="filter table"
-                    value={this.state.searchInput}
+                    <TextField
+                        className={classes.textField}
+                        label="Search Table"
+                        value={this.props.searchKey}
+                        onChange={this.handleSearchInputChange}
+                        margin="normal"
                     />
-
+                <Paper>
                 <Table id="trainer-search-table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Cohort</TableCell>
-                            <TableCell>First Name</TableCell>
-                            <TableCell>Last Name</TableCell>
-                            <TableCell>State</TableCell>
-                            <TableCell>State-Level Org.</TableCell>
-                            <TableCell>Last Completed Req.</TableCell>
-                            <TableCell>Upcoming Req.</TableCell>
-                            <TableCell>Due Date</TableCell>
+                            <TableCell className={classes.tableCell} >Cohort</TableCell>
+                            <TableCell className={classes.tableCell} >First Name</TableCell>
+                            <TableCell className={classes.tableCell} >Last Name</TableCell>
+                            <TableCell className={classes.tableCell} >State</TableCell>
+                            <TableCell className={classes.tableCell} >State-Level Org.</TableCell>
+                            <TableCell className={classes.tableCell} >Last Completed Req.</TableCell>
+                            <TableCell className={classes.tableCell} >Upcoming Req.</TableCell>
+                            <TableCell className={classes.tableCell} >Due Date</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {trainersTableBody}
                     </TableBody>
                 </Table>
+                </Paper>
                 </div>
             </div>
             </React.Fragment>
