@@ -13,6 +13,10 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const styles = {
+  mainComponent : {
+    marginRight: '0.5em',
+    marginLeft: '0.7em'
+  },
   expansionDetails : {
     padding : '0em 1.3em 1em 1.3em'
   },
@@ -99,7 +103,7 @@ class CohortManagerFilter extends Component {
     }
 
     return (
-      <div>
+      <div className={classes.mainComponent}>
         <ExpansionPanel>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography className={classes.heading}>State</Typography>

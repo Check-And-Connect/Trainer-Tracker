@@ -8,6 +8,7 @@ import moment from "moment";
 
 import { LOCAL_TRAINERS_ACTIONS } from "../../redux/actions/localTrainerActions";
 import EditIcon from "@material-ui/icons/Edit";
+import SaveIcon from "@material-ui/icons/Save";
 
 import {
   Button,
@@ -55,7 +56,7 @@ class CohortManagerModal extends Component {
     completed: null,
     editInfo: false,
     selectedDate: moment().format("ddd, DD MMM YYYY HH:mm:ss ZZ"),
-    note : null
+    note: null
   };
 
   componentDidMount() {
@@ -70,9 +71,13 @@ class CohortManagerModal extends Component {
   }
 
   componentDidUpdate(prevProps) {
+
+    console.log(prevProps.localTrainers );
+    console.log(this.props.localTrainers);
+    
     if (
-      prevProps.localTrainers.singleTrainerReqInfo[0] !==
-      this.props.localTrainers.singleTrainerReqInfo[0]
+      prevProps.localTrainers.singleTrainerReqInfo.length === 0 &&
+      this.props.localTrainers.singleTrainerReqInfo.length !== 0
     ) {
       this.setState({
         localTrainer: this.props.localTrainers.singleTrainerReqInfo[0],
@@ -83,7 +88,8 @@ class CohortManagerModal extends Component {
           ? this.props.localTrainers.singleTrainerReqInfo[0].requirements[0]
               .completed
           : this.state.selectedDate,
-        note : this.props.localTrainers.singleTrainerReqInfo[0].requirements[0].requirement_note  
+        note: this.props.localTrainers.singleTrainerReqInfo[0].requirements[0]
+          .requirement_note
       });
 
       let nt = this.props.nationalTrainers.allNationalTrainers.filter(
@@ -102,9 +108,7 @@ class CohortManagerModal extends Component {
       );
 
       this.setState({
-        nationalTrainer: nt.length > 0
-          ? nt[0].national_trainer_id
-          : ''
+        nationalTrainer: nt.length > 0 ? nt[0].national_trainer_id : ""
       });
     }
   }
@@ -116,7 +120,9 @@ class CohortManagerModal extends Component {
   };
 
   handleClose = () => {
+    
     this.props.handleDialgClose();
+    
   };
 
   handleNationalTrainers = event => {
@@ -131,13 +137,13 @@ class CohortManagerModal extends Component {
     console.log(date);
     this.setState({
       selectedDate: date.toISOString(),
-      completed : date.toISOString()
+      completed: date.toISOString()
     });
   };
 
   handleMarkDone = () => {
     this.setState({
-      completed: this.state.selectedDate
+      completed: this.state.completed ? null : this.state.selectedDate
     });
   };
 
@@ -147,22 +153,23 @@ class CohortManagerModal extends Component {
     });
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = event => {
     event.preventDefault();
     console.log(this.state);
+
     let payload = {
-      requirement_id : this.state.localTrainer.requirements[0].requirement_id,
-      date_marked_complete : this.state.completed,
-      national_trainer : this.state.nationalTrainer,
-      note : this.state.note,
-      localTrainerIDs : [this.state.localTrainer.local_trainers_id]
-    }
+      requirement_id: this.state.localTrainer.requirements[0].requirement_id,
+      date_marked_complete: this.state.completed,
+      national_trainer: this.state.nationalTrainer,
+      note: this.state.note,
+      localTrainerIDs: [this.state.localTrainer.local_trainers_id]
+    };
     this.props.dispatch({
-      type : LOCAL_TRAINERS_ACTIONS.MARK_COMPLETE,
-      payload : payload
-    })
-    
-  }
+      type: LOCAL_TRAINERS_ACTIONS.MARK_COMPLETE,
+      payload: payload
+    });
+    this.toggleEdit();
+  };
 
   render() {
     let { classes } = this.props;
@@ -256,11 +263,12 @@ class CohortManagerModal extends Component {
                           <Typography>
                             Confirmed By : {observerNationalTrainer}
                           </Typography>
-                          {localTrainer.requirements[0].requirement_note &&
-                          <Typography>
-                            Note : {localTrainer.requirements[0].requirement_note}
-                          </Typography>
-                          }
+                          {localTrainer.requirements[0].requirement_note && (
+                            <Typography>
+                              Note :{" "}
+                              {localTrainer.requirements[0].requirement_note}
+                            </Typography>
+                          )}
                         </div>
                       )}
                       {this.state.editInfo && (
@@ -311,17 +319,23 @@ class CohortManagerModal extends Component {
                             className={classes.textField}
                             margin="normal"
                             onChange={this.handleNote}
-                            value={this.state.note ? this.state.note : ''}
+                            value={this.state.note ? this.state.note : ""}
                           />
                           <br />
                           <br />
-                          <Button type="submit" color="primary" variant='outlined'>
-                            Submit
-                          </Button>
                         </div>
                       )}
                       <div className={classes.editIcon}>
-                        <EditIcon onClick={this.toggleEdit} />
+                        {!this.state.editInfo && (
+                          <Button onClick={this.toggleEdit}>
+                            <EditIcon />
+                          </Button>
+                        )}
+                        {this.state.editInfo && (
+                          <Button type="submit">
+                            <SaveIcon />
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </MuiPickersUtilsProvider>
