@@ -32,7 +32,8 @@ class TrainerDetails extends Component{
     constructor(props){
         super(props)
         this.state = {
-            editing: false,
+            editingDetails: false,
+            editingNotes: false,
             trainer: null,
             requirements: null,
             cohort: null,
@@ -66,6 +67,16 @@ class TrainerDetails extends Component{
     }
 
     handleInputChange = (e) => {
+        if (e.target.name === 'notes' && !this.state.editingNotes){
+            this.setState({
+                editingNotes: true
+            })
+        } else if (e.target.name !== 'notes' && !this.state.editingDetails){
+            this.setState({
+                editingDetails: true
+            })
+        }
+
         console.log(e.target.name, e.target.value);
         if (e.target.name === 'state'){
             this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_STATE, payload: e.target.value });
@@ -118,7 +129,7 @@ class TrainerDetails extends Component{
     }
 
     handleIconClick = () => {
-        if (this.state.editing){
+        if (this.state.editingDetails || this.state.editingNotes){
             let localTrainerID = this.props.match.params.id;
             axios.put(`/api/localTrainers/${localTrainerID}`, this.state.trainer)
                 .then(res => {
@@ -130,7 +141,8 @@ class TrainerDetails extends Component{
                 })
         }
         this.setState({
-            editing: !this.state.editing
+            editingDetails: false,
+            editingNotes: false
         })
     }
 
@@ -160,36 +172,10 @@ class TrainerDetails extends Component{
             })
         }
 
-        let fnameField;
-        let lnameField;
-        let titleField;
-        let emailField;
-        let phoneField;
-        let organizationField;
-        let districtField;
-        let notesField;
-        let stateField;
-        let sloField;
-        let cohortField;
-        let stateDropdown;
-        let sloDropdown;
-        let cohortDropdown;
-
+        let fnameField, lnameField, titleField, emailField, phoneField, organizationField, districtField, notesField;
+        let stateField, sloField, cohortField;
 
         if (this.state.trainer !== null && this.state.slo !== null && this.state.cohort !== null){
-            fnameField = <span>{this.state.trainer.first_name}</span>;
-            lnameField = <span>{this.state.trainer.last_name}</span>;
-            titleField = <span>{this.state.trainer.title}</span>;
-            emailField = <span>{this.state.trainer.email}</span>;
-            phoneField = <span>{this.state.trainer.phone_number}</span>;
-            organizationField = <span>{this.state.trainer.organization}</span>;
-            districtField = <span>{this.state.trainer.district}</span>;
-            stateField = <span>{this.state.slo.state}</span>
-            sloField = <span>{this.state.slo.name}</span>
-            cohortField = <span>{this.state.cohort.name}</span>
-            notesField = <span>{this.state.trainer.notes}</span>
-            if (this.state.editing){
-
                 fnameField = <TextField 
                                 className={this.props.classes.textField}
                                 label="First Name" 
@@ -307,7 +293,6 @@ class TrainerDetails extends Component{
                                     {cohortListArray}
                                 </Select>
                                 </span>
-            }
         }
 
         let requirementsHistory;
@@ -321,10 +306,20 @@ class TrainerDetails extends Component{
             })
         }
 
+        let detailsButtonArea = null;
+        if (this.state.editingDetails){
+            detailsButtonArea = <Button onClick={this.handleIconClick}>{this.state.editingDetails ? "Save Changes" : ""}</Button>
+        }
+
+        let notesButtonArea = null;
+        if (this.state.editingNotes){
+            notesButtonArea = <Button onClick={this.handleIconClick}>{this.state.editingNotes ? "Save Changes" : ""}</Button>
+        }
+
         return(
             <React.Fragment>
             <div>
-                    <h2 className='centerHeadings'>Trainer Details<Button onClick={this.handleIconClick}>{this.state.editing ? "Save" : "Edit"}</Button></h2>
+                    <h2 className='centerHeadings'>Trainer Details{detailsButtonArea}</h2>
                     <Grid container>
                         <Grid item xs={3}></Grid>
                         <Grid item xs={9}>
@@ -335,51 +330,43 @@ class TrainerDetails extends Component{
                                     </Grid>
                                     <Grid item xs={8}>
                                         <FormControl className={this.props.classes.formControl}>
-                                        {/* <InputLabel>State</InputLabel> */}
                                             {stateField}
                                         </FormControl>
                                     </Grid>
                                     <Grid item xs={4}>
-                                    {/* <InputLabel>Last Name</InputLabel> */}
                                         {lnameField}
                                     </Grid>
                                     <Grid item xs={8}>
                                         <FormControl className={this.props.classes.formControl}>
-                                            {/* <InputLabel>State Level Organization</InputLabel> */}
                                             {sloField}
                                         </FormControl>
                                     </Grid>
                                     <Grid item xs={4}>
-                                    {/* <InputLabel>Title</InputLabel> */}
                                         {titleField}
                                     </Grid>
                                     <Grid item xs={8}>
                                         <FormControl className={this.props.classes.formControl}>
-                                            {/* <InputLabel>Cohort</InputLabel> */}
                                             {cohortField}
                                         </FormControl>
                                     </Grid>
                                     <Grid item xs={12}>
-                                    {/* <InputLabel>Email</InputLabel> */}
                                         {emailField}
                                     </Grid>
+
                                     <Grid item xs={12}>
-                                    {/* <InputLabel>Phone Number</InputLabel> */}
                                         {phoneField}
                                     </Grid>
                                     <Grid item xs={12}>
-                                    {/* <InputLabel>Organization</InputLabel> */}
                                         {organizationField}
                                     </Grid>
                                     <Grid item xs={5}>
-                                    {/* <InputLabel>District</InputLabel> */}
                                         {districtField}
                                     </Grid>
                                 </Grid>
                             </form>
                         </Grid>
                     </Grid>
-                    <h2 className='centerHeadings'>Notes</h2>
+                    <h2 className='centerHeadings'>Notes{notesButtonArea}</h2>
                     <Grid container>
                     <Grid item xs={3}></Grid>
                         <Grid item xs={6}>
