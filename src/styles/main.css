@@ -156,6 +156,7 @@ li a:hover {
 
 .item3b2 {
     display: grid;
+    display: inline-block;
     justify-content: right;
 }
 
