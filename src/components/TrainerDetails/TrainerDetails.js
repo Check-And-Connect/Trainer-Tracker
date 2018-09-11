@@ -11,6 +11,20 @@ const styles = {
     mainComponent: {
         display: "Grid",
         gridTemplateColumns: "1fr 1fr"
+    },
+    textField: {
+        margin: '0em 0em 0.5em 1em',
+        width: "14em"
+    },
+    dropDown: {
+        width: "10em"
+    },
+    formControl: {
+        margin: '0em 0em 0.5em 1em',
+        width: "14em"
+    },
+    selectEmpty: {
+        marginTop: '0em 0em 0.5em 1em' * 2,
     }
 }
 
@@ -27,10 +41,10 @@ class TrainerDetails extends Component{
     }
 
     componentDidMount = () => {
+        this.getTrainerDetails();
         this.props.dispatch({ type: COHORT_ACTIONS.FETCH_STATES });
         this.props.dispatch({ type: COHORT_ACTIONS.FETCH_COHORTS });
         this.props.dispatch({ type: COHORT_ACTIONS.FETCH_STATE_LEVEL_ORG });
-        this.getTrainerDetails();
     }
 
     getTrainerDetails = () => {
@@ -157,7 +171,7 @@ class TrainerDetails extends Component{
         let cohortDropdown;
 
 
-        if (this.state.trainer !== null){
+        if (this.state.trainer !== null && this.state.slo !== null && this.state.cohort !== null){
             fnameField = <span>{this.state.trainer.first_name}</span>;
             lnameField = <span>{this.state.trainer.last_name}</span>;
             titleField = <span>{this.state.trainer.title}</span>;
@@ -171,17 +185,123 @@ class TrainerDetails extends Component{
             notesField = <span>{this.state.trainer.notes}</span>
             if (this.state.editing){
 
-                fnameField = <TextField label="First Name" type="text" name="first_name" placeholder="first name" value={this.state.trainer.first_name} onChange={this.handleInputChange}/>
-                lnameField = <TextField label="Last Name" type="text" name="last_name" placeholder="last name" value={this.state.trainer.last_name} onChange={this.handleInputChange}/>
-                titleField = <TextField label="Title" type="text" name="title" placeholder="title" value={this.state.trainer.title} onChange={this.handleInputChange}/>
-                emailField = <TextField label="Email Address" type="text" name="email" placeholder="email" value={this.state.trainer.email} onChange={this.handleInputChange}/>
-                phoneField = <TextField label="Phone Number" type="text" name="phone_number" placeholder="phone number" value={this.state.trainer.phone_number} onChange={this.handleInputChange}/>
-                organizationField = <TextField label="Organization" type="text" name="organization" placeholder="organization" value={this.state.trainer.organization} onChange={this.handleInputChange}/>
-                districtField = <TextField label="District" type="text" name="district" placeholder="district" value={this.state.trainer.district} onChange={this.handleInputChange}/>
-                notesField = <textarea rows="10" cols="100" type="text" name="notes" placeholder="notes" value={this.state.trainer.notes} onChange={this.handleInputChange}></textarea>
-                stateField = <span><InputLabel>State</InputLabel><Select label="State" value={this.state.slo.state} name="state" onChange={this.handleInputChange}><MenuItem value=""><em>None</em></MenuItem>{stateListArray}</Select></span>
-                sloField = <span><InputLabel>State-Level Org.</InputLabel><Select label="State-Level Org." value={this.state.slo.state_level_organization_id} name="slo" onChange={this.handleInputChange}><MenuItem value=""><em>None</em></MenuItem>{sloListArray}</Select></span>
-                cohortField = <span><InputLabel>Cohort</InputLabel><Select label="Cohort" value={this.state.cohort.cohort_id} name="cohort" onChange={this.handleInputChange}><MenuItem value=""><em>None</em></MenuItem>{cohortListArray}</Select></span>
+                fnameField = <TextField 
+                                className={this.props.classes.textField}
+                                label="First Name" 
+                                type="text" 
+                                name="first_name" 
+                                placeholder="first name" 
+                                value={this.state.trainer.first_name} 
+                                onChange={this.handleInputChange}
+                            />
+                lnameField = <TextField 
+                                className={this.props.classes.textField}
+                                label="Last Name" 
+                                type="text" 
+                                name="last_name" 
+                                placeholder="last name" 
+                                value={this.state.trainer.last_name} 
+                                onChange={this.handleInputChange}
+                            />
+                titleField = <TextField 
+                                className={this.props.classes.textField}
+                                label="Title" 
+                                type="text" 
+                                name="title" 
+                                placeholder="title" 
+                                value={this.state.trainer.title} 
+                                onChange={this.handleInputChange}
+                            />
+                emailField = <TextField 
+                                className={this.props.classes.textField}
+                                label="Email Address" 
+                                type="text" 
+                                name="email" 
+                                placeholder="email" 
+                                value={this.state.trainer.email} 
+                                onChange={this.handleInputChange}
+                            />
+                phoneField = <TextField 
+                                className={this.props.classes.textField}
+                                label="Phone Number" 
+                                type="text" 
+                                name="phone_number" 
+                                placeholder="phone number" 
+                                value={this.state.trainer.phone_number} 
+                                onChange={this.handleInputChange}
+                            />
+                organizationField = <TextField 
+                                        className={this.props.classes.textField}
+                                        label="Organization" 
+                                        type="text" 
+                                        name="organization" 
+                                        placeholder="organization" 
+                                        value={this.state.trainer.organization} 
+                                        onChange={this.handleInputChange}
+                                    />
+                districtField = <TextField 
+                                    className={this.props.classes.textField}
+                                    label="District" 
+                                    type="text" 
+                                    name="district" 
+                                    placeholder="district" 
+                                    value={this.state.trainer.district} 
+                                    onChange={this.handleInputChange}
+                                />
+                notesField = <textarea 
+                                rows="10" 
+                                cols="100" 
+                                type="text" 
+                                name="notes" 
+                                placeholder="notes" 
+                                value={this.state.trainer.notes} 
+                                onChange={this.handleInputChange}>
+                            </textarea>
+                stateField = <span>
+                                <InputLabel>
+                                    State
+                                </InputLabel>
+                                <Select 
+                                    className={this.props.classes.formControl}
+                                    label="State" 
+                                    value={this.state.slo.state} 
+                                    name="state" 
+                                    onChange={this.handleInputChange}
+                                >
+                                    <MenuItem value=""><em>None</em></MenuItem>
+                                    {stateListArray}
+                                </Select>
+                            </span>
+                sloField = <span>
+                                <InputLabel>
+                                    State-Level Org.
+                                </InputLabel>
+                                <Select 
+                                    className={this.props.classes.formControl}
+                                    label="State-Level Org." 
+                                    value={this.state.slo.state_level_organization_id} 
+                                    name="slo" 
+                                    onChange={this.handleInputChange}
+                                >
+                                    <MenuItem value=""><em>None</em></MenuItem>
+                                    {sloListArray}
+                                </Select>
+                            </span>
+                cohortField = <span>
+                                <InputLabel>
+                                    Cohort
+                                </InputLabel>
+                                <Select 
+                                    className={this.props.classes.formControl}
+                                    label="Cohort" 
+                                    value={this.state.cohort.cohort_id} 
+                                    name="cohort" 
+                                    onChange={this.handleInputChange}
+                                >
+                                    <MenuItem value=""><em>None</em></MenuItem>
+                                    {cohortListArray}
+                                </Select>
+                                </span>
             }
         }
 
