@@ -23,14 +23,6 @@ class Nav extends React.Component {
 
     return (
       <div>
-        <Link to="/user">
-          <Button
-            aria-owns={anchorEl ? "simple-menu" : null}
-            aria-haspopup="true"
-          >
-            HOME4NOW
-          </Button>
-        </Link>
 
         <Link to="/trainersearch">
           <Button
