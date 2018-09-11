@@ -30,8 +30,10 @@ class TrainerDetails extends Component{
         this.props.dispatch({ type: COHORT_ACTIONS.FETCH_STATES });
         this.props.dispatch({ type: COHORT_ACTIONS.FETCH_COHORTS });
         this.props.dispatch({ type: COHORT_ACTIONS.FETCH_STATE_LEVEL_ORG });
+        this.getTrainerDetails();
+    }
 
-
+    getTrainerDetails = () => {
         let localTrainerID = this.props.match.params.id;
         axios.get(`/api/localTrainers/${localTrainerID}`)
             .then(res => {
@@ -102,6 +104,7 @@ class TrainerDetails extends Component{
             axios.put(`/api/localTrainers/${localTrainerID}`, this.state.trainer)
                 .then(res => {
                     console.log(res.data);
+                    this.getTrainerDetails();
                 })
                 .catch(err => {
                     console.log(err);
