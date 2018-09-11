@@ -64,7 +64,8 @@ router.get("/", rejectUnauthenticated, (req, res) => {
      
 
       let resultAry = [];
-
+      console.log('POOL QUERY RESULTS.ROWS:');
+      console.log(results.rows);
       results.rows.forEach(element => {
         let indexOfLC = resultAry.findIndex(localTrainer => {
           return localTrainer.local_trainers_id == element.local_trainers_id;
@@ -116,7 +117,6 @@ router.get("/", rejectUnauthenticated, (req, res) => {
           resultAry[indexOfLC].requirements.push(newReq);
         }
       });
-
       res.send(resultAry);
     })
     .catch(err => {
@@ -143,6 +143,7 @@ router.get("/stateLevelOrganization", (req, res) => {
   }
 });
 
+//Adds a new local trainer
 router.post("/addLT", async (req, res) => {
   console.log("got to post", req.body);
   if (req.isAuthenticated) {
@@ -167,24 +168,26 @@ router.post("/addLT", async (req, res) => {
         req.body.district,
         req.body.cohort
       ])
-      .then(() => {
-        res.sendStatus(200);
+      .then(results => {
+        // res.sendStatus(200);
+        console.log('post', results)
+        return results;
       })
       .catch(error => {
         console.log(error);
         res.sendStatus(500);
       });
+
+      let localTrainerID = null;
       const getTrainerID = `SELECT "local_trainers_id" FROM local_trainers WHERE
                               "first_name" = $1 AND 
                               "last_name" = $2 AND  
                               "title" = $3 AND 
                               "email" = $4 AND  
-                              "phone_number" = $5 AND  
-                              "phone_number" = $6 AND  
-                              "organization" = $7 AND  
-                              "district" = $8 AND  
-                              "cohort_ref_id" = $9) 
-                            VALUES ($1,$2,$3,$4,$5,$6,$7,$8);`;
+                              "phone_number" = $5 AND   
+                              "organization" = $6 AND  
+                              "district" = $7 AND  
+                              "cohort_ref_id" = $8;`;
       await pool
         .query(getTrainerID, [
           req.body.first_name,
@@ -196,8 +199,10 @@ router.post("/addLT", async (req, res) => {
           req.body.district,
           req.body.cohort
         ])
-        .then(() => {
-          res.sendStatus(200);
+        .then(results => {
+          localTrainerID = results.rows[0].local_trainers_id;
+          return results.rows[0] || null;
+          console.log('localTrainer', localTrainerID);
         })
         .catch(error => {
           console.log(error);
@@ -205,6 +210,22 @@ router.post("/addLT", async (req, res) => {
         });
 
 
+        // let cohortRequirementsID = [];
+        // const getcohortRequirementsID = 
+        //   `SELECT "cohort_req_id" FROM cohort_requirements WHERE "cohort_id" = $1;`;
+        // await pool
+        //   .query(getcohortRequirementsID, [
+        //     req.body.cohort
+        //   ])
+        //   .then(results => {
+        //     cohortRequirementsID = results.rows;
+        //     return results.rows[0] || null;
+        //     console.log('cohortRequirements', cohortRequirementsID);
+        //   })
+        //   .catch(error => {
+        //     console.log(error);
+        //     res.sendStatus(500);
+        //   });
 
 
 
@@ -319,11 +340,13 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
   console.log("local_trainer GET details route", req.params.id);
   let err = false;
   let cohortID = null;
+  let sloID = null;
+
   const getLocalTrainerDetailsQuery = `SELECT * FROM local_trainers WHERE local_trainers_id = $1;`;
   const localTrainerObject = await pool
     .query(getLocalTrainerDetailsQuery, [req.params.id])
     .then(PGres => {
-      cohortID = PGres.rows[0].cohort_ref_id;
+      cohortID = PGres.rows[0].cohort_ref_id || null;
       return PGres.rows[0] || null;
     })
     .catch(err => {
@@ -349,6 +372,7 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
   const trainerCohortObject = await pool
     .query(getTrainerCohortQuery, [cohortID])
     .then(PGres => {
+      sloID = PGres.rows[0].state_level_organization_ref_id || null;
       return PGres.rows[0] || null;
     })
     .catch(err => {
@@ -356,13 +380,25 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
       err = true;
     });
 
+  const getSloDetailsQuery = `SELECT * FROM state_level_organization WHERE state_level_organization_id =$1;`;
+  const sloDetailsObject = await pool
+    .query(getSloDetailsQuery, [sloID])
+    .then(PGres => {
+      return PGres.rows[0] || null
+    })
+    .catch(err => {
+      console.log(err);
+      err = true;
+    })
+
   if (err) {
     res.sendStatus(500);
   } else {
     res.send({
       trainer: localTrainerObject,
       requirements: trainerRequirementsArray,
-      cohort: trainerCohortObject
+      cohort: trainerCohortObject,
+      slo: sloDetailsObject
     });
   }
 });
