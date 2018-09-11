@@ -12,7 +12,7 @@ function* getCohorts() {
             payload: cohortResponse.data
         })
     } catch (err) {
-        yield console.log(err);
+        console.log(err);
     }
 }
 
@@ -25,7 +25,23 @@ function* getStates() {
             payload: stateResponse.data
         })
     } catch (err) {
-        yield console.log(err);
+        console.log(err);
+    }
+}
+
+function* filterSLO(action) {
+    try {
+        const cohortResponse = yield call(axios.get, '/api/cohorts/cohort')
+        yield dispatch({
+            type: COHORT_ACTIONS.TRAINER_COHORTS,
+            payload: cohortResponse.data
+        })
+        yield dispatch({
+            type: COHORT_ACTIONS.FILTER_SLO,
+            payload: action.payload
+        })
+    } catch (err) {
+         console.log(err);
     }
 }
 
@@ -42,7 +58,7 @@ function* filterState(action) {
             payload: action.payload
         })
     } catch (err) {
-        yield console.log(err);
+         console.log(err);
     }
 }
 
@@ -54,16 +70,34 @@ function* getStateLevelOrgandState() {
             payload: stateLevelResponse.data
         })
     } catch (err) {
-        yield console.log(err);
+         console.log(err);
     }
 }
 
+function* getRequirements() {
+    try {
+        const requirements = yield call(axios.get, '/api/cohorts/requirements')
+        console.log(requirements);
+        
+        yield dispatch({
+            type : COHORT_ACTIONS.SET_REQUIREMENTS,
+            payload : requirements.data
+        })
+    } catch(err) {
+        console.log(err);
+        
+    }
+    
+}
 
 function* cohortSaga() {
     yield takeEvery(COHORT_ACTIONS.FETCH_COHORTS, getCohorts);
+    yield takeLatest(COHORT_ACTIONS.FETCH_REQUIREMENTS, getRequirements)
     yield takeEvery(COHORT_ACTIONS.FETCH_STATES, getStates);
     yield takeEvery(COHORT_ACTIONS.FETCH_FILTER_STATE, filterState);
     yield takeEvery(COHORT_ACTIONS.FETCH_STATE_LEVEL_ORG, getStateLevelOrgandState);
+    yield takeEvery(COHORT_ACTIONS.FETCH_FILTER_SLO, filterSLO);
+    
 }
 
 export default cohortSaga;

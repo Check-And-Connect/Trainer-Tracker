@@ -13,6 +13,7 @@ import Paper from "@material-ui/core/Paper";
 import moment from "moment";
 
 const styles = {
+ 
   tableCell: {
     padding: 0,
     textAlign: "center",
@@ -20,14 +21,27 @@ const styles = {
   },
   buttonInCell: {
     fontSize: "0.9em",
-    textDecoration: 'none'
+    textDecoration: 'none',
+  },
+  completed : {
+    textDecoration: 'none',
+    fontSize : '0.9em',
+    background : 'linear-gradient(135deg, white 85%, rgba(124,252,0,0.3));'
+  },
+  pastDue : {
+    textDecoration: 'none',
+    fontSize : '1em',
+    background : 'linear-gradient(135deg, white 85%, rgba(255, 12, 12, 0.5));'
+  },
+  scheduled : {
+    textDecoration: 'none',
+    fontSize : '0.9em',
+    background : 'linear-gradient(135deg, white 85%, rgba(255, 250, 0,0.6));'
   }
 };
 
 export class CohortManagerTable extends Component {
-  handleChange = () => {
-    console.log("checkbox clicked");
-  };
+  
 
   formatRequirement = (localTrainerId, reqAry, reqId) => {
     let requirement = reqAry.filter(req => {
@@ -35,33 +49,55 @@ export class CohortManagerTable extends Component {
     });
 
     let content;
+    
+    
 
     if (requirement.length !== 0) {
+      let pastDue = moment(requirement[0].requirement_due_date).isBefore(moment());
+
       if (requirement[0].completed) {
         content = (
           <Button
             onClick={() => this.props.onCellClick(localTrainerId, reqId)}
-            className={this.props.classes.buttonInCell}
+            className={this.props.classes.completed}
           >
             Completed <br />
             {moment(requirement[0].completed).format("MM-DD-YYYY")}
           </Button>
         );
       } else if (requirement[0].scheduled_date) {
+        
+        let style = '';
+        if(pastDue){
+          style = this.props.classes.pastDue
+        }else{
+          style = this.props.classes.scheduled;
+        }
+        
         content = (
           <Button
             onClick={() => this.props.onCellClick(localTrainerId, reqId)}
-            className={this.props.classes.buttonInCell}
+            className={style}
           >
             Scheduled <br />
             {moment(requirement[0].scheduled_date).format("MM-DD-YYYY")}
           </Button>
         );
       } else {
+        console.log(localTrainerId);
+        console.log(reqId);
+        
+      
+        let style = '';
+        if(pastDue) {
+          style = this.props.classes.pastDue;
+        }else{
+          style = this.props.classes.buttonInCell
+        }
         content = (
           <Button
             onClick={() => this.props.onCellClick(localTrainerId, reqId)}
-            className={this.props.classes.buttonInCell}
+            className={style}
           >
             Due <br />
             {moment(requirement[0].requirement_due_date).format("MM-DD-YYYY")}
@@ -72,7 +108,6 @@ export class CohortManagerTable extends Component {
       content = "n/a";
     }
 
-    // ${moment([requirement[0].requirement_due_date]).format('MM-DD-YYYY')}`}
     return content;
   };
 
@@ -82,9 +117,9 @@ export class CohortManagerTable extends Component {
         <TableRow key={localTrainer.local_trainers_id}>
           <TableCell className={this.props.classes.tableCell}>
             <Checkbox
-              // checked={this.state.checkedA}
-              onChange={() => this.handleChange("checkedA")}
-              value="checkedA"
+              onChange={() => this.props.handleChecked(localTrainer.local_trainers_id)}
+              value={localTrainer.local_trainers_id.toString()}
+              checked={this.props.checkedIDs.includes(localTrainer.local_trainers_id)}
             />
           </TableCell>
           <TableCell className={this.props.classes.tableCell}>
@@ -98,7 +133,7 @@ export class CohortManagerTable extends Component {
           </TableCell>
           <TableCell className={this.props.classes.tableCell}>
             <Link
-              to={`/local_trainer/${localTrainer.local_trainers_id}`}
+              to={`/trainerdetails/${localTrainer.local_trainers_id}`}
               className={this.props.classes.buttonInCell}
             >
               <Button>{localTrainer.first_name}</Button>
@@ -106,7 +141,7 @@ export class CohortManagerTable extends Component {
           </TableCell>
           <TableCell className={this.props.classes.tableCell}>
           <Link
-              to={`/local_trainer/${localTrainer.local_trainers_id}`}
+              to={`/trainerdetails/${localTrainer.local_trainers_id}`}
               className={this.props.classes.buttonInCell}
             >
               <Button>{localTrainer.last_name}</Button>
@@ -155,16 +190,16 @@ export class CohortManagerTable extends Component {
     });
 
     return (
-      <div>
+      <div className={this.props.classes.mainComponent}>
         <Paper>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell className={this.props.classes.tableCell}>
                   <Checkbox
-                    // checked={this.state.checkedA}
-                    onChange={() => this.handleChange("checkedA")}
-                    value="checkedA"
+                    checked={this.props.currentTrainers.length === this.props.checkedIDs.length}
+                    onChange={() => this.props.handleChecked('selectAll')}
+                    value="all"
                   />
                 </TableCell>
                 <TableCell className={this.props.classes.tableCell}>

@@ -38,7 +38,7 @@ router.get('/states', (req, res) => {
 
 router.get('/cohort', (req, res) => {
     if (req.isAuthenticated) {
-        const queryText = `SELECT "name", "cohort_id" FROM cohort;`;
+        const queryText = `SELECT "name", "cohort_id", "state_level_organization_ref_id" FROM cohort;`;
         pool.query(queryText)
             .then((results) => {
                 res.send(results.rows)
@@ -52,5 +52,20 @@ router.get('/cohort', (req, res) => {
         res.sendStatus(403);
     }
 });
+
+router.get('/requirements', (req, res) => {
+    const queryText =  'SELECT * FROM requirements';
+    pool.query(queryText)
+        .then(results => {
+            console.log(results.rows);
+            res.send(results.rows);
+        })
+        .catch(err => {
+            console.log(err);
+            
+            res.sendStatus(500);
+            
+        })
+})
 
 module.exports = router;

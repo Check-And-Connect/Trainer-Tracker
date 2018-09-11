@@ -32,6 +32,23 @@ const SLO_dropDown = (state = [], action) => {
     }
 };
 
+const cohort_dropDown = (state = [], action) => {
+    switch (action.type) {
+        case COHORT_ACTIONS.TRAINER_COHORTS:
+            return action.payload
+        case COHORT_ACTIONS.FILTER_SLO:
+            let newCohort = [];
+            for (let i = 0; i < state.length; i++) {
+                if (state[i].state_level_organization_ref_id == action.payload) {
+                    newCohort.push(state[i]);
+                }
+            }
+            return newCohort;
+        default:
+            return state;
+    }
+};
+
 const trainer_cohorts = (state = [], action) => {
     switch (action.type) {
         case COHORT_ACTIONS.TRAINER_COHORTS:
@@ -41,9 +58,20 @@ const trainer_cohorts = (state = [], action) => {
     }
 };
 
+const requirements = (state = [] , action) =>{
+    switch (action.type) {
+        case COHORT_ACTIONS.SET_REQUIREMENTS:
+          return action.payload
+        default:
+          return state;
+      }
+}
+
 export default combineReducers({
     state_dropDown,
     SLO_dropDown,
-    trainer_cohorts
+    trainer_cohorts,
+    cohort_dropDown,
+    requirements
 }); 
 

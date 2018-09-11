@@ -53,7 +53,7 @@ class TrainerSearchView extends Component {
     }
 
     componentDidUpdate = (prevProps) => {
-        if (prevProps.localTrainersReducer.allLocalTrainers !== this.props.localTrainersReducer.allLocalTrainers) {
+        if (prevProps.localTrainerReducer.allLocalTrainers !== this.props.localTrainerReducer.allLocalTrainers) {
 
             let newDisplayedCheckboxes = {
                 state_name: new Set(),
@@ -61,14 +61,14 @@ class TrainerSearchView extends Component {
                 cohort_name: new Set(),
                 status: new Set()
             }
-            this.props.localTrainersReducer.allLocalTrainers.map((trainer) => {
+            this.props.localTrainerReducer.allLocalTrainers.map((trainer) => {
                 newDisplayedCheckboxes.state_name.add(trainer.state)
                 newDisplayedCheckboxes.state_level_organization_name.add(trainer.state_level_organization.state_level_organization_name)
                 newDisplayedCheckboxes.cohort_name.add(trainer.cohort.cohort_name)
             })
 
             this.setState({
-                localTrainers: this.props.localTrainersReducer.allLocalTrainers,
+                localTrainers: this.props.localTrainerReducer.allLocalTrainers,
                 checkboxesDisplayed: newDisplayedCheckboxes,
                 selections: newDisplayedCheckboxes
             })
@@ -104,7 +104,7 @@ class TrainerSearchView extends Component {
         })
 
         let filteredTrainersList = [];
-        this.props.localTrainersReducer.allLocalTrainers.forEach((trainer) => {
+        this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
             if (newSet.has(trainer.state)){
                 sloSet.add(trainer.state_level_organization.state_level_organization_name);
                 cohortSet.add(trainer.cohort.cohort_name);
@@ -142,7 +142,7 @@ class TrainerSearchView extends Component {
         })
 
         let filteredTrainersList = [];
-        this.props.localTrainersReducer.allLocalTrainers.forEach((trainer) => {
+        this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
             if (newSet.has(trainer.state_level_organization.state_level_organization_name)){
                 cohortSet.add(trainer.cohort.cohort_name);
                 filteredTrainersList.push(trainer)
@@ -175,7 +175,7 @@ class TrainerSearchView extends Component {
         })
 
         let filteredTrainersList = [];
-        this.props.localTrainersReducer.allLocalTrainers.forEach((trainer) => {
+        this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
             if (newSet.has(trainer.cohort.cohort_name)){
                 filteredTrainersList.push(trainer)
             }
@@ -214,16 +214,22 @@ class TrainerSearchView extends Component {
         let { classes } = this.props;
         let trainersTableBody = null;
 
-        let testArray = null;
-
         if (this.state.localTrainers) {
             trainersTableBody = this.state.localTrainers.map((trainer) => {
                 // let lastNext = this.getLastNext(trainer.requirements)
                 return (
                     <TableRow key={trainer.local_trainers_id}>
                         <TableCell>{trainer.cohort.cohort_name}</TableCell>
-                        <TableCell>{trainer.first_name}</TableCell>
-                        <TableCell>{trainer.last_name}</TableCell>
+                        <TableCell>
+                            <Link to={"/trainerdetails/" + trainer.local_trainers_id}>
+                                {trainer.first_name}
+                            </Link>
+                        </TableCell>
+                        <TableCell>
+                            <Link to={"/trainerdetails/" + trainer.local_trainers_id}>
+                                {trainer.last_name}
+                            </Link>
+                        </TableCell>
                         <TableCell>{trainer.state}</TableCell>
                         <TableCell>{trainer.state_level_organization.state_level_organization_name}</TableCell>
                         <TableCell>Last Requirement Completed</TableCell>

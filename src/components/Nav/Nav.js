@@ -73,7 +73,7 @@ class Nav extends React.Component {
             </MenuItem>
           </Link>
 
-          <Link to="/">
+          <Link to="/addcohort">
             <MenuItem
               className={this.props.classes.dropDown}
               onClick={this.handleClose}
@@ -91,7 +91,7 @@ class Nav extends React.Component {
             </MenuItem>
           </Link>
 
-          <Link to="/register">
+          <Link to="/national_trainer">
             <MenuItem
               className={this.props.classes.dropDown}
               onClick={this.handleClose}

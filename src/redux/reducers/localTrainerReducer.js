@@ -5,7 +5,9 @@ import { LOCAL_TRAINERS_ACTIONS } from '../actions/localTrainerActions';
   const allLocalTrainers  = (state = [], action) => {
     switch (action.type) {
         case LOCAL_TRAINERS_ACTIONS.SET_LOCAL_TRAINERS:
-            return action.payload || state    
+            return action.payload || state
+        case LOCAL_TRAINERS_ACTIONS.UNSET_LOCAL_TRAINERS: 
+            return []
         default:
             return state;
     }
@@ -15,7 +17,8 @@ import { LOCAL_TRAINERS_ACTIONS } from '../actions/localTrainerActions';
   switch (action.type) {
       case LOCAL_TRAINERS_ACTIONS.SET_TRAINER_REQUIREMENT_SINGLE:
           return action.payload || state
-  
+      case LOCAL_TRAINERS_ACTIONS.UNSET_TRAINER_REQUIREMENT_SINGLE: 
+          return []
       default:
           return state;
   }
