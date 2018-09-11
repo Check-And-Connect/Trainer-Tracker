@@ -49,17 +49,31 @@ class TrainerDetails extends Component{
 
     handleInputChange = (e) => {
         console.log(e.target.name, e.target.value);
+        if (e.target.name === 'state'){
+            this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_STATE, payload: e.target.value });
+            this.setState({
+                slo: {
+                    ...this.state.slo,
+                    state: e.target.value
+                }    
+            })
+            return;
+        } else if (e.target.name === 'slo'){
+            this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_SLO, payload: e.target.value})
+            this.setState({
+                slo: {
+                    ...this.state.slo,
+                    name: e.target.value
+                }
+            })
+        }
         this.setState({
             trainer: {
                 ...this.state.trainer,
                 [e.target.name]: e.target.value
             }
         })
-        if (e.target.name === 'state'){
-            this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_STATE, payload: e.target.value });
-        } else if (e.target.name === 'slo'){
-            this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_SLO, payload: e.target.value})
-        }
+
     }
 
     handleIconClick = () => {
@@ -99,7 +113,7 @@ class TrainerDetails extends Component{
             })
             sloListArray = this.props.cohortReducer.SLO_dropDown.map((slo, index) => {
                 return(
-                    <MenuItem key={index} value={slo.name}>{slo.name}</MenuItem>
+                    <MenuItem key={index} value={slo.state_level_organization_id}>{slo.name}</MenuItem>
                 )
             })
         }
@@ -141,7 +155,7 @@ class TrainerDetails extends Component{
                 phoneField = <TextField label="Phone Number" type="text" name="phone_number" placeholder="phone number" value={this.state.trainer.phone_number} onChange={this.handleInputChange}/>
                 organizationField = <TextField label="Organization" type="text" name="organization" placeholder="organization" value={this.state.trainer.organization} onChange={this.handleInputChange}/>
                 districtField = <TextField label="District" type="text" name="district" placeholder="district" value={this.state.trainer.district} onChange={this.handleInputChange}/>
-                notesField = <textarea width="100%" height="100px" type="text" name="notes" placeholder="notes" value={this.state.trainer.notes} onChange={this.handleInputChange}></textarea>
+                notesField = <textarea rows="10" cols="100" type="text" name="notes" placeholder="notes" value={this.state.trainer.notes} onChange={this.handleInputChange}></textarea>
                 stateField = <span><InputLabel>State</InputLabel><Select label="State" value={this.state.slo.state} name="state" onChange={this.handleInputChange}>{stateListArray}</Select></span>
                 sloField = <span><InputLabel>State-Level Organization</InputLabel><Select label="State-Level Organization" value={this.state.slo.name} name="slo" onChange={this.handleInputChange}>{sloListArray}</Select></span>
                 cohortField = <span><InputLabel>Cohort</InputLabel><Select label="Cohort" value={this.state.cohort.name} name="cohort" onChange={this.handleInputChange}>{cohortListArray}</Select></span>
@@ -220,7 +234,7 @@ class TrainerDetails extends Component{
                     <h2 className='centerHeadings'>Notes</h2>
                     <Grid container>
                     <Grid item xs={3}></Grid>
-                        <Grid item xs={9}>
+                        <Grid item xs={6}>
                             {notesField}
                         </Grid>
                     </Grid>

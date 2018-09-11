@@ -50,7 +50,7 @@ class VerticalLinearStepper extends React.Component {
         let stepContent = <span><p>Completed: {req.completed}</p><p>Notes: {req.notes}</p></span>
         return (
           <Step key={index} onClick={this.handleClick}>
-            <StepLabel>{req.name}</StepLabel>
+            <StepLabel>{req.name}{stepContent}</StepLabel>
             <StepContent>{stepContent}</StepContent>
           </Step>
         );
