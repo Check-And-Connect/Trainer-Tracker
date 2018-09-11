@@ -141,7 +141,7 @@ class TrainerDetails extends Component{
                 phoneField = <TextField label="Phone Number" type="text" name="phone_number" placeholder="phone number" value={this.state.trainer.phone_number} onChange={this.handleInputChange}/>
                 organizationField = <TextField label="Organization" type="text" name="organization" placeholder="organization" value={this.state.trainer.organization} onChange={this.handleInputChange}/>
                 districtField = <TextField label="District" type="text" name="district" placeholder="district" value={this.state.trainer.district} onChange={this.handleInputChange}/>
-                notesField = <textarea type="text" name="notes" placeholder="notes" value={this.state.trainer.notes} onChange={this.handleInputChange}></textarea>
+                notesField = <textarea width="100%" height="100px" type="text" name="notes" placeholder="notes" value={this.state.trainer.notes} onChange={this.handleInputChange}></textarea>
                 stateField = <span><InputLabel>State</InputLabel><Select label="State" value={this.state.slo.state} name="state" onChange={this.handleInputChange}>{stateListArray}</Select></span>
                 sloField = <span><InputLabel>State-Level Organization</InputLabel><Select label="State-Level Organization" value={this.state.slo.name} name="slo" onChange={this.handleInputChange}>{sloListArray}</Select></span>
                 cohortField = <span><InputLabel>Cohort</InputLabel><Select label="Cohort" value={this.state.cohort.name} name="cohort" onChange={this.handleInputChange}>{cohortListArray}</Select></span>
@@ -161,35 +161,8 @@ class TrainerDetails extends Component{
 
         return(
             <React.Fragment>
-            <Button onClick={this.handleIconClick}>{this.state.editing ? "Save" : "Edit"}</Button>
-            <div className={classes.mainComponent}>
-                <h3>Trainer Information</h3>
-                <div>First Name: {fnameField}</div>
-                <div>Last Name: {lnameField}</div>
-                <div>Title: {titleField}</div>
-                <div>Email Address: {emailField}</div>
-                <div>Phone Number: {phoneField}</div>
-                <div>Organization: {organizationField}</div>
-                <div>District: {districtField}</div>
-                <div>State: {stateDropdown}</div>
-                <div>State-Level Organization: {sloDropdown}</div>
-                <div>Cohort: {cohortDropdown}</div>
-            </div>
-            <hr></hr>
-            <div className="trainerNotes">
-                <h3>Notes</h3>
-                <br></br>
-                <div>{notesField}</div>
-            </div>
-            <hr></hr>
-            <div className="trainerHistory">
-                <h3>History</h3>
-                <TrainerHistoryStepper 
-                    requirements={this.state.requirements} 
-                />
-            </div>
             <div>
-                    <h2 className='centerHeadings'>Trainer Details</h2>
+                    <h2 className='centerHeadings'>Trainer Details<Button onClick={this.handleIconClick}>{this.state.editing ? "Save" : "Edit"}</Button></h2>
                     <Grid container>
                         <Grid item xs={3}></Grid>
                         <Grid item xs={9}>
@@ -240,16 +213,24 @@ class TrainerDetails extends Component{
                                     {/* <InputLabel>District</InputLabel> */}
                                         {districtField}
                                     </Grid>
-                                    <Grid item xs={7}>
-                                        <Button variant="raised" onClick={this.addNewTrainer}>Submit</Button>
-                                    </Grid>
                                 </Grid>
                             </form>
                         </Grid>
                     </Grid>
                     <h2 className='centerHeadings'>Notes</h2>
+                    <Grid container>
+                    <Grid item xs={3}></Grid>
+                        <Grid item xs={9}>
+                            {notesField}
+                        </Grid>
+                    </Grid>
                     <h2 className='centerHeadings'>History</h2>
-                    <TrainerHistoryStepper requirements={this.state.requirements} />
+                    <Grid container>
+                    <Grid item xs={3}></Grid>
+                        <Grid item xs={9}>
+                            <TrainerHistoryStepper requirements={this.state.requirements} />                            
+                        </Grid>
+                    </Grid>
                 </div>
             </React.Fragment>
         )
