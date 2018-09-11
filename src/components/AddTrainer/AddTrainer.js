@@ -31,13 +31,14 @@ const mapStateToProps = state => ({
 const styles = {
     textField: {
         margin: '0em 0em 0.5em 1em',
+        width: "14em"
     },
     dropDown: {
         width: "10em"
     },
     formControl: {
         margin: '0em 0em 0.5em 1em',
-        width: "12em"
+        width: "14em"
     },
     selectEmpty: {
         marginTop: '0em 0em 0.5em 1em' * 2,
@@ -124,7 +125,13 @@ class AddTrainer extends Component {
     addNewTrainer = event => {
         event.preventDefault();
         this.props.dispatch({ type: 'ADD_LT', payload: this.state.newTrainer })
-        this.state.recentlyAdded.unshift(this.state.newTrainer);
+        // this.state.recentlyAdded.unshift(this.state.newTrainer);
+        this.setState({
+            recentlyAdded: [
+                ...this.state.recentlyAdded,
+                this.state.newTrainer
+            ]
+        })
         this.setState({
             newTrainer: {
                 first_name: '',
@@ -151,8 +158,7 @@ class AddTrainer extends Component {
         })
         let recentListArray = this.state.recentlyAdded.map((item, index) => {
             // return <li key={index}>NAME: {item.first_name} {item.last_name} STATE: {item.state}</li>
-            return
-            <TableRow key={index}>
+            return <TableRow key={index}>
                 <TableCell>
                     {item.first_name}
                 </TableCell>
@@ -172,8 +178,8 @@ class AddTrainer extends Component {
                 <div>
                     <h2 className='centerHeadings'>Create New Trainer</h2>
                     <Grid container>
-                        <Grid item xs={4}></Grid>
-                        <Grid item xs={8}>
+                        <Grid item xs={3}></Grid>
+                        <Grid item xs={9}>
                             <form className='trainerForm'>
                                 <Grid container>
                                     <Grid item xs={4}>
@@ -248,7 +254,7 @@ class AddTrainer extends Component {
                                             </Select>
                                         </FormControl>
                                     </Grid>
-                                    <Grid item xs={5}>
+                                    <Grid item xs={12}>
                                         <TextField
                                             className={this.props.classes.textField}
                                             label="Email"
@@ -256,9 +262,6 @@ class AddTrainer extends Component {
                                             onChange={this.handleChangeFor('email')}
                                             margin="normal"
                                         />
-                                    </Grid>
-                                    <Grid item xs={7}>
-                                        <Button variant="raised" onClick={this.addNewTrainer}>Submit</Button>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
@@ -278,7 +281,7 @@ class AddTrainer extends Component {
                                             margin="normal"
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid item xs={5}>
                                         <TextField
                                             className={this.props.classes.textField}
                                             label="District"
@@ -287,13 +290,16 @@ class AddTrainer extends Component {
                                             margin="normal"
                                         />
                                     </Grid>
+                                    <Grid item xs={7}>
+                                        <Button variant="raised" onClick={this.addNewTrainer}>Submit</Button>
+                                    </Grid>
                                 </Grid>
                             </form>
                         </Grid>
                     </Grid>
                     <h2 className='centerHeadings'>Recently Added</h2>
                     <Grid container>
-                        <Grid item xs={2}></Grid>
+                        <Grid item xs={1}></Grid>
                         <Grid item xs={10}>
                             {/* <ul>
                                 {recentListArray}
@@ -319,6 +325,7 @@ class AddTrainer extends Component {
                                 </Table>
                             </Paper>
                         </Grid>
+                        <Grid item xs={1}></Grid>
                     </Grid>
                 </div>
             );
