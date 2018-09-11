@@ -121,7 +121,7 @@ class CohortManagerModal extends Component {
 
   handleClose = () => {
     
-    this.props.handleDialgClose();
+    this.props.handleDialogClose();
     
   };
 
@@ -204,7 +204,7 @@ class CohortManagerModal extends Component {
         className={classes.mainContent}
         open={this.props.dialogOpen}
         onClose={() => {
-          this.props.handleDialgClose();
+          this.props.handleDialogClose();
         }}
       >
         <div>
