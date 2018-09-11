@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import Nav from "../../components/Nav/Nav";
-
+import Button from "@material-ui/core/Button";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import { withStyles } from "@material-ui/core";
+import { Link } from "react-router-dom";
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 import { triggerLogout } from "../../redux/actions/loginActions";
 
@@ -64,30 +68,59 @@ class Header extends Component {
             </div>
             <div className="hSplit">
               <div className="item item3">
-                <div className="item3a"></div>
+                <div className="item3a" />
                 <div className="item3b">
                   {/* <div className="item3b1">3b1</div> */}
                   <div className="item3b2">
-                    <h1 id="welcome">Hello, {this.props.user.userName}!</h1>
+                    {/* <h1 id="welcome">Hello, {this.props.user.userName}!</h1> */}
                     {/* <button className="logOut" onClick={this.logout}>
                       Log Out
                     </button>  */}
-                    <a href="#" className="logOut" onClick={this.logout}>
+
+
+
+                    <Link
+                      to="/"
+                      style={{ textDecoration: "none" }}
+                    >
+                      <Button
+                        aria-owns={content ? "simple-menu" : null}
+                        aria-haspopup="true"
+                      >
+                        Account Details
+                      </Button>
+                    </Link>
+
+
+                    <Link
+                      to="#"
+                      onClick={this.logout}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <Button
+                        aria-owns={content ? "simple-menu" : null}
+                        aria-haspopup="true"
+                      >
+                        Log Out
+                      </Button>
+                    </Link>
+
+                    
+
+
+                    {/* <a href="#" className="logOut" onClick={this.logout}>
                       Log Out
-                    </a> 
+                    </a> */}
                   </div>
-                  <div className="item3b3">
-                  
-                  </div>
+                  <div className="item3b3" />
                 </div>
                 <div className="item3c">
-                  
-                  <div className="item3c2">
+                  {/* <div className="item3c2">
                     <img
                       className="person"
                       src={require("../../styles/images/person_icon.jpg")}
                     />
-                  </div>
+                  </div> */}
                   <div className="item3c3" />
                 </div>
               </div>

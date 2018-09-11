@@ -23,8 +23,8 @@ class Nav extends React.Component {
 
     return (
       <div>
-
-        <Link to="/trainersearch">
+      
+        <Link to="/trainersearch" style={{ textDecoration: 'none' }}>
           <Button
             aria-owns={anchorEl ? "simple-menu" : null}
             aria-haspopup="true"
@@ -33,7 +33,7 @@ class Nav extends React.Component {
           </Button>
         </Link>
 
-        <Link to="/cohort_manager">
+        <Link to="/cohort_manager" style={{ textDecoration: 'none' }}>
           <Button
             aria-owns={anchorEl ? "simple-menu" : null}
             aria-haspopup="true"
@@ -47,7 +47,7 @@ class Nav extends React.Component {
           aria-haspopup="true"
           onClick={this.handleClick}
         >
-          Create
+          Create ▼
         </Button>
 
         <Menu
@@ -56,7 +56,7 @@ class Nav extends React.Component {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
-          <Link to="/addtrainer">
+          <Link to="/addtrainer" style={{ textDecoration: 'none' }}>
             <MenuItem
               className={this.props.classes.dropDown}
               onClick={this.handleClose}
@@ -65,7 +65,7 @@ class Nav extends React.Component {
             </MenuItem>
           </Link>
 
-          <Link to="/addcohort">
+          <Link to="/addcohort" style={{ textDecoration: 'none' }}>
             <MenuItem
               className={this.props.classes.dropDown}
               onClick={this.handleClose}
@@ -74,7 +74,7 @@ class Nav extends React.Component {
             </MenuItem>
           </Link>
 
-          <Link to="/">
+          <Link to="/" style={{ textDecoration: 'none' }}>
             <MenuItem
               className={this.props.classes.dropDown}
               onClick={this.handleClose}
@@ -83,7 +83,7 @@ class Nav extends React.Component {
             </MenuItem>
           </Link>
 
-          <Link to="/national_trainer">
+          <Link to="/national_trainer" style={{ textDecoration: 'none' }}>
             <MenuItem
               className={this.props.classes.dropDown}
               onClick={this.handleClose}
@@ -92,7 +92,7 @@ class Nav extends React.Component {
             </MenuItem>
           </Link>
 
-          <Link to="/">
+          <Link to="/" style={{ textDecoration: 'none' }}>
             <MenuItem
               className={this.props.classes.dropDown}
               onClick={this.handleClose}
