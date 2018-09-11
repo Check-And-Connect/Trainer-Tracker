@@ -97,11 +97,16 @@ class TrainerDetails extends Component{
             return;
         }  else if (e.target.name === 'cohort'){
             this.setState({
+                trainer: {
+                    ...this.state.trainer,
+                    cohort_ref_id: e.target.value
+                },
                 cohort: {
                     ...this.state.cohort,
                     cohort_id: e.target.value
                 }
             })
+            return;
         }
         this.setState({
             trainer: {

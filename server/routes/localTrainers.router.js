@@ -324,7 +324,7 @@ router.put("/:id", rejectUnauthenticated, (req, res) => {
       req.body.organization,
       req.body.district,
       req.body.notes,
-      req.body.cohort,
+      req.body.cohort_ref_id,
       req.params.id
     ])
     .then(PGres => {
