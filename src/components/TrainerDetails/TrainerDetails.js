@@ -5,7 +5,7 @@ import {COHORT_ACTIONS} from '../../redux/actions/cohortActions';
 
 import TrainerHistoryStepper from '../TrainerHistoryStepper/TrainerHistoryStepper';
 
-import {withStyles, Button, TextField, Select, MenuItem} from '@material-ui/core';
+import {withStyles, Button, TextField, Select, MenuItem, Grid, FormControl, InputLabel} from '@material-ui/core';
 
 const styles = {
     mainComponent: {
@@ -57,6 +57,8 @@ class TrainerDetails extends Component{
         })
         if (e.target.name === 'state'){
             this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_STATE, payload: e.target.value });
+        } else if (e.target.name === 'slo'){
+            this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_SLO, payload: e.target.value})
         }
     }
 
@@ -110,9 +112,13 @@ class TrainerDetails extends Component{
         let organizationField;
         let districtField;
         let notesField;
+        let stateField;
+        let sloField;
+        let cohortField;
         let stateDropdown;
         let sloDropdown;
         let cohortDropdown;
+
 
         if (this.state.trainer !== null){
             fnameField = <span>{this.state.trainer.first_name}</span>;
@@ -122,19 +128,23 @@ class TrainerDetails extends Component{
             phoneField = <span>{this.state.trainer.phone_number}</span>;
             organizationField = <span>{this.state.trainer.organization}</span>;
             districtField = <span>{this.state.trainer.district}</span>;
+            stateField = <span>{this.state.slo.state}</span>
+            sloField = <span>{this.state.slo.name}</span>
+            cohortField = <span>{this.state.cohort.name}</span>
             notesField = <span>{this.state.trainer.notes}</span>
             if (this.state.editing){
-                fnameField = <TextField type="text" name="first_name" placeholder="first name" value={this.state.trainer.first_name} onChange={this.handleInputChange}/>
-                lnameField = <TextField type="text" name="last_name" placeholder="last name" value={this.state.trainer.last_name} onChange={this.handleInputChange}/>
-                titleField = <TextField type="text" name="title" placeholder="title" value={this.state.trainer.title} onChange={this.handleInputChange}/>
-                emailField = <TextField type="text" name="email" placeholder="email" value={this.state.trainer.email} onChange={this.handleInputChange}/>
-                phoneField = <TextField type="text" name="phone_number" placeholder="phone number" value={this.state.trainer.phone_number} onChange={this.handleInputChange}/>
-                organizationField = <TextField type="text" name="organization" placeholder="organization" value={this.state.trainer.organization} onChange={this.handleInputChange}/>
-                districtField = <TextField type="text" name="district" placeholder="district" value={this.state.trainer.district} onChange={this.handleInputChange}/>
+
+                fnameField = <TextField label="First Name" type="text" name="first_name" placeholder="first name" value={this.state.trainer.first_name} onChange={this.handleInputChange}/>
+                lnameField = <TextField label="Last Name" type="text" name="last_name" placeholder="last name" value={this.state.trainer.last_name} onChange={this.handleInputChange}/>
+                titleField = <TextField label="Title" type="text" name="title" placeholder="title" value={this.state.trainer.title} onChange={this.handleInputChange}/>
+                emailField = <TextField label="Email Address" type="text" name="email" placeholder="email" value={this.state.trainer.email} onChange={this.handleInputChange}/>
+                phoneField = <TextField label="Phone Number" type="text" name="phone_number" placeholder="phone number" value={this.state.trainer.phone_number} onChange={this.handleInputChange}/>
+                organizationField = <TextField label="Organization" type="text" name="organization" placeholder="organization" value={this.state.trainer.organization} onChange={this.handleInputChange}/>
+                districtField = <TextField label="District" type="text" name="district" placeholder="district" value={this.state.trainer.district} onChange={this.handleInputChange}/>
                 notesField = <textarea type="text" name="notes" placeholder="notes" value={this.state.trainer.notes} onChange={this.handleInputChange}></textarea>
-                stateDropdown = <Select value={this.state.slo.state} name="state" onChange={this.handleInputChange}>{stateListArray}</Select>
-                sloDropdown = <Select value={this.state.slo.name} name="slo" onChange={this.handleInputChange}>{sloListArray}</Select>
-                cohortDropdown = <Select value={this.state.cohort.name} name="cohort" onChange={this.handleInputChange}>{cohortListArray}</Select>
+                stateField = <span><InputLabel>State</InputLabel><Select label="State" value={this.state.slo.state} name="state" onChange={this.handleInputChange}>{stateListArray}</Select></span>
+                sloField = <span><InputLabel>State-Level Organization</InputLabel><Select label="State-Level Organization" value={this.state.slo.name} name="slo" onChange={this.handleInputChange}>{sloListArray}</Select></span>
+                cohortField = <span><InputLabel>Cohort</InputLabel><Select label="Cohort" value={this.state.cohort.name} name="cohort" onChange={this.handleInputChange}>{cohortListArray}</Select></span>
             }
         }
 
@@ -178,6 +188,69 @@ class TrainerDetails extends Component{
                     requirements={this.state.requirements} 
                 />
             </div>
+            <div>
+                    <h2 className='centerHeadings'>Trainer Details</h2>
+                    <Grid container>
+                        <Grid item xs={3}></Grid>
+                        <Grid item xs={9}>
+                            <form className='trainerForm'>
+                                <Grid container>
+                                    <Grid item xs={4}>
+                                        {fnameField}
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                        <FormControl className={this.props.classes.formControl}>
+                                        {/* <InputLabel>State</InputLabel> */}
+                                            {stateField}
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                    {/* <InputLabel>Last Name</InputLabel> */}
+                                        {lnameField}
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                        <FormControl className={this.props.classes.formControl}>
+                                            {/* <InputLabel>State Level Organization</InputLabel> */}
+                                            {sloField}
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                    {/* <InputLabel>Title</InputLabel> */}
+                                        {titleField}
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                        <FormControl className={this.props.classes.formControl}>
+                                            {/* <InputLabel>Cohort</InputLabel> */}
+                                            {cohortField}
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                    {/* <InputLabel>Email</InputLabel> */}
+                                        {emailField}
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                    {/* <InputLabel>Phone Number</InputLabel> */}
+                                        {phoneField}
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                    {/* <InputLabel>Organization</InputLabel> */}
+                                        {organizationField}
+                                    </Grid>
+                                    <Grid item xs={5}>
+                                    {/* <InputLabel>District</InputLabel> */}
+                                        {districtField}
+                                    </Grid>
+                                    <Grid item xs={7}>
+                                        <Button variant="raised" onClick={this.addNewTrainer}>Submit</Button>
+                                    </Grid>
+                                </Grid>
+                            </form>
+                        </Grid>
+                    </Grid>
+                    <h2 className='centerHeadings'>Notes</h2>
+                    <h2 className='centerHeadings'>History</h2>
+                    <TrainerHistoryStepper requirements={this.state.requirements} />
+                </div>
             </React.Fragment>
         )
     }
