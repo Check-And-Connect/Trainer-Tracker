@@ -37,19 +37,13 @@ class AddCohort extends Component {
         super(props)
 
         this.state = {
-            newTrainer: {
-                first_name: '',
-                last_name: '',
-                title: '',
-                email: '',
-                phone_number: '',
-                organization: '',
+            newCohort: {
+                name: '',
                 state: '',
                 state_level_organization: '',
-                district: '',
-                cohort: 0
-            },
-            recentlyAdded: []
+                state_lead: '',
+                choosenDate: ''
+            }
         }
     }
 
@@ -68,8 +62,8 @@ class AddCohort extends Component {
     handleChangeFor = (propertyName) => {
         return (event) => {
             this.setState({
-                newTrainer: {
-                    ...this.state.newTrainer,
+                newCohort: {
+                    ...this.state.newCohort,
                     [propertyName]: event.target.value
                 }
             })
@@ -79,8 +73,8 @@ class AddCohort extends Component {
     handleChangeForState = (propertyName) => {
         return (event) => {
             this.setState({
-                newTrainer: {
-                    ...this.state.newTrainer,
+                newCohort: {
+                    ...this.state.newCohort,
                     [propertyName]: event.target.value
                 }
             })
@@ -91,8 +85,8 @@ class AddCohort extends Component {
     handleChangeForSLO = (propertyName) => {
         return (event) => {
             this.setState({
-                newTrainer: {
-                    ...this.state.newTrainer,
+                newCohort: {
+                    ...this.state.newCohort,
                     [propertyName]: event.target.value
                 }
             })
@@ -129,13 +123,14 @@ class AddCohort extends Component {
 
     render() {
         let stateListArray = this.props.cohortReducer.state_dropDown.map((item, index) => {
-            return <option value={item}>{item}</option>
+            return <option key={index} value={item}>{item}</option>
         })
         let SLOListArray = this.props.cohortReducer.SLO_dropDown.map((item, index) => {
-            return <option value={item.state_level_organization_id}>{item.name}</option>
+            return <option key={index} value={item.state_level_organization_id}>{item.name}</option>
         })
+        //this is still broken
         let stateLeadListArray = this.props.stateLeadReducer.stateLead_dropDown.map((item, index) => {
-            return <option value={item.cohort_id}>{item.name}</option>
+            return <option key={index} value={item.cohort_id}>{item.name}</option>
         })
 
         let content = null;
@@ -147,10 +142,10 @@ class AddCohort extends Component {
                     <Grid container>
                         <Grid item xs={5}></Grid>
                         <Grid item xs={6}>
-                            <form className='trainerForm' onSubmit={this.addNewTrainer}>
+                            <form className='trainerForm'>
                                 <Grid container>
                                     <Grid item xs={9}>
-                                        <input className='lengthOfInputsCohort' type='text' placeholder='Name of Cohort' value={this.state.newTrainer.first_name} onChange={this.handleChangeFor('name_of_cohort')} />
+                                        <input className='lengthOfInputsCohort' type='text' placeholder='Name of Cohort' value={this.state.newCohort.name} onChange={this.handleChangeFor('name')} />
                                     </Grid>
                                     <Grid item xs={3}>
                                         <Save />
@@ -168,7 +163,7 @@ class AddCohort extends Component {
                                         </select>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <select id='cohortDrop' className='lengthOfInputsCohort' onChange={this.handleChangeFor('cohort')}>
+                                        <select id='cohortDrop' className='lengthOfInputsCohort' onChange={this.handleChangeFor('state_lead')}>
                                             <option value="">State Lead</option>
                                             {stateLeadListArray}
                                         </select>
@@ -398,5 +393,5 @@ class AddCohort extends Component {
     }
 }
 
-const styleGraph = withStyles(styles)(AddCohort)
-export default connect(mapStateToProps)(styleGraph);
+const styleCohort = withStyles(styles)(AddCohort)
+export default connect(mapStateToProps)(styleCohort);
