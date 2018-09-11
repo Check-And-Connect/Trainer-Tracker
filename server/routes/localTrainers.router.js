@@ -143,6 +143,7 @@ router.get("/stateLevelOrganization", (req, res) => {
   }
 });
 
+//Adds a new local trainer
 router.post("/addLT", async (req, res) => {
   console.log("got to post", req.body);
   if (req.isAuthenticated) {
@@ -167,24 +168,26 @@ router.post("/addLT", async (req, res) => {
         req.body.district,
         req.body.cohort
       ])
-      .then(() => {
-        res.sendStatus(200);
+      .then(results => {
+        // res.sendStatus(200);
+        console.log('post', results)
+        return results;
       })
       .catch(error => {
         console.log(error);
         res.sendStatus(500);
       });
+
+      let localTrainerID = null;
       const getTrainerID = `SELECT "local_trainers_id" FROM local_trainers WHERE
                               "first_name" = $1 AND 
                               "last_name" = $2 AND  
                               "title" = $3 AND 
                               "email" = $4 AND  
-                              "phone_number" = $5 AND  
-                              "phone_number" = $6 AND  
-                              "organization" = $7 AND  
-                              "district" = $8 AND  
-                              "cohort_ref_id" = $9) 
-                            VALUES ($1,$2,$3,$4,$5,$6,$7,$8);`;
+                              "phone_number" = $5 AND   
+                              "organization" = $6 AND  
+                              "district" = $7 AND  
+                              "cohort_ref_id" = $8;`;
       await pool
         .query(getTrainerID, [
           req.body.first_name,
@@ -196,8 +199,10 @@ router.post("/addLT", async (req, res) => {
           req.body.district,
           req.body.cohort
         ])
-        .then(() => {
-          res.sendStatus(200);
+        .then(results => {
+          localTrainerID = results.rows[0].local_trainers_id;
+          return results.rows[0] || null;
+          console.log('localTrainer', localTrainerID);
         })
         .catch(error => {
           console.log(error);
@@ -205,6 +210,22 @@ router.post("/addLT", async (req, res) => {
         });
 
 
+        // let cohortRequirementsID = [];
+        // const getcohortRequirementsID = 
+        //   `SELECT "cohort_req_id" FROM cohort_requirements WHERE "cohort_id" = $1;`;
+        // await pool
+        //   .query(getcohortRequirementsID, [
+        //     req.body.cohort
+        //   ])
+        //   .then(results => {
+        //     cohortRequirementsID = results.rows;
+        //     return results.rows[0] || null;
+        //     console.log('cohortRequirements', cohortRequirementsID);
+        //   })
+        //   .catch(error => {
+        //     console.log(error);
+        //     res.sendStatus(500);
+        //   });
 
 
 
