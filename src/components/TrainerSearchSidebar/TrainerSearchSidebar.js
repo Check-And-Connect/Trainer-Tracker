@@ -5,12 +5,21 @@ import {
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
-  Typography
+  Typography,
+  Checkbox
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { isNullOrUndefined } from "util";
 
-const styles = {};
+const styles = {  
+    mainComponent : {
+        marginRight: '0.5em',
+        marginLeft: '0.7em'
+    },
+    expansionDetails : {
+        padding : '0em 1.3em 1em 1.3em'
+    }
+};
 
 class TrainerSearchSidebar extends Component {
     constructor(props){
@@ -28,14 +37,13 @@ class TrainerSearchSidebar extends Component {
         stateCheckboxes = stateArray.map((setElement) => {
             return(
                 <div>
-                    <p>{setElement}</p>
-                    <input
-                        type="checkbox"
+                    <Checkbox
                         value={setElement}
                         name="state"
                         defaultChecked
                         onChange={this.props.handleStateCheckbox}
                     />
+                    <span>{setElement}</span>
                 </div>
             )
         })
@@ -46,14 +54,13 @@ class TrainerSearchSidebar extends Component {
         stateLevelOrgCheckboxes = sloArray.map((setElement) => {
             return(
                 <div>
-                    <p>{setElement}</p>
-                    <input
-                        type="checkbox"
+                    <Checkbox
                         value={setElement}
                         name="state_level_organization_name"
                         defaultChecked
                         onChange={this.props.handleSloCheckbox}
                     />
+                    <span>{setElement}</span>
                 </div>
             )
         })
@@ -64,14 +71,13 @@ class TrainerSearchSidebar extends Component {
         cohortNameCheckboxes = cohortArray.map((setElement) => {
             return(
                 <div>
-                    <p>{setElement}</p>
-                    <input
-                        type="checkbox"
+                    <Checkbox
                         value={setElement}
                         name="cohort_name"
                         defaultChecked
                         onChange={this.props.handleCohortCheckbox}
                     />
+                    <span>{setElement}</span>
                 </div>
             )
         })
@@ -80,26 +86,24 @@ class TrainerSearchSidebar extends Component {
     const statusCheckboxes = 
         <React.Fragment>
         <div>
-            <p>Active</p>
-            <input
-                type="checkbox"
+            <Checkbox
                 value="active"
                 name="status"
                 defaultChecked
             />
+            <span>Active</span>
         </div>
         <div>
-            <p>Inactive</p>
-            <input
-                type="checkbox"
+            <Checkbox
                 value="active"
                 name="status"
             />
+            <span>Inactive</span>
         </div>
         </React.Fragment>
 
     return (
-      <div>
+      <div className={classes.mainComponent} >
         <ExpansionPanel>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography className={classes.heading}>
