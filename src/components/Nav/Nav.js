@@ -55,7 +55,7 @@ class Nav extends React.Component {
           aria-haspopup="true"
           onClick={this.handleClick}
         >
-          Create
+          Create ▼
         </Button>
 
         <Menu
