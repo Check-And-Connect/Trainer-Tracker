@@ -5,7 +5,14 @@ import {COHORT_ACTIONS} from '../../redux/actions/cohortActions';
 
 import TrainerHistoryStepper from '../TrainerHistoryStepper/TrainerHistoryStepper';
 
-import {Button, TextField, Select, MenuItem} from '@material-ui/core';
+import {withStyles, Button, TextField, Select, MenuItem} from '@material-ui/core';
+
+const styles = {
+    mainComponent: {
+        display: "Grid",
+        gridTemplateColumns: "1fr 1fr"
+    }
+}
 
 class TrainerDetails extends Component{
     constructor(props){
@@ -48,6 +55,9 @@ class TrainerDetails extends Component{
                 [e.target.name]: e.target.value
             }
         })
+        if (e.target.name === 'state'){
+            this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_STATE, payload: e.target.value });
+        }
     }
 
     handleIconClick = () => {
@@ -67,6 +77,9 @@ class TrainerDetails extends Component{
     }
 
     render(){
+
+        let { classes } = this.props;
+
         let stateListArray;
         let cohortListArray;
         let sloListArray;
@@ -79,12 +92,12 @@ class TrainerDetails extends Component{
             })
             cohortListArray = this.props.cohortReducer.cohort_dropDown.map((cohort, index) => {
                 return(
-                    <MenuItem key={index} value={cohort.id}>{cohort.name}</MenuItem>
+                    <MenuItem key={index} value={cohort.name}>{cohort.name}</MenuItem>
                 )
             })
             sloListArray = this.props.cohortReducer.SLO_dropDown.map((slo, index) => {
                 return(
-                    <MenuItem key={index} value={slo.id}>{slo.name}</MenuItem>
+                    <MenuItem key={index} value={slo.name}>{slo.name}</MenuItem>
                 )
             })
         }
@@ -119,9 +132,9 @@ class TrainerDetails extends Component{
                 organizationField = <TextField type="text" name="organization" placeholder="organization" value={this.state.trainer.organization} onChange={this.handleInputChange}/>
                 districtField = <TextField type="text" name="district" placeholder="district" value={this.state.trainer.district} onChange={this.handleInputChange}/>
                 notesField = <textarea type="text" name="notes" placeholder="notes" value={this.state.trainer.notes} onChange={this.handleInputChange}></textarea>
-                stateDropdown = <Select>{stateListArray}</Select>
-                sloDropdown = <Select>{sloListArray}</Select>
-                cohortDropdown = <Select>{cohortListArray}</Select>
+                stateDropdown = <Select value={this.state.slo.state} name="state" onChange={this.handleInputChange}>{stateListArray}</Select>
+                sloDropdown = <Select value={this.state.slo.name} name="slo" onChange={this.handleInputChange}>{sloListArray}</Select>
+                cohortDropdown = <Select value={this.state.cohort.name} name="cohort" onChange={this.handleInputChange}>{cohortListArray}</Select>
             }
         }
 
@@ -139,9 +152,8 @@ class TrainerDetails extends Component{
         return(
             <React.Fragment>
             <Button onClick={this.handleIconClick}>{this.state.editing ? "Save" : "Edit"}</Button>
-            <div className="trainerDetails">
+            <div className={classes.mainComponent}>
                 <h3>Trainer Information</h3>
-                <hr></hr>
                 <div>First Name: {fnameField}</div>
                 <div>Last Name: {lnameField}</div>
                 <div>Title: {titleField}</div>
@@ -162,7 +174,9 @@ class TrainerDetails extends Component{
             <hr></hr>
             <div className="trainerHistory">
                 <h3>History</h3>
-                <TrainerHistoryStepper requirements={this.state.requirements} />
+                <TrainerHistoryStepper 
+                    requirements={this.state.requirements} 
+                />
             </div>
             </React.Fragment>
         )
@@ -173,4 +187,5 @@ const mapStateToProps = state => ({
     cohortReducer: state.cohortReducer
 })
 
-export default connect(mapStateToProps)(TrainerDetails);
+const styledComponent = withStyles(styles)(TrainerDetails);
+export default connect(mapStateToProps)(styledComponent);
