@@ -311,7 +311,8 @@ router.post("/scheduleForRequirement/:local_trainer_id", (req, res) => {
 // i.e. FROM THE TRAINER DETAILS VIEW
 router.put("/:id", rejectUnauthenticated, (req, res) => {
   console.log("local_trainer PUT route for", req.params.id);
-  const editLocalTrainerDetailsQuery = `UPDATE local_trainers SET first_name = $1, last_name = $2, title = $3, email = $4, phone_number = $5, organization = $6, district = $7, notes = $8
+
+  const editLocalTrainerDetailsQuery = `UPDATE local_trainers SET first_name = $1, last_name = $2, title = $3, email = $4, phone_number = $5, organization = $6, district = $7, notes = $8, cohort_ref_id = $9
                                         WHERE local_trainers_id = $9`;
   pool
     .query(editLocalTrainerDetailsQuery, [
@@ -323,6 +324,7 @@ router.put("/:id", rejectUnauthenticated, (req, res) => {
       req.body.organization,
       req.body.district,
       req.body.notes,
+      req.body.cohort_ref_id,
       req.params.id
     ])
     .then(PGres => {

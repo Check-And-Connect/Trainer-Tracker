@@ -41,6 +41,8 @@ class TrainerDetails extends Component{
                     cohort: res.data.cohort,
                     slo: res.data.slo,
                 })
+                this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_STATE, payload: res.data.slo.state });
+                this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_SLO, payload: res.data.slo.state_level_organization_id})            
             })
             .catch(err => {
                 console.log(err);
@@ -54,16 +56,34 @@ class TrainerDetails extends Component{
             this.setState({
                 slo: {
                     ...this.state.slo,
-                    state: e.target.value
-                }    
+                    state: e.target.value,
+                    state_level_organization_id: 0
+                },
+                cohort: {
+                    ...this.state.cohort,
+                    cohort_id: 0
+                }
             })
+
             return;
         } else if (e.target.name === 'slo'){
             this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_SLO, payload: e.target.value})
             this.setState({
                 slo: {
                     ...this.state.slo,
-                    name: e.target.value
+                    state_level_organization_id: e.target.value
+                },
+                cohort: {
+                    ...this.state.cohort,
+                    cohort_id: 0
+                }
+            })
+            return;
+        }  else if (e.target.name === 'cohort'){
+            this.setState({
+                cohort: {
+                    ...this.state.cohort,
+                    cohort_id: e.target.value
                 }
             })
         }
@@ -108,7 +128,7 @@ class TrainerDetails extends Component{
             })
             cohortListArray = this.props.cohortReducer.cohort_dropDown.map((cohort, index) => {
                 return(
-                    <MenuItem key={index} value={cohort.name}>{cohort.name}</MenuItem>
+                    <MenuItem key={index} value={cohort.cohort_id}>{cohort.name}</MenuItem>
                 )
             })
             sloListArray = this.props.cohortReducer.SLO_dropDown.map((slo, index) => {
@@ -156,9 +176,9 @@ class TrainerDetails extends Component{
                 organizationField = <TextField label="Organization" type="text" name="organization" placeholder="organization" value={this.state.trainer.organization} onChange={this.handleInputChange}/>
                 districtField = <TextField label="District" type="text" name="district" placeholder="district" value={this.state.trainer.district} onChange={this.handleInputChange}/>
                 notesField = <textarea rows="10" cols="100" type="text" name="notes" placeholder="notes" value={this.state.trainer.notes} onChange={this.handleInputChange}></textarea>
-                stateField = <span><InputLabel>State</InputLabel><Select label="State" value={this.state.slo.state} name="state" onChange={this.handleInputChange}>{stateListArray}</Select></span>
-                sloField = <span><InputLabel>State-Level Organization</InputLabel><Select label="State-Level Organization" value={this.state.slo.name} name="slo" onChange={this.handleInputChange}>{sloListArray}</Select></span>
-                cohortField = <span><InputLabel>Cohort</InputLabel><Select label="Cohort" value={this.state.cohort.name} name="cohort" onChange={this.handleInputChange}>{cohortListArray}</Select></span>
+                stateField = <span><InputLabel>State</InputLabel><Select label="State" value={this.state.slo.state} name="state" onChange={this.handleInputChange}><MenuItem value=""><em>None</em></MenuItem>{stateListArray}</Select></span>
+                sloField = <span><InputLabel>State-Level Org.</InputLabel><Select label="State-Level Org." value={this.state.slo.state_level_organization_id} name="slo" onChange={this.handleInputChange}><MenuItem value=""><em>None</em></MenuItem>{sloListArray}</Select></span>
+                cohortField = <span><InputLabel>Cohort</InputLabel><Select label="Cohort" value={this.state.cohort.cohort_id} name="cohort" onChange={this.handleInputChange}><MenuItem value=""><em>None</em></MenuItem>{cohortListArray}</Select></span>
             }
         }
 
