@@ -7,7 +7,7 @@ import {
 } from "redux-saga/effects";
 import axios from "axios";
 import { NATIONAL_TRAINER_ACTIONS } from "../actions/nationalTrainerActions";
-
+ 
 function* getAllNationalTrainers() {
   try {
     yield dispatch({
@@ -21,6 +21,29 @@ function* getAllNationalTrainers() {
     });
   } catch (error) {
     console.log(error);
+  }
+}
+
+//get national trainer details
+function* getOneNationalTrainer() {
+  try {
+    let NTDetails = yield call(axios.get, "/api/nationalTrainers/getNTDetails");
+    console.log(NTDetails);
+    yield dispatch({
+      type: NATIONAL_TRAINER_ACTIONS.SET_ONE_NATIONAL_TRAINER,
+      payload: NTDetails.data
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//update national trainer details
+function* updateOneNationalTrainer(action) {
+  try {
+    yield call(axios.put, `api/nationalTrainers/updateNT/`, action.payload);
+  } catch (err) {
+    yield console.log(err);
   }
 }
 
@@ -59,10 +82,16 @@ function* nationalTrainersSaga() {
   );
   yield takeLatest(
     NATIONAL_TRAINER_ACTIONS.ADD_NATIONAL_TRAINER, addNewTrainer
-  )
+  );
   yield takeLatest(
     NATIONAL_TRAINER_ACTIONS.CHANGE_STATUS, changeStatus
-  )
+  );
+  yield takeLatest(
+    NATIONAL_TRAINER_ACTIONS.FETCH_ONE_NATIONAL_TRAINER, getOneNationalTrainer
+  );
+  yield takeLatest(
+    NATIONAL_TRAINER_ACTIONS.UPDATE_NATIONAL_TRAINER, updateOneNationalTrainer
+  );
 }
 
 export default nationalTrainersSaga;
