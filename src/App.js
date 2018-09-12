@@ -17,6 +17,8 @@ import TrainerSearchView from './components/TrainerSearchView/TrainerSearchView'
 import TrainerDetails from './components/TrainerDetails/TrainerDetails';
 import NationalTrainer from './components/NationalTrainer/NationalTrainer';
 import AddCohort from './components/AddCohort/AddCohort';
+import AccountDetails from './components/AccountDetails/AccountDetails';
+
 import './styles/main.css';
 const App = () => (
   <div>
@@ -57,6 +59,10 @@ const App = () => (
         <Route
           path="/addcohort"
           component={AddCohort}
+        />
+        <Route
+          path="/accountdetails"
+          component={AccountDetails}
         />
         {/* OTHERWISE (no path!) */}
         <Route render={() => <h1>404</h1>} />

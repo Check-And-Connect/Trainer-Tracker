@@ -80,7 +80,7 @@ class Header extends Component {
 
 
                     <Link
-                      to="/"
+                      to="/accountdetails"
                       style={{ textDecoration: "none" }}
                     >
                       <Button

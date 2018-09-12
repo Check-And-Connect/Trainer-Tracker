@@ -19,6 +19,21 @@ router.get("/", (req, res) => {
     });
 });
 
+router.get("/getNTDetails", (req, res) => {
+  let getNTDetailsQuery =
+    "SELECT national_trainer_id, first_name, last_name, email, title FROM national_trainer WHERE national_trainer_id = $1";
+  pool
+    .query(getNTDetailsQuery, [req.user.national_trainer_id])
+    .then(response => {
+      console.log('NTDetails', response.rows[0]);
+      res.send(response.rows[0]);
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(500);
+    });
+});
+
 router.post("/addNew", (req, res) => {
   console.log("req: ", req.body);
 
