@@ -6,6 +6,8 @@ import {
   Switch,
 } from 'react-router-dom';
 
+import { connect } from 'react-redux';
+
 import Header from './components/Header/Header';
 import LoginPage from './components/LoginPage/LoginPage';
 import RegisterPage from './components/RegisterPage/RegisterPage';
@@ -19,12 +21,17 @@ import NationalTrainer from './components/NationalTrainer/NationalTrainer';
 import AddCohort from './components/AddCohort/AddCohort';
 import AddStateLevelOrg from './components/AddStateLevelOrg/AddStateLevelOrg'
 import './styles/main.css';
-const App = () => (
+
+const mapStateToProps = state => ({
+  user: state.user
+})
+
+const App = (props) => (
   <div>
 
     <Router>
       <div>
-      <Header title="" />
+      {props.user.id && <Header title="" />}
       <Switch>
         <Redirect exact from="/" to="/home" />
         <Route
@@ -71,4 +78,4 @@ const App = () => (
   </div>
 );
 
-export default App;
+export default connect(mapStateToProps)(App);
