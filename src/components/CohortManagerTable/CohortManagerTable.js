@@ -26,7 +26,7 @@ const styles = {
   completed : {
     textDecoration: 'none',
     fontSize : '0.9em',
-    background : 'linear-gradient(135deg, white 85%, rgba(124,252,0,0.3));'
+    background : 'linear-gradient(135deg, white 85%, rgba(124,252,0,0.7));'
   },
   pastDue : {
     textDecoration: 'none',
@@ -36,7 +36,7 @@ const styles = {
   scheduled : {
     textDecoration: 'none',
     fontSize : '0.9em',
-    background : 'linear-gradient(135deg, white 85%, rgba(255, 250, 0,0.6));'
+    background : 'linear-gradient(135deg, white 85%, rgba(255, 250, 0,1));'
   }
 };
 
@@ -84,9 +84,6 @@ export class CohortManagerTable extends Component {
           </Button>
         );
       } else {
-        console.log(localTrainerId);
-        console.log(reqId);
-        
       
         let style = '';
         if(pastDue) {
@@ -182,7 +179,11 @@ export class CohortManagerTable extends Component {
               5
             )}
           </TableCell>
-          <TableCell className={this.props.classes.tableCell}>n/a</TableCell>
+          <TableCell className={this.props.classes.tableCell}>{this.formatRequirement(
+              localTrainer.local_trainers_id,
+              localTrainer.requirements,
+              6
+            )}</TableCell>
         </TableRow>
       );
 

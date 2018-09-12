@@ -112,6 +112,16 @@ function* createNewCohort(action) {
   }
 }
 
+function* createStateLevelOrg(action) {
+    try {
+        yield call(axios.post, 'api/cohorts/addNewSLO' , action.payload)
+    } catch (error) {
+        console.log(error);
+        
+        
+    }
+}
+
 function* cohortSaga() {
   yield takeEvery(COHORT_ACTIONS.FETCH_COHORTS, getCohorts);
   yield takeLatest(COHORT_ACTIONS.ADD_NEW_COHORT, createNewCohort);
@@ -123,6 +133,7 @@ function* cohortSaga() {
     getStateLevelOrgandState
   );
   yield takeEvery(COHORT_ACTIONS.FETCH_FILTER_SLO, filterSLO);
+  yield takeLatest(COHORT_ACTIONS.ADD_SLO, createStateLevelOrg)
 }
 
 export default cohortSaga;

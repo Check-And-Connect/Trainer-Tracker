@@ -89,7 +89,6 @@ router.post('/addNewCohort', (req, res) => {
                     console.log(reqCounter);
                     
                     if(reqCounter === 0){
-                        console.log('GOT HERE ==================================================================');
                         res.sendStatus(201);
                     }
                 })
@@ -104,10 +103,19 @@ router.post('/addNewCohort', (req, res) => {
             console.log(err);
             res.sendStatus(500);  
         })
+})
 
-   
-    
-   
+router.post('/addNewSLO', (req, res) => {
+    let queryText = 'INSERT INTO state_level_organization (name, state) VALUES ($1, $2)'
+
+    pool.query(queryText, [req.body.name, req.body.state])
+        .then(response => {
+            res.sendStatus(201)
+        })
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+        })
 })
 
 module.exports = router;

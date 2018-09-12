@@ -9,7 +9,6 @@ import {
   withStyles,
   Typography,
   TextField,
-  Grid,
   Button,
   FormControl,
   MenuItem,
@@ -21,7 +20,6 @@ import {
   TableBody,
   TableCell
 } from "@material-ui/core";
-import SaveIcon from "@material-ui/icons/Save";
 
 import MomentUtils from "material-ui-pickers/utils/moment-utils";
 import MuiPickersUtilsProvider from "material-ui-pickers/utils/MuiPickersUtilsProvider";
@@ -73,7 +71,7 @@ class AddCohort extends Component {
         requirements: []
       },
       chosenDate: moment().toISOString(),
-      errorMessege: ""
+      errorMessage: ""
     };
   }
 
@@ -131,7 +129,7 @@ class AddCohort extends Component {
           ...this.state.newCohort,
           [propertyName]: event.target.value
         },
-        errorMessege: ""
+        errorMessage: ""
       });
     };
   };
@@ -144,7 +142,7 @@ class AddCohort extends Component {
           state_level_organization: "",
           [propertyName]: event.target.value
         },
-        errorMessege: ""
+        errorMessage: ""
       });
       this.props.dispatch({
         type: COHORT_ACTIONS.FETCH_FILTER_STATE,
@@ -160,7 +158,7 @@ class AddCohort extends Component {
           ...this.state.newCohort,
           [propertyName]: event.target.value
         },
-        errorMessege: ""
+        errorMessage: ""
       });
       this.props.dispatch({
         type: STATE_LEAD_ACTIONS.FILTER_STATE_LEAD,
@@ -184,7 +182,7 @@ class AddCohort extends Component {
     let allReqs = this.state.newCohort.requirements;
 
     let getReqIndex = allReqs.findIndex(req => {
-      return req.requirement_id == req_ID;
+      return req.requirement_id === req_ID;
     });
 
     allReqs[getReqIndex][dateType] = date;
@@ -285,19 +283,19 @@ class AddCohort extends Component {
 
     if (this.state.newCohort.name === "") {
       this.setState({
-        errorMessege: "Please Enter the Cohort Name"
+        errorMessage: "Please Enter the Cohort Name"
       });
     } else if (this.state.newCohort.state === "") {
       this.setState({
-        errorMessege: "Please Pick a State"
+        errorMessage: "Please Pick a State"
       });
     } else if (this.state.newCohort.state_level_organization === "") {
       this.setState({
-        errorMessege: "Please Pick a State Level Org."
+        errorMessage: "Please Pick a State Level Org."
       });
     } else {
       this.setState({
-        errorMessege: ""
+        errorMessage: ""
       });
 
       this.props.dispatch({
@@ -413,7 +411,7 @@ class AddCohort extends Component {
             </Button>
             <br />
             <Typography variant="subheading" color="error">
-              {this.state.errorMessege}
+              {this.state.errorMessage}
             </Typography>
           </div>
         </div>
