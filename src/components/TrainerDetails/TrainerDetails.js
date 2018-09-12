@@ -5,7 +5,7 @@ import {COHORT_ACTIONS} from '../../redux/actions/cohortActions';
 
 import TrainerHistoryStepper from '../TrainerHistoryStepper/TrainerHistoryStepper';
 
-import {withStyles, Button, TextField, Select, MenuItem, Grid, FormControl, InputLabel} from '@material-ui/core';
+import {withStyles, Button, TextField, Select, MenuItem, Grid, FormControl, FormLabel, InputLabel, Switch, FormControlLabel} from '@material-ui/core';
 
 const styles = {
     mainComponent: {
@@ -146,6 +146,22 @@ class TrainerDetails extends Component{
         })
     }
 
+    toggleStatus = () => {
+        let localTrainerID = this.props.match.params.id
+        axios.put(`/api/localTrainers/status/${localTrainerID}`)
+            .then(res => {
+                this.setState({
+                    trainer: {
+                        ...this.state.trainer,
+                        status: !this.state.trainer.status
+                    }
+                })
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
     render(){
 
         let { classes } = this.props;
@@ -174,6 +190,7 @@ class TrainerDetails extends Component{
 
         let fnameField, lnameField, titleField, emailField, phoneField, organizationField, districtField, notesField;
         let stateField, sloField, cohortField;
+        let statusSwitch;
 
         if (this.state.trainer !== null && this.state.slo !== null && this.state.cohort !== null){
                 fnameField = <TextField 
@@ -293,6 +310,18 @@ class TrainerDetails extends Component{
                                     {cohortListArray}
                                 </Select>
                                 </span>
+                statusSwitch = <span>
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                            checked={this.state.trainer.status}
+                                            onChange={this.toggleStatus}
+                                        />
+                                        }
+                                        label={this.state.trainer.status ? 'Active' : 'Inactive'}
+                                    />
+                                </span>
+
         }
 
         let requirementsHistory;
@@ -349,10 +378,15 @@ class TrainerDetails extends Component{
                                             {cohortField}
                                         </FormControl>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid item xs={4}>
                                         {emailField}
                                     </Grid>
-
+                                    <Grid item xs={8}>
+                                        <FormControl className={this.props.classes.formControl}>
+                                            <FormLabel>Status</FormLabel>
+                                            {statusSwitch}
+                                        </FormControl>
+                                    </Grid>
                                     <Grid item xs={12}>
                                         {phoneField}
                                     </Grid>

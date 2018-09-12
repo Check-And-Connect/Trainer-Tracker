@@ -76,6 +76,7 @@ router.get("/", rejectUnauthenticated, (req, res) => {
             local_trainers_id: element.local_trainers_id,
             first_name: element.first_name,
             last_name: element.last_name,
+            status: element.status,
             cohort: {
               cohort_id: element.cohort_id,
               cohort_name: element.name
@@ -404,5 +405,19 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
     });
   }
 });
+
+// THIS ROUTE TOGGLES LOCAL TRAINER STATUS AND THAT'S ALL IT DOES
+router.put("/status/:id", (req, res) => {
+  console.log('toggle route reached');
+  const toggleTrainerQuery = `UPDATE local_trainers SET status = NOT status WHERE local_trainers_id = $1;`;
+  pool.query(toggleTrainerQuery, [req.params.id])
+    .then(PGres => {
+      res.sendStatus(200)
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(500);
+    })
+})
 
 module.exports = router;
