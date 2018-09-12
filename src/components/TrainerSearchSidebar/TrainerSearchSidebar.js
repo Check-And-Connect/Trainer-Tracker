@@ -31,6 +31,7 @@ class TrainerSearchSidebar extends Component {
     let stateCheckboxes = null;
     let stateLevelOrgCheckboxes = null;
     let cohortNameCheckboxes = null;
+    let statusCheckboxes = null;
 
     if (this.props.checkboxesDisplayed.state_name !== null && this.props.checkboxesSelected.state_name){
         const stateArray = Array.from(this.props.checkboxesDisplayed.state_name);
@@ -119,24 +120,23 @@ class TrainerSearchSidebar extends Component {
         }
     }
 
-    const statusCheckboxes = 
-        <React.Fragment>
-        <div>
-            <Checkbox
-                value="active"
-                name="status"
-                defaultChecked
-            />
-            <span>Active</span>
-        </div>
-        <div>
-            <Checkbox
-                value="active"
-                name="status"
-            />
-            <span>Inactive</span>
-        </div>
-        </React.Fragment>
+    if (this.props.checkboxesDisplayed.status !== null){
+        const statusArray = Array.from(this.props.checkboxesDisplayed.status)
+        statusCheckboxes = statusArray.map((setElement) => {
+            return(
+                <div>
+                    <Checkbox
+                        value={setElement}
+                        name="status"
+                        checked={this.props.checkboxesSelected.status.has(setElement)}
+                        onChange={this.props.handleStatusCheckbox}
+                    />
+                    <span>{setElement}</span>
+                </div>
+            )
+        })
+    }
+
 
     return (
       <div className={classes.mainComponent} >

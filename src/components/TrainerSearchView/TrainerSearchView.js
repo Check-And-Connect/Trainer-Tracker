@@ -62,7 +62,7 @@ class TrainerSearchView extends Component {
                 state_name: new Set(),
                 state_level_organization_name: new Set(),
                 cohort_name: new Set(),
-                status: new Set()
+                status: new Set(['Active'])
             },
             checkboxesDisplayed: {
                 state_name: null,
@@ -93,7 +93,7 @@ class TrainerSearchView extends Component {
                 state_name: new Set(),
                 state_level_organization_name: new Set(),
                 cohort_name: new Set(),
-                status: new Set()
+                status: new Set(['Active', 'Inactive'])
             }
 
             // As we map over the trainers, we add the state, slo, and cohort information to the displayed checkboxes
@@ -115,7 +115,10 @@ class TrainerSearchView extends Component {
                 localTrainers: displayedTrainersList,
                 trainersBeforeSearch: this.props.localTrainerReducer.allLocalTrainers,
                 checkboxesDisplayed: newDisplayedCheckboxes,
-                checkboxesSelected: newDisplayedCheckboxes
+                checkboxesSelected: {
+                    ...newDisplayedCheckboxes,
+                    status: new Set(['Active'])
+                }
             })
         }
     }
@@ -261,6 +264,28 @@ class TrainerSearchView extends Component {
 
     handleStatusCheckbox = (e) => {
         console.log('handling status checkbox');
+        let newSet = new Set(this.state.checkboxesSelected.status)
+
+        if (newSet.has(e.target.value)){
+            newSet.delete(e.target.value)
+        } else {
+            newSet.add(e.target.value)
+        }
+
+        let filteredTrainersList = [];
+        this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
+            if ((trainer.status && newSet.has('Active')) || (!trainer.status && newSet.has('Inactive'))){
+                filteredTrainersList.push(trainer)
+            }
+        })
+
+        this.setState({
+            checkboxesSelected: {
+                ...this.state.checkboxesSelected,
+                status: newSet
+            },
+            localTrainers: filteredTrainersList
+        })
     }
 
     handleSearchTable = searchKey => {
@@ -394,6 +419,7 @@ class TrainerSearchView extends Component {
                         handleStateCheckbox={this.handleStateCheckbox}
                         handleSloCheckbox={this.handleSloCheckbox}
                         handleCohortCheckbox={this.handleCohortCheckbox}
+                        handleStatusCheckbox={this.handleStatusCheckbox}
                     />                 
                 </div>
                 <div className={classes.rightPanel}>
