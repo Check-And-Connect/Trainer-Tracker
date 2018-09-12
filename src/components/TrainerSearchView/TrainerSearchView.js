@@ -98,17 +98,21 @@ class TrainerSearchView extends Component {
 
             // As we map over the trainers, we add the state, slo, and cohort information to the displayed checkboxes
             // piece of local state. This ensures that we only ever show checkbox filters for the trainers in the table.
-            this.props.localTrainerReducer.allLocalTrainers.map((trainer) => {
-                newDisplayedCheckboxes.state_name.add(trainer.state)
-                newDisplayedCheckboxes.state_level_organization_name.add(trainer.state_level_organization.state_level_organization_name)
-                newDisplayedCheckboxes.cohort_name.add(trainer.cohort.cohort_name)
+            let displayedTrainersList = [];
+            this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
+                if (trainer.status){
+                    newDisplayedCheckboxes.state_name.add(trainer.state)
+                    newDisplayedCheckboxes.state_level_organization_name.add(trainer.state_level_organization.state_level_organization_name)
+                    newDisplayedCheckboxes.cohort_name.add(trainer.cohort.cohort_name)
+                    displayedTrainersList.push(trainer);
+                }
             })
 
             // The initial configuration is storing a copy of the allLocalTrainers array from the reducer in local state,
             // another copy in the local state for updating when we filter by typed input, the checkboxes displayed
             // are everything available in the dataset, and the checkboxes selected is a copy of that i.e. everything.
             this.setState({
-                localTrainers: this.props.localTrainerReducer.allLocalTrainers,
+                localTrainers: displayedTrainersList,
                 trainersBeforeSearch: this.props.localTrainerReducer.allLocalTrainers,
                 checkboxesDisplayed: newDisplayedCheckboxes,
                 checkboxesSelected: newDisplayedCheckboxes
