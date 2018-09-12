@@ -1,397 +1,465 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import { USER_ACTIONS } from '../../redux/actions/userActions';
-import { COHORT_ACTIONS } from '../../redux/actions/cohortActions';
-import { STATE_LEAD_ACTIONS } from '../../redux/actions/stateLeadActions';
+import { USER_ACTIONS } from "../../redux/actions/userActions";
+import { COHORT_ACTIONS } from "../../redux/actions/cohortActions";
+import { STATE_LEAD_ACTIONS } from "../../redux/actions/stateLeadActions";
 
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import { withStyles } from '@material-ui/core/styles';
-import { Save } from '@material-ui/icons';
+import {
+  withStyles,
+  Typography,
+  TextField,
+  Button,
+  FormControl,
+  MenuItem,
+  InputLabel,
+  Select,
+  TableRow,
+  Table,
+  TableHead,
+  TableBody,
+  TableCell
+} from "@material-ui/core";
 
-
-const moment = require('moment');
+import MomentUtils from "material-ui-pickers/utils/moment-utils";
+import MuiPickersUtilsProvider from "material-ui-pickers/utils/MuiPickersUtilsProvider";
+import { InlineDatePicker } from "material-ui-pickers/DatePicker";
+import moment from "moment";
 
 const mapStateToProps = state => ({
-    user: state.user,
-    // localTrainerReducer: state.localTrainerReducer,
-    cohortReducer: state.cohortReducer,
-    stateLeadReducer: state.stateLeadReducer
+  user: state.user,
+  // localTrainerReducer: state.localTrainerReducer,
+  cohortReducer: state.cohortReducer,
+  stateLeadReducer: state.stateLeadReducer
 });
 
 const styles = theme => ({
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
-    textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: 200,
-    },
+  mainFormComponent: {
+    display: "Grid",
+    gridTemplateRows: "0.5fr 0.7fr 0.1fr",
+    justifyContent: "center"
+  },
+  selectState: {
+    width: "10em"
+  },
+  topPart: {
+    textAlign: "center"
+  },
+  bottomPart: {
+    textAlign: "center"
+  },
+  input: {
+    width: "15em",
+    textAlign: "center"
+  },
+  createButton: {
+    textAlign: "center",
+    marginTop: "1em",
+    marginBottom: "2em"
+  }
 });
 class AddCohort extends Component {
+  constructor(props) {
+    super(props);
 
-    constructor(props) {
-        super(props)
+    this.state = {
+      newCohort: {
+        name: "",
+        state: "",
+        state_level_organization: "",
+        note: "",
+        requirements: []
+      },
+      chosenDate: moment().format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ"),
+      errorMessage: ""
+    };
+  }
 
-        this.state = {
-            newCohort: {
-                name: '',
-                state: '',
-                state_level_organization: '',
-                state_lead: '',
-                choosenDate: ''
-            }
-        }
+  componentDidMount() {
+    this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+    this.props.dispatch({ type: COHORT_ACTIONS.FETCH_STATES });
+    this.props.dispatch({ type: COHORT_ACTIONS.FETCH_REQUIREMENTS });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!this.props.user.isLoading && this.props.user.userName === null) {
+      this.props.history.push("home");
     }
 
-    componentDidMount() {
-        this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
-        this.props.dispatch({ type: COHORT_ACTIONS.FETCH_STATES });
-        // this.props.dispatch({ type: STATE_LEAD_ACTIONS.STATE_LEAD });
+    if (
+      prevProps.cohortReducer.requirements.length === 0 &&
+      this.props.cohortReducer.requirements.length !== 0
+    ) {
+      this.updateRequirementState();
     }
 
-    componentDidUpdate() {
-        if (!this.props.user.isLoading && this.props.user.userName === null) {
-            this.props.history.push('home');
+    if (
+      prevProps.cohortReducer.latestCohort.length === 0 &&
+      this.props.cohortReducer.latestCohort.length !== 0
+    ) {
+      let latestCohort = this.props.cohortReducer.latestCohort[0].name.split(
+        " "
+      );
+      console.log(latestCohort);
+      let nextCohortNumber = parseInt(latestCohort[1]) + 1;
+      let nextCohort = latestCohort[0] + " " + nextCohortNumber;
+
+      this.setState({
+        newCohort: {
+            ...this.state.newCohort,
+          name: nextCohort
         }
+      });
     }
+  }
 
-    handleChangeFor = (propertyName) => {
-        return (event) => {
-            this.setState({
-                newCohort: {
-                    ...this.state.newCohort,
-                    [propertyName]: event.target.value
-                }
-            })
-        }
-    }
+  updateRequirementState = () => {
+    let requirementAry = [];
 
-    handleChangeForState = (propertyName) => {
-        return (event) => {
-            this.setState({
-                newCohort: {
-                    ...this.state.newCohort,
-                    [propertyName]: event.target.value
-                }
-            })
-            this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_STATE, payload: event.target.value });
-        }
-    }
-
-    handleChangeForSLO = (propertyName) => {
-        return (event) => {
-            this.setState({
-                newCohort: {
-                    ...this.state.newCohort,
-                    [propertyName]: event.target.value
-                }
-            })
-            this.props.dispatch({ type: STATE_LEAD_ACTIONS.FILTER_STATE_LEAD, payload: event.target.value });
-        }
-    }
-
-    // reset = () => {
-    //     let stateDrop = document.getElementById("stateDrop");
-    //     stateDrop.selectedIndex = 0;
-    //     let SLODrop = document.getElementById("SLODrop");
-    //     SLODrop.selectedIndex = 0;
-    //     let cohortDrop = document.getElementById("cohortDrop");
-    //     cohortDrop.selectedIndex = 0;
-    // }
-
-    // addNewTrainer = event => {
-    //     event.preventDefault();
-    //     this.props.dispatch({ type: 'ADD_LT', payload: this.state.newTrainer })
-    //     this.state.recentlyAdded.unshift(this.state.newTrainer);
-    //     this.setState({
-    //         newTrainer: {
-    //             first_name: '',
-    //             last_name: '',
-    //             title: '',
-    //             email: '',
-    //             phone_number: '',
-    //             organization: '',
-    //             district: ''
-    //         }
-    //     });
-    //     this.reset();
-    // }
-
-    render() {
-        let stateListArray = this.props.cohortReducer.state_dropDown.map((item, index) => {
-            return <option key={index} value={item}>{item}</option>
-        })
-        let SLOListArray = this.props.cohortReducer.SLO_dropDown.map((item, index) => {
-            return <option key={index} value={item.state_level_organization_id}>{item.name}</option>
-        })
-        //this is still broken
-        let stateLeadListArray = this.props.stateLeadReducer.stateLead_dropDown.map((item, index) => {
-            return <option key={index} value={item.cohort_id}>{item.name}</option>
-        })
-
-        let content = null;
-        if (this.props.user.userName) {
-            const date = moment().format().split('T', 1);
-            content = (
-                <div>
-                    <h2 className='centerHeadings'>Create New Cohort</h2>
-                    <Grid container>
-                        <Grid item xs={5}></Grid>
-                        <Grid item xs={6}>
-                            <form className='trainerForm'>
-                                <Grid container>
-                                    <Grid item xs={9}>
-                                        <input className='lengthOfInputsCohort' type='text' placeholder='Name of Cohort' value={this.state.newCohort.name} onChange={this.handleChangeFor('name')} />
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        <Save />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <select id='stateDrop' className='lengthOfInputsCohort' onChange={this.handleChangeForState('state')}>
-                                            <option value="state">State</option>
-                                            {stateListArray}
-                                        </select>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <select id='SLODrop' className='lengthOfInputsCohort' onChange={this.handleChangeForSLO('state_level_organization')}>
-                                            <option value="">State Level Organization</option>
-                                            {SLOListArray}
-                                        </select>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <select id='cohortDrop' className='lengthOfInputsCohort' onChange={this.handleChangeFor('state_lead')}>
-                                            <option value="">State Lead</option>
-                                            {stateLeadListArray}
-                                        </select>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <form id="TTTdate" className={this.props.classes.container} noValidate>
-                                            <TextField 
-                                                label="Initial TTT Workshop"
-                                                type="date"
-                                                defaultValue={date}
-                                                onChange={this.handleChangeFor("choosenDate")}
-                                            />
-                                        </form>
-                                    </Grid>
-                                </Grid>
-                            </form>
-                        </Grid>
-                    </Grid>
-                    <h2 className='centerHeadings'>Cohort Deadlines</h2>
-                    <Grid container>
-                        <Grid item xs={4}></Grid>
-                        <Grid item xs={2}><p>Due Date</p></Grid>
-                        <Grid item xs={2}><p>Notification Email 1</p></Grid>
-                        <Grid item xs={4}><p>Notification Email 2</p></Grid>
-                        <Grid item xs={1}></Grid>
-                        <Grid item xs={3}><p>Train the Trainers</p></Grid>
-                        <Grid item xs={2}>
-                            <form className={this.props.classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    type="date"
-                                    // defaultValue={date}
-                                    onChange={this.handleChangeFor("choosenDate")}
-                                />
-                            </form>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <form className={this.props.classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    type="date"
-                                    // defaultValue={date}
-                                    onChange={this.handleChangeFor("choosenDate")}
-                                />
-                            </form>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <form className={this.props.classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    type="date"
-                                    // defaultValue={date}
-                                    onChange={this.handleChangeFor("choosenDate")}
-                                />
-                            </form>
-                        </Grid>
-                        <Grid item xs={1}></Grid>
-                        <Grid item xs={3}><p>Signed TTT Terms Agreement</p></Grid>
-                        <Grid item xs={2}>
-                            <form className={this.props.classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    type="date"
-                                    // defaultValue={date}
-                                    onChange={this.handleChangeFor("choosenDate")}
-                                />
-                            </form>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <form className={this.props.classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    type="date"
-                                    // defaultValue={date}
-                                    onChange={this.handleChangeFor("choosenDate")}
-                                />
-                            </form>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <form className={this.props.classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    type="date"
-                                    // defaultValue={date}
-                                    onChange={this.handleChangeFor("choosenDate")}
-                                />
-                            </form>
-                        </Grid>
-                        <Grid item xs={1}></Grid>
-                        <Grid item xs={3}><p>Observed Training</p></Grid>
-                        <Grid item xs={2}>
-                            <form className={this.props.classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    type="date"
-                                    // defaultValue={date}
-                                    onChange={this.handleChangeFor("choosenDate")}
-                                />
-                            </form>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <form className={this.props.classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    type="date"
-                                    // defaultValue={date}
-                                    onChange={this.handleChangeFor("choosenDate")}
-                                />
-                            </form>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <form className={this.props.classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    type="date"
-                                    // defaultValue={date}
-                                    onChange={this.handleChangeFor("choosenDate")}
-                                />
-                            </form>
-                        </Grid>
-                        <Grid item xs={1}></Grid>
-                        <Grid item xs={3}><p>Certification Workshop</p></Grid>
-                        <Grid item xs={2}>
-                            <form className={this.props.classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    type="date"
-                                    // defaultValue={date}
-                                    onChange={this.handleChangeFor("choosenDate")}
-                                />
-                            </form>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <form className={this.props.classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    type="date"
-                                    // defaultValue={date}
-                                    onChange={this.handleChangeFor("choosenDate")}
-                                />
-                            </form>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <form className={this.props.classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    type="date"
-                                    // defaultValue={date}
-                                    onChange={this.handleChangeFor("choosenDate")}
-                                />
-                            </form>
-                        </Grid>
-                        <Grid item xs={1}></Grid>
-                        <Grid item xs={3}><p>C & C Training</p></Grid>
-                        <Grid item xs={2}>
-                            <form className={this.props.classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    type="date"
-                                    // defaultValue={date}
-                                    onChange={this.handleChangeFor("choosenDate")}
-                                />
-                            </form>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <form className={this.props.classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    type="date"
-                                    // defaultValue={date}
-                                    onChange={this.handleChangeFor("choosenDate")}
-                                />
-                            </form>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <form className={this.props.classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    type="date"
-                                    // defaultValue={date}
-                                    onChange={this.handleChangeFor("choosenDate")}
-                                />
-                            </form>
-                        </Grid>
-                        <Grid item xs={1}></Grid>
-                        <Grid item xs={3}><p>Recertification</p></Grid>
-                        <Grid item xs={2}>
-                            <form className={this.props.classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    type="date"
-                                    // defaultValue={date}
-                                    onChange={this.handleChangeFor("choosenDate")}
-                                />
-                            </form>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <form className={this.props.classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    type="date"
-                                    // defaultValue={date}
-                                    onChange={this.handleChangeFor("choosenDate")}
-                                />
-                            </form>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <form className={this.props.classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    type="date"
-                                    // defaultValue={date}
-                                    onChange={this.handleChangeFor("choosenDate")}
-                                />
-                            </form>
-                        </Grid>
-                    </Grid>
-                </div>
-            );
-        }
-
-        return (
-            <div>
-                {content}
-            </div>
+    this.props.cohortReducer.requirements.forEach(requirement => {
+      if (requirement.requirements_id === 1) {
+        console.log(
+          moment(this.state.chosenDate)
+            .add(requirement.duration, "day")
+            .format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ")
         );
+      }
+
+      let newObject = {
+        requirement_id: requirement.requirements_id,
+        requirement_name: requirement.name,
+        due_date: moment(this.state.chosenDate)
+          .add(requirement.duration, "day")
+          .format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ"),
+        notification_1_date: moment(this.state.chosenDate)
+          .add(requirement.notification_1_time, "day")
+          .format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ"),
+        notification_2_date: moment(this.state.chosenDate)
+          .add(requirement.notification_2_time, "day")
+          .format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ")
+      };
+      requirementAry.push(newObject);
+    });
+
+    this.setState({
+      newCohort: {
+        ...this.state.newCohort,
+        requirements: requirementAry
+      }
+    });
+  };
+
+  handleChangeFor = propertyName => {
+    return event => {
+      this.setState({
+        newCohort: {
+          ...this.state.newCohort,
+          [propertyName]: event.target.value
+        },
+        errorMessage: ""
+      });
+    };
+  };
+
+  handleChangeForState = propertyName => {
+    return event => {
+      this.setState({
+        newCohort: {
+          ...this.state.newCohort,
+          state_level_organization: "",
+          [propertyName]: event.target.value
+        },
+        errorMessage: ""
+      });
+      this.props.dispatch({
+        type: COHORT_ACTIONS.FETCH_FILTER_STATE,
+        payload: event.target.value
+      });
+    };
+  };
+
+  handleChangeForSLO = propertyName => {
+    return event => {
+      this.setState({
+        newCohort: {
+          ...this.state.newCohort,
+          [propertyName]: event.target.value
+        },
+        errorMessage: ""
+      });
+      this.props.dispatch({
+        type: COHORT_ACTIONS.FETCH_LATEST_COHORT,
+        payload: event.target.value
+      });
+    };
+  };
+
+  handleInitialDate = date => {
+    this.setState(
+      {
+        chosenDate: date.format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ")
+      },
+      () => {
+        this.updateRequirementState();
+      }
+    );
+  };
+
+  handleDateChange = (req_ID, dateType, date) => {
+    let allReqs = this.state.newCohort.requirements;
+
+    let getReqIndex = allReqs.findIndex(req => {
+      return req.requirement_id === req_ID;
+    });
+
+    allReqs[getReqIndex][dateType] = date;
+
+    this.setState({
+      newCohort: {
+        ...this.state.newCohort,
+        requirements: allReqs
+      }
+    });
+  };
+
+  createDueDates = () => {
+    let tableBody = this.state.newCohort.requirements.map(
+      (requirement, index) => {
+        return (
+          <TableRow key={index}>
+            <TableCell>{requirement.requirement_name.toUpperCase()}</TableCell>
+            <TableCell>
+              <InlineDatePicker
+                className={this.props.classes.dropDown}
+                disabled={requirement.requirement_id === 1}
+                keyboard
+                format="MM/DD/YYYY"
+                label="Due Date"
+                value={this.state.newCohort.requirements[index].due_date}
+                onChange={date =>
+                  this.handleDateChange(
+                    requirement.requirement_id,
+                    "due_date",
+                    date.format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ")
+                  )
+                }
+              />
+            </TableCell>
+
+            <TableCell>
+              <InlineDatePicker
+                className={this.props.classes.dropDown}
+                disabled={requirement.requirement_id === 1}
+                keyboard
+                format="MM/DD/YYYY"
+                label="Notification 1"
+                value={
+                  this.state.newCohort.requirements[index].notification_1_date
+                }
+                onChange={date =>
+                  this.handleDateChange(
+                    requirement.requirement_id,
+                    "notification_1_date",
+                    date.format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ")
+                  )
+                }
+              />
+            </TableCell>
+
+            <TableCell>
+              <InlineDatePicker
+                className={this.props.classes.dropDown}
+                disabled={requirement.requirement_id === 1}
+                keyboard
+                format="MM/DD/YYYY"
+                label="Notification 2"
+                value={
+                  this.state.newCohort.requirements[index].notification_2_date
+                }
+                onChange={date =>
+                  this.handleDateChange(
+                    requirement.requirement_id,
+                    "notification_2_date",
+                    date.format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ")
+                  )
+                }
+              />
+            </TableCell>
+          </TableRow>
+        );
+      }
+    );
+
+    return (
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Requirement Name</TableCell>
+            <TableCell>Due Date</TableCell>
+            <TableCell>Notification 1 Date</TableCell>
+            <TableCell>Notification 2 Date</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>{tableBody}</TableBody>
+      </Table>
+    );
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+
+    if (this.state.newCohort.name === "") {
+      this.setState({
+        errorMessage: "Please Enter the Cohort Name"
+      });
+    } else if (this.state.newCohort.state === "") {
+      this.setState({
+        errorMessage: "Please Pick a State"
+      });
+    } else if (this.state.newCohort.state_level_organization === "") {
+      this.setState({
+        errorMessage: "Please Pick a State Level Org."
+      });
+    } else {
+      this.setState({
+        errorMessage: ""
+      });
+
+      this.props.dispatch({
+        type: COHORT_ACTIONS.ADD_NEW_COHORT,
+        payload: this.state
+      });
     }
+  };
+
+  render() {
+    let { classes } = this.props;
+
+    let stateListArray = this.props.cohortReducer.state_dropDown.map(
+      (item, index) => {
+        return (
+          <MenuItem key={index} value={item}>
+            {item}
+          </MenuItem>
+        );
+      }
+    );
+    let SLOListArray = this.props.cohortReducer.SLO_dropDown.map(
+      (item, index) => {
+        return (
+          <MenuItem key={index} value={item.state_level_organization_id}>
+            {item.name}
+          </MenuItem>
+        );
+      }
+    );
+
+    let dueDateTabel =
+      this.state.newCohort.requirements.length > 0 ? this.createDueDates() : [];
+
+    console.log(this.state);
+    let content = null;
+    if (this.props.user.userName) {
+      content = (
+        <div className={classes.mainFormComponent}>
+          <div className={classes.topPart}>
+            <Typography variant="display2">Create New Cohort</Typography>
+
+            <div>
+              <FormControl>
+                <InputLabel>Select A State</InputLabel>
+                <Select
+                  value={this.state.newCohort.state}
+                  className={classes.input}
+                  onChange={this.handleChangeForState("state")}
+                  required
+                >
+                  {stateListArray}
+                </Select>
+              </FormControl>
+            </div>
+            <br />
+            <div>
+              <FormControl>
+                <InputLabel>Select A State Level Org</InputLabel>
+                <Select
+                  value={this.state.newCohort.state_level_organization}
+                  className={classes.input}
+                  onChange={this.handleChangeForSLO("state_level_organization")}
+                  required
+                >
+                  {SLOListArray}
+                </Select>
+              </FormControl>
+            </div>
+
+            <div>
+              <TextField
+                label="Cohort Name"
+                className={classes.input}
+                value={this.state.newCohort.name}
+                onChange={this.handleChangeFor("name")}
+                margin="normal"
+              />
+            </div>
+
+            <div>
+              <TextField
+                label="Note"
+                multiline
+                rowsMax="4"
+                className={classes.input}
+                value={this.state.newCohort.note}
+                onChange={this.handleChangeFor("note")}
+                margin="normal"
+              />
+            </div>
+            <br />
+            <div>
+              <InlineDatePicker
+                className={classes.input}
+                keyboard
+                format="MM/DD/YYYY"
+                label="Initial TTT Workshop"
+                value={this.state.chosenDate}
+                onChange={this.handleInitialDate}
+              />
+            </div>
+          </div>
+
+          <div className={classes.bottomPart}>
+            <br />
+            <Typography variant="display1">Cohort Deadlines</Typography>
+            {dueDateTabel}
+          </div>
+          <div className={classes.createButton}>
+            <Button type="Submit" variant="outlined">
+              Create Cohort
+            </Button>
+            <br />
+            <Typography variant="subheading" color="error">
+              {this.state.errorMessage}
+            </Typography>
+          </div>
+        </div>
+      );
+    }
+
+    console.log(
+      moment(this.state.chosenDate)
+        .add(1, "day")
+        .toString()
+    );
+
+    return (
+      <div>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
+          <form onSubmit={this.handleSubmit}>{content}</form>
+        </MuiPickersUtilsProvider>
+      </div>
+    );
+  }
 }
 
-const styleCohort = withStyles(styles)(AddCohort)
+const styleCohort = withStyles(styles)(AddCohort);
 export default connect(mapStateToProps)(styleCohort);

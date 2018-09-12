@@ -17,6 +17,7 @@ import TrainerSearchView from './components/TrainerSearchView/TrainerSearchView'
 import TrainerDetails from './components/TrainerDetails/TrainerDetails';
 import NationalTrainer from './components/NationalTrainer/NationalTrainer';
 import AddCohort from './components/AddCohort/AddCohort';
+import AddStateLevelOrg from './components/AddStateLevelOrg/AddStateLevelOrg'
 import './styles/main.css';
 const App = () => (
   <div>
@@ -57,6 +58,10 @@ const App = () => (
         <Route
           path="/addcohort"
           component={AddCohort}
+        />
+        <Route
+          path="/state_level_org"
+          component={AddStateLevelOrg}
         />
         {/* OTHERWISE (no path!) */}
         <Route render={() => <h1>404</h1>} />
