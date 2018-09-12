@@ -23,7 +23,7 @@ const App = () => (
 
     <Router>
       <div>
-    <Header title="" />
+      <Header title="" />
       <Switch>
         <Redirect exact from="/" to="/home" />
         <Route

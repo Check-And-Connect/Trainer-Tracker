@@ -149,7 +149,7 @@ li a:hover {
     display: grid;
     grid-template-rows: 1fr;
     text-align: right;
-    padding: 0 15px 0 0;
+    /* padding: 0 15px 0 0; */
 }
 
 /* .item3b1 {
@@ -171,7 +171,7 @@ li a:hover {
 .item3c {
     display: grid;
     grid-template-rows:  1fr;
-    padding: 0 0 0 15px;
+    /* padding: 0 0 0 15px; */
 }
 .item3c2 {
     display: grid;
@@ -195,4 +195,5 @@ li a:hover {
 
 .linkText {
     text-decoration: none;
+    text-align: right;
 }
