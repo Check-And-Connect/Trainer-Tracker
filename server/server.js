@@ -19,7 +19,7 @@ const cron = require('node-cron');
 const notifier = require('./modules/notifier');
 
 
-// cron.schedule('12 20 * * *', () => {
+// cron.schedule('0 8 * * *', () => {
 //   notifier()
 
 // }, {
@@ -27,9 +27,9 @@ const notifier = require('./modules/notifier');
 //   timezone : 'America/Chicago'
 // });
 
-cron.schedule('*/10 * * * * *', () => {
-  notifier()
-})
+// cron.schedule('*/30 * * * * *', () => {
+//   notifier()
+// })
 
 // Body parser middleware
 app.use(bodyParser.json());

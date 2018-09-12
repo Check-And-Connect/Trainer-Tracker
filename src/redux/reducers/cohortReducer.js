@@ -70,10 +70,22 @@ const requirements = (state = [], action) => {
   }
 };
 
+const latestCohort = (state = [], action) => {
+    switch (action.type) {
+        case COHORT_ACTIONS.UNSET_LATEST_COHORT:
+          return [];
+        case COHORT_ACTIONS.SET_LATEST_COHORT:
+        return action.payload;
+        default:
+          return state;
+      }
+}
+
 export default combineReducers({
   state_dropDown,
   SLO_dropDown,
   trainer_cohorts,
   cohort_dropDown,
-  requirements
+  requirements,
+  latestCohort
 });

@@ -117,4 +117,25 @@ router.post('/addNewSLO', (req, res) => {
         })
 })
 
+router.get('/latestCohort/:state_level_org_id', (req, res) => {
+    let queryText = 'SELECT * FROM cohort WHERE state_level_organization_ref_id = $1 ORDER BY cohort_id DESC LIMIT 1';
+
+    console.log('==============================');
+    
+    console.log(req.params.state_level_org_id);
+    console.log('==============================');
+
+    pool.query(queryText, [req.params.state_level_org_id])
+        .then(response => {
+            console.log(response.rows);
+            res.send(response.rows);
+            
+        })
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+            
+        })
+})
+
 module.exports = router;
