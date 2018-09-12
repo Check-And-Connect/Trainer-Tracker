@@ -47,6 +47,12 @@ class TrainerDetails extends Component{
             })
     }
 
+    componentDidUpdate = () => {
+        if (!this.props.user.isLoading && this.props.user.userName === null) {
+          this.props.history.push("home");
+        }
+      }
+
     handleInputChange = (e) => {
         console.log(e.target.name, e.target.value);
         this.setState({

@@ -75,6 +75,11 @@ class TrainerSearchView extends Component {
     }
 
     componentDidUpdate = (prevProps) => {
+            if (!this.props.user.isLoading && this.props.user.userName === null) {
+              this.props.history.push("home");
+            }
+          
+
         if (prevProps.localTrainerReducer.allLocalTrainers !== this.props.localTrainerReducer.allLocalTrainers) {
 
             let newDisplayedCheckboxes = {
