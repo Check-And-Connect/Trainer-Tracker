@@ -163,13 +163,8 @@ class AccountDetails extends Component {
                     <Grid container>
                         <Grid item xs={12}></Grid>
                         <Grid item xs={5}></Grid>
-                        <Grid item xs={3}>
+                        <Grid item xs={7}>
                             <h2>Account Details</h2>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <h2>
-                                <Button variant="raised" onClick={this.saveNationalTrainer}>Save Changes</Button>
-                            </h2>
                         </Grid>
                     </Grid>
                     <Grid container>
@@ -220,6 +215,12 @@ class AccountDetails extends Component {
                             />
                         </Grid>
                         <Grid item xs={3}></Grid>
+                        <Grid item xs={5}></Grid>
+                        <Grid item xs={7}>
+                            <h2>
+                                <Button variant="raised" onClick={this.saveNationalTrainer}>Save</Button>
+                            </h2>
+                        </Grid>
                     </Grid>
                 </div>
             );
