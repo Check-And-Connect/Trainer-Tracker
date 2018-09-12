@@ -23,7 +23,7 @@ const styles = {
     width: "15em"
   },
   mainComponent: {
-    
+    textAlign : 'center',
     padding: "1em"
   },
   buttons: {
