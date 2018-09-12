@@ -67,10 +67,10 @@ class AddCohort extends Component {
         name: "",
         state: "",
         state_level_organization: "",
-        note : "",
+        note: "",
         requirements: []
       },
-      chosenDate: moment().format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ'),
+      chosenDate: moment().format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ"),
       errorMessage: ""
     };
   }
@@ -92,30 +92,51 @@ class AddCohort extends Component {
     ) {
       this.updateRequirementState();
     }
+
+    if (
+      prevProps.cohortReducer.latestCohort.length === 0 &&
+      this.props.cohortReducer.latestCohort.length !== 0
+    ) {
+      let latestCohort = this.props.cohortReducer.latestCohort[0].name.split(
+        " "
+      );
+      console.log(latestCohort);
+      let nextCohortNumber = parseInt(latestCohort[1]) + 1;
+      let nextCohort = latestCohort[0] + " " + nextCohortNumber;
+
+      this.setState({
+        newCohort: {
+            ...this.state.newCohort,
+          name: nextCohort
+        }
+      });
+    }
   }
 
   updateRequirementState = () => {
     let requirementAry = [];
 
     this.props.cohortReducer.requirements.forEach(requirement => {
-        if(requirement.requirements_id === 1) {
+      if (requirement.requirements_id === 1) {
+        console.log(
+          moment(this.state.chosenDate)
+            .add(requirement.duration, "day")
+            .format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ")
+        );
+      }
 
-        
-        console.log(moment(this.state.chosenDate).add(requirement.duration, 'day').format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ'));
-        }
-        
       let newObject = {
         requirement_id: requirement.requirements_id,
         requirement_name: requirement.name,
         due_date: moment(this.state.chosenDate)
           .add(requirement.duration, "day")
-          .format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ'),
+          .format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ"),
         notification_1_date: moment(this.state.chosenDate)
           .add(requirement.notification_1_time, "day")
-          .format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ'),
+          .format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ"),
         notification_2_date: moment(this.state.chosenDate)
           .add(requirement.notification_2_time, "day")
-          .format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ')
+          .format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ")
       };
       requirementAry.push(newObject);
     });
@@ -167,7 +188,7 @@ class AddCohort extends Component {
         errorMessage: ""
       });
       this.props.dispatch({
-        type: STATE_LEAD_ACTIONS.FILTER_STATE_LEAD,
+        type: COHORT_ACTIONS.FETCH_LATEST_COHORT,
         payload: event.target.value
       });
     };
@@ -176,7 +197,7 @@ class AddCohort extends Component {
   handleInitialDate = date => {
     this.setState(
       {
-        chosenDate: date.format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ')
+        chosenDate: date.format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ")
       },
       () => {
         this.updateRequirementState();
@@ -219,7 +240,7 @@ class AddCohort extends Component {
                   this.handleDateChange(
                     requirement.requirement_id,
                     "due_date",
-                    date.format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ')
+                    date.format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ")
                   )
                 }
               />
@@ -239,7 +260,7 @@ class AddCohort extends Component {
                   this.handleDateChange(
                     requirement.requirement_id,
                     "notification_1_date",
-                    date.format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ')
+                    date.format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ")
                   )
                 }
               />
@@ -259,7 +280,7 @@ class AddCohort extends Component {
                   this.handleDateChange(
                     requirement.requirement_id,
                     "notification_2_date",
-                    date.format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ')
+                    date.format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ")
                   )
                 }
               />
@@ -306,7 +327,7 @@ class AddCohort extends Component {
 
       this.props.dispatch({
         type: COHORT_ACTIONS.ADD_NEW_COHORT,
-        payload : this.state
+        payload: this.state
       });
     }
   };
@@ -345,16 +366,6 @@ class AddCohort extends Component {
             <Typography variant="display2">Create New Cohort</Typography>
 
             <div>
-              <TextField
-                label="Cohort Name"
-                className={classes.input}
-                value={this.state.newCohort.name}
-                onChange={this.handleChangeFor("name")}
-                margin="normal"
-              />
-            </div>
-
-            <div>
               <FormControl>
                 <InputLabel>Select A State</InputLabel>
                 <Select
@@ -381,7 +392,17 @@ class AddCohort extends Component {
                 </Select>
               </FormControl>
             </div>
-            
+
+            <div>
+              <TextField
+                label="Cohort Name"
+                className={classes.input}
+                value={this.state.newCohort.name}
+                onChange={this.handleChangeFor("name")}
+                margin="normal"
+              />
+            </div>
+
             <div>
               <TextField
                 label="Note"
@@ -393,7 +414,7 @@ class AddCohort extends Component {
                 margin="normal"
               />
             </div>
-            <br/>
+            <br />
             <div>
               <InlineDatePicker
                 className={classes.input}
@@ -424,8 +445,12 @@ class AddCohort extends Component {
       );
     }
 
-    console.log(moment(this.state.chosenDate).add(1 , 'day').toString());
-    
+    console.log(
+      moment(this.state.chosenDate)
+        .add(1, "day")
+        .toString()
+    );
+
     return (
       <div>
         <MuiPickersUtilsProvider utils={MomentUtils}>
