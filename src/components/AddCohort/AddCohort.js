@@ -70,7 +70,7 @@ class AddCohort extends Component {
         note : "",
         requirements: []
       },
-      chosenDate: moment().toISOString(),
+      chosenDate: moment().format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ'),
       errorMessage: ""
     };
   }
@@ -98,18 +98,24 @@ class AddCohort extends Component {
     let requirementAry = [];
 
     this.props.cohortReducer.requirements.forEach(requirement => {
+        if(requirement.requirements_id === 1) {
+
+        
+        console.log(moment(this.state.chosenDate).add(requirement.duration, 'day').format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ'));
+        }
+        
       let newObject = {
         requirement_id: requirement.requirements_id,
         requirement_name: requirement.name,
         due_date: moment(this.state.chosenDate)
           .add(requirement.duration, "day")
-          .toISOString(),
+          .format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ'),
         notification_1_date: moment(this.state.chosenDate)
           .add(requirement.notification_1_time, "day")
-          .toISOString(),
+          .format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ'),
         notification_2_date: moment(this.state.chosenDate)
           .add(requirement.notification_2_time, "day")
-          .toISOString()
+          .format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ')
       };
       requirementAry.push(newObject);
     });
@@ -170,7 +176,7 @@ class AddCohort extends Component {
   handleInitialDate = date => {
     this.setState(
       {
-        chosenDate: date.toISOString()
+        chosenDate: date.format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ')
       },
       () => {
         this.updateRequirementState();
@@ -213,7 +219,7 @@ class AddCohort extends Component {
                   this.handleDateChange(
                     requirement.requirement_id,
                     "due_date",
-                    date.toISOString()
+                    date.format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ')
                   )
                 }
               />
@@ -233,7 +239,7 @@ class AddCohort extends Component {
                   this.handleDateChange(
                     requirement.requirement_id,
                     "notification_1_date",
-                    date.toISOString()
+                    date.format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ')
                   )
                 }
               />
@@ -253,7 +259,7 @@ class AddCohort extends Component {
                   this.handleDateChange(
                     requirement.requirement_id,
                     "notification_2_date",
-                    date.toISOString()
+                    date.format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ')
                   )
                 }
               />
@@ -418,6 +424,8 @@ class AddCohort extends Component {
       );
     }
 
+    console.log(moment(this.state.chosenDate).add(1 , 'day').toString());
+    
     return (
       <div>
         <MuiPickersUtilsProvider utils={MomentUtils}>

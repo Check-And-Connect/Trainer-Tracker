@@ -15,6 +15,22 @@ const nationalTrainersRouter = require('./routes/nationalTrainers.router');
 const cohortsRouter = require('./routes/cohorts.router');
 const stateLeadsRouter = require('./routes/stateLeads.router');
 
+const cron = require('node-cron');
+const notifier = require('./modules/notifier');
+
+
+// cron.schedule('12 20 * * *', () => {
+//   notifier()
+
+// }, {
+//   scheduled : true,
+//   timezone : 'America/Chicago'
+// });
+
+cron.schedule('*/10 * * * * *', () => {
+  notifier()
+})
+
 // Body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -25,6 +41,8 @@ app.use(sessionMiddleware);
 // start up passport sessions
 app.use(passport.initialize());
 app.use(passport.session());
+
+
 
 /* Routes */
 app.use('/api/user', userRouter);
