@@ -301,7 +301,7 @@ class TrainerDetails extends Component{
                                 </InputLabel>
                                 <Select 
                                     className={this.props.classes.formControl}
-                                    label="Cohort" 
+                                    label="Cohort!!!" 
                                     value={this.state.cohort.cohort_id} 
                                     name="cohort" 
                                     onChange={this.handleInputChange}
@@ -410,7 +410,7 @@ class TrainerDetails extends Component{
                     <h2 className='centerHeadings'>History</h2>
                     <Grid container>
                     <Grid item xs={3}></Grid>
-                        <Grid item xs={9}>
+                        <Grid item xs={6}>
                             <TrainerHistoryStepper requirements={this.state.requirements} />                            
                         </Grid>
                     </Grid>
