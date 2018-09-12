@@ -282,7 +282,6 @@ class CohortManager extends Component {
           Object.keys(object).forEach(key => {
             if (typeof object[key] === "string" || typeof object[key] === 'number') {
               if (object[key].toString().toLowerCase().includes(this.state.searchKey.toLowerCase())) {
-                console.log(object[key].toString().toLowerCase() + ' includes ' + this.state.searchKey);
                 flag = true;
               }
             } else if (Array.isArray(object[key])) {

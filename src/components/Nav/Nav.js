@@ -92,12 +92,12 @@ class Nav extends React.Component {
             </MenuItem>
           </Link>
 
-          <Link to="/" style={{ textDecoration: 'none' }}>
+          <Link to="/state_level_org" style={{ textDecoration: 'none' }}>
             <MenuItem
               className={this.props.classes.dropDown}
               onClick={this.handleClose}
             >
-              State Lead
+              State Level Organization
             </MenuItem>
           </Link>
         </Menu>
