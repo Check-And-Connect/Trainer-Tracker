@@ -56,24 +56,36 @@ class TrainerSearchView extends Component {
             localTrainers: [],
             trainersBeforeSearch: [],
             searchKey: '',
-            // Using sets instead of arrays for the selections, since they are limited to 
+            // Using sets instead of arrays for the checkboxesSelected, since they are limited to 
             // unique values by default.
-            selections: {
+            checkboxesSelected: {
                 state_name: new Set(),
                 state_level_organization_name: new Set(),
                 cohort_name: new Set(),
-                status: new Set()
+                status: new Set(['Active'])
             },
-            checkboxesDisplayed: null
+            checkboxesDisplayed: {
+                state_name: null,
+                state_level_organization_name: null,
+                cohort_name: null,
+                status: null
+            },
+            checkAlls: {
+                stateCheckAll: true,
+                sloCheckAll: true,
+                cohortCheckAll: true
+            }
         }
     }
 
+    // Fetch all the info when the page loads the first time, then we use client-side JS for the filtering actions
     componentDidMount = () => {
         this.props.dispatch({
             type: LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINERS
         })
     }
 
+    // This fires after the dispatched action has set the local trainer reducer
     componentDidUpdate = (prevProps) => {
         if (prevProps.localTrainerReducer.allLocalTrainers !== this.props.localTrainerReducer.allLocalTrainers) {
 
@@ -81,27 +93,42 @@ class TrainerSearchView extends Component {
                 state_name: new Set(),
                 state_level_organization_name: new Set(),
                 cohort_name: new Set(),
-                status: new Set()
+                status: new Set(['Active', 'Inactive'])
             }
-            this.props.localTrainerReducer.allLocalTrainers.map((trainer) => {
-                newDisplayedCheckboxes.state_name.add(trainer.state)
-                newDisplayedCheckboxes.state_level_organization_name.add(trainer.state_level_organization.state_level_organization_name)
-                newDisplayedCheckboxes.cohort_name.add(trainer.cohort.cohort_name)
+
+            // As we map over the trainers, we add the state, slo, and cohort information to the displayed checkboxes
+            // piece of local state. This ensures that we only ever show checkbox filters for the trainers in the table.
+            let displayedTrainersList = [];
+            this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
+                if (trainer.status){
+                    newDisplayedCheckboxes.state_name.add(trainer.state)
+                    newDisplayedCheckboxes.state_level_organization_name.add(trainer.state_level_organization.state_level_organization_name)
+                    newDisplayedCheckboxes.cohort_name.add(trainer.cohort.cohort_name)
+                    displayedTrainersList.push(trainer);
+                }
             })
 
+            // The initial configuration is storing a copy of the allLocalTrainers array from the reducer in local state,
+            // another copy in the local state for updating when we filter by typed input, the checkboxes displayed
+            // are everything available in the dataset, and the checkboxes selected is a copy of that i.e. everything.
             this.setState({
-                localTrainers: this.props.localTrainerReducer.allLocalTrainers,
+                localTrainers: displayedTrainersList,
                 trainersBeforeSearch: this.props.localTrainerReducer.allLocalTrainers,
                 checkboxesDisplayed: newDisplayedCheckboxes,
-                selections: newDisplayedCheckboxes
+                checkboxesSelected: {
+                    ...newDisplayedCheckboxes,
+                    status: new Set(['Active'])
+                }
             })
         }
     }
 
+    // This is a placeholder for when we actually get the export function hooked up.
     handleExport = () => {
         console.log('export function called');
     }
 
+    //
     handleSearchInputChange = (e) => {
         this.setState({
             searchInput: e.target.value
@@ -110,7 +137,15 @@ class TrainerSearchView extends Component {
 
     handleStateCheckbox = (e) => {
         console.log('handling state checkbox');
-        let newSet = new Set(this.state.selections.state_name);
+        console.log(e.target.checked);
+        let newSet = new Set(this.state.checkboxesSelected.state_name);
+
+        if (e.target.value === 'all' && e.target.checked){
+            newSet = new Set(this.state.checkboxesDisplayed.state_name)
+        } else if (e.target.value === 'all' && !e.target.checked){
+            newSet = new Set();
+        }
+
         let sloSet = new Set();
         let cohortSet= new Set();
         if (newSet.has(e.target.value)){
@@ -120,9 +155,13 @@ class TrainerSearchView extends Component {
         }
 
         this.setState({
-            selections: {
-                ...this.state.selections,
+            checkboxesSelected: {
+                ...this.state.checkboxesSelected,
                 state_name: newSet
+            },
+            checkAlls: {
+                ...this.state.checkAlls,
+                stateCheckAll: !this.state.checkAlls.stateCheckAll
             }
         })
 
@@ -149,7 +188,14 @@ class TrainerSearchView extends Component {
 
     handleSloCheckbox = (e) => {
         console.log('handling slo checkbox');
-        let newSet = new Set(this.state.selections.state_level_organization_name);
+        let newSet = new Set(this.state.checkboxesSelected.state_level_organization_name);
+
+        if (e.target.value === 'all' && e.target.checked){
+            newSet = new Set(this.state.checkboxesDisplayed.state_level_organization_name)
+        } else if (e.target.value === 'all' && !e.target.checked){
+            newSet = new Set();
+        }
+
         let cohortSet= new Set();
         if (newSet.has(e.target.value)){
             newSet.delete(e.target.value)
@@ -158,8 +204,8 @@ class TrainerSearchView extends Component {
         }
 
         this.setState({
-            selections: {
-                ...this.state.selections,
+            checkboxesSelected: {
+                ...this.state.checkboxesSelected,
                 state_level_organization_name: newSet
             }
         })
@@ -183,7 +229,14 @@ class TrainerSearchView extends Component {
 
     handleCohortCheckbox = (e) => {
         console.log('handling cohort checkbox');
-        let newSet = new Set(this.state.selections.cohort_name);
+        let newSet = new Set(this.state.checkboxesSelected.cohort_name);
+
+        if (e.target.value === 'all' && e.target.checked){
+            newSet = new Set(this.state.checkboxesDisplayed.cohort_name)
+        } else if (e.target.value === 'all' && !e.target.checked){
+            newSet = new Set();
+        }
+
         if (newSet.has(e.target.value)){
             newSet.delete(e.target.value)
         } else {
@@ -191,8 +244,8 @@ class TrainerSearchView extends Component {
         }
 
         this.setState({
-            selections: {
-                ...this.state.selections,
+            checkboxesSelected: {
+                ...this.state.checkboxesSelected,
                 cohort_name: newSet
             }
         })
@@ -211,6 +264,28 @@ class TrainerSearchView extends Component {
 
     handleStatusCheckbox = (e) => {
         console.log('handling status checkbox');
+        let newSet = new Set(this.state.checkboxesSelected.status)
+
+        if (newSet.has(e.target.value)){
+            newSet.delete(e.target.value)
+        } else {
+            newSet.add(e.target.value)
+        }
+
+        let filteredTrainersList = [];
+        this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
+            if ((trainer.status && newSet.has('Active')) || (!trainer.status && newSet.has('Inactive'))){
+                filteredTrainersList.push(trainer)
+            }
+        })
+
+        this.setState({
+            checkboxesSelected: {
+                ...this.state.checkboxesSelected,
+                status: newSet
+            },
+            localTrainers: filteredTrainersList
+        })
     }
 
     handleSearchTable = searchKey => {
@@ -339,11 +414,12 @@ class TrainerSearchView extends Component {
             <div className={classes.mainComponent}>
                  <div className={classes.leftPanel} >
                     <TrainerSearchSidebar 
-                        {...this.state.checkboxesDisplayed} 
-                        handleCheckboxClick={this.handleCheckboxClick} 
+                        checkboxesDisplayed={this.state.checkboxesDisplayed}
+                        checkboxesSelected={this.state.checkboxesSelected}
                         handleStateCheckbox={this.handleStateCheckbox}
                         handleSloCheckbox={this.handleSloCheckbox}
                         handleCohortCheckbox={this.handleCohortCheckbox}
+                        handleStatusCheckbox={this.handleStatusCheckbox}
                     />                 
                 </div>
                 <div className={classes.rightPanel}>

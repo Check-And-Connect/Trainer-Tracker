@@ -163,13 +163,8 @@ class AccountDetails extends Component {
                     <Grid container>
                         <Grid item xs={12}></Grid>
                         <Grid item xs={5}></Grid>
-                        <Grid item xs={3}>
+                        <Grid item xs={7}>
                             <h2>Account Details</h2>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <h2>
-                                <Button variant="raised" onClick={this.saveNationalTrainer}>Save Changes</Button>
-                            </h2>
                         </Grid>
                     </Grid>
                     <Grid container>
@@ -220,53 +215,16 @@ class AccountDetails extends Component {
                             />
                         </Grid>
                         <Grid item xs={3}></Grid>
+                        <Grid item xs={5}></Grid>
+                        <Grid item xs={7}>
+                            <h2>
+                                <Button variant="raised" onClick={this.saveNationalTrainer}>Save</Button>
+                            </h2>
+                        </Grid>
                     </Grid>
                 </div>
             );
         }
-
-
-
-
-
-
-
-
-        // <div>
-        //     <h2 className='centerHeadings'>Account Details</h2>
-        //     <Grid container>
-        //         <Grid item xs={3}></Grid>
-        //         <Grid item xs={9}>
-        //             <form className='trainerForm'>
-        //                 <Grid container>
-        //                     <Grid item xs={4}>
-        //                         <TextField
-        //                             className={this.props.classes.textField}
-        //                             label="First Name"
-        //                             // value={this.state.newTrainer.first_name}
-        //                             onChange={this.handleChangeFor('first_name')}
-        //                             margin="normal"
-        //                         />
-        //                     </Grid>
-        //                     <Grid item xs={5}>
-        //                         <TextField
-        //                             className={this.props.classes.textField}
-        //                             label="District"
-        //                             // value={this.state.newTrainer.district}
-        //                             onChange={this.handleChangeFor('district')}
-        //                             margin="normal"
-        //                         />
-        //                     </Grid>
-        //                     <Grid item xs={7}>
-        //                         <Button variant="raised" onClick={this.addNewTrainer}>Submit</Button>
-        //                     </Grid>
-        //                 </Grid>
-        //             </form>
-        //         </Grid>
-        //     </Grid>
-        // </div>
-
-
         return (
             <div>
                 {content}

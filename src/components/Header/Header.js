@@ -77,36 +77,12 @@ class Header extends Component {
                       Log Out
                     </button>  */}
 
-
-
-                    <Link
-                      to="/accountdetails"
-                      style={{ textDecoration: "none" }}
-                    >
-                      <Button
-                        aria-owns={content ? "simple-menu" : null}
-                        aria-haspopup="true"
-                      >
-                        Account Details
-                      </Button>
-                    </Link>
-
-
-                    <Link
-                      to="#"
-                      onClick={this.logout}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <Button
-                        aria-owns={content ? "simple-menu" : null}
-                        aria-haspopup="true"
-                      >
-                        Log Out
-                      </Button>
+                    <Link to="/accountdetails" style={{ textDecoration: "none" }}>
+                      {" "}
+                      <h5 className="linkText">Account Details</h5>
                     </Link>
 
                     
-
 
                     {/* <a href="#" className="logOut" onClick={this.logout}>
                       Log Out
@@ -121,6 +97,14 @@ class Header extends Component {
                       src={require("../../styles/images/person_icon.jpg")}
                     />
                   </div> */}
+
+                  <Link
+                      to="#"
+                      onClick={this.logout}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <h5 className="linkText">Log Out</h5>
+                    </Link>
                   <div className="item3c3" />
                 </div>
               </div>
