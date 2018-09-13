@@ -10,7 +10,9 @@ import {
     TextField,
     withStyles,
     Button,
-    Typography
+    Typography,
+    Snackbar,
+    Slide
 } from '@material-ui/core';
 
 const mapStateToProps = state => ({
@@ -30,6 +32,10 @@ const styles = {
 
 }
 
+function TransitionRight(props) {
+    return <Slide {...props} direction="right" />;
+  }
+
 class AccountDetails extends Component {
 
     constructor(props) {
@@ -42,7 +48,9 @@ class AccountDetails extends Component {
                 title: '',
                 email: ''
             },
-            editDetails: false
+            editDetails: false,
+            open: false,
+            Transition: null
         }
     }
 
@@ -87,12 +95,19 @@ class AccountDetails extends Component {
         }
     }
 
-    saveNationalTrainer = () => {
+    saveNationalTrainer = Transition => () => {
         this.setState({
             editDetails: false
         })
+        this.setState({ 
+            open: true, Transition 
+        })
         this.props.dispatch({ type: NATIONAL_TRAINER_ACTIONS.UPDATE_NATIONAL_TRAINER, payload: this.state.nationalTrainer })
     }
+
+    handleClose = () => {
+        this.setState({ open: false });
+    };
 
     render() {
         let content = null;
@@ -179,9 +194,8 @@ class AccountDetails extends Component {
                         />
                     </div>
                     <div className='centerHeadings'>
-                                <Button className={this.props.classes.button} variant="outlined" onClick={this.saveNationalTrainer}>Save</Button>
+                        <Button className={this.props.classes.button} variant="outlined" onClick={this.saveNationalTrainer(TransitionRight)}>Save</Button>
                     </div>
-                    
 
                 </div>
             );
@@ -189,6 +203,15 @@ class AccountDetails extends Component {
         return (
             <div>
                 {content}
+                <Snackbar
+                        open={this.state.open}
+                        onClose={this.handleClose}
+                        TransitionComponent={this.state.Transition}
+                        ContentProps={{
+                            'aria-describedby': 'message-id',
+                        }}
+                        message={<span id="message-id">Saved Successfully</span>}
+                    />
             </div>
         );
     }
