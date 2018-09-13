@@ -5,7 +5,7 @@ import {COHORT_ACTIONS} from '../../redux/actions/cohortActions';
 
 import TrainerHistoryStepper from '../TrainerHistoryStepper/TrainerHistoryStepper';
 
-import {withStyles, Button, TextField, Select, MenuItem, Grid, FormControl, FormLabel, InputLabel, Switch, FormControlLabel} from '@material-ui/core';
+import {withStyles, Button, TextField, Select, MenuItem, Grid, FormControl, FormLabel, InputLabel, Switch, FormControlLabel, Snackbar, Slide} from '@material-ui/core';
 
 const styles = {
     mainComponent: {
@@ -182,6 +182,8 @@ class TrainerDetails extends Component{
                 console.log(err);
             })
     }
+
+    
 
     render(){
 

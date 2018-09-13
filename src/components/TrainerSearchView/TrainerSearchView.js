@@ -23,7 +23,7 @@ const styles = {
     },
     rightPanel: {
         display: "Grid",
-        gridTemplateRows: "0.3fr 9fr",
+        gridTemplateRows: "0.0001fr 9fr",
         margin: "0em 1em"
     },
     tableCell: {
@@ -416,6 +416,7 @@ class TrainerSearchView extends Component {
         }
 
         return (
+            <div>
             <div className={classes.mainComponent}>
                 <div className={classes.leftPanel} >
                     <TrainerSearchSidebar
@@ -438,6 +439,7 @@ class TrainerSearchView extends Component {
                             <Button className={classes.export}>Export</Button>
                         </div>
                     </div>
+                    <div>
                     <Paper>
                         <Table id="trainer-search-table">
                             <TableHead>
@@ -457,7 +459,9 @@ class TrainerSearchView extends Component {
                             </TableBody>
                         </Table>
                     </Paper>
+                    </div>
                 </div>
+            </div>
             </div>
         )
     }
