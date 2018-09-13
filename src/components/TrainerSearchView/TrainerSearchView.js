@@ -140,14 +140,20 @@ class TrainerSearchView extends Component {
         console.log(e.target.checked);
         let newSet = new Set(this.state.checkboxesSelected.state_name);
 
-        if (e.target.value === 'all' && e.target.checked) {
-            newSet = new Set(this.state.checkboxesDisplayed.state_name)
-        } else if (e.target.value === 'all' && !e.target.checked) {
-            newSet = new Set();
+        if (e.target.value === 'all') {
+            this.setState({
+                checkAlls: {
+                    ...this.state.checkAlls,
+                    stateCheckAll: !this.state.checkAlls.stateCheckAll
+                }
+            })
+            if (e.target.checked){
+                newSet = new Set(this.state.checkboxesDisplayed.state_name);
+            } else if (!e.target.checked){
+                newSet = new Set();
+            }
         }
 
-        let sloSet = new Set();
-        let cohortSet = new Set();
         if (newSet.has(e.target.value)) {
             newSet.delete(e.target.value)
         } else {
@@ -158,10 +164,6 @@ class TrainerSearchView extends Component {
             checkboxesSelected: {
                 ...this.state.checkboxesSelected,
                 state_name: newSet
-            },
-            checkAlls: {
-                ...this.state.checkAlls,
-                stateCheckAll: !this.state.checkAlls.stateCheckAll
             }
         }, () => this.applyFilters('state'))
     }
@@ -169,13 +171,20 @@ class TrainerSearchView extends Component {
     handleSloCheckbox = (e) => {
         let newSet = new Set(this.state.checkboxesSelected.state_level_organization_name);
 
-        if (e.target.value === 'all' && e.target.checked) {
-            newSet = new Set(this.state.checkboxesDisplayed.state_level_organization_name)
-        } else if (e.target.value === 'all' && !e.target.checked) {
-            newSet = new Set();
+        if (e.target.value === 'all') {
+            this.setState({
+                checkAlls: {
+                    ...this.state.checkAlls,
+                    sloCheckAll: !this.state.checkAlls.sloCheckAll
+                }
+            })
+            if (e.target.checked){
+                newSet = new Set(this.state.checkboxesDisplayed.state_level_organization_name);
+            } else if (!e.target.checked){
+                newSet = new Set();
+            }
         }
 
-        let cohortSet = new Set();
         if (newSet.has(e.target.value)) {
             newSet.delete(e.target.value)
         } else {
@@ -193,10 +202,18 @@ class TrainerSearchView extends Component {
     handleCohortCheckbox = (e) => {
         let newSet = new Set(this.state.checkboxesSelected.cohort_name);
 
-        if (e.target.value === 'all' && e.target.checked) {
-            newSet = new Set(this.state.checkboxesDisplayed.cohort_name)
-        } else if (e.target.value === 'all' && !e.target.checked) {
-            newSet = new Set();
+        if (e.target.value === 'all') {
+            this.setState({
+                checkAlls: {
+                    ...this.state.checkAlls,
+                    cohortCheckAll: !this.state.checkAlls.cohortCheckAll
+                }
+            })
+            if (e.target.checked){
+                newSet = new Set(this.state.checkboxesDisplayed.cohort_name);
+            } else if (!e.target.checked){
+                newSet = new Set();
+            }
         }
 
         if (newSet.has(e.target.value)) {
@@ -327,7 +344,7 @@ class TrainerSearchView extends Component {
 
     getLastNext = (requirementsArray) => {
         if (!requirementsArray) {
-            return;
+            return ['n/a', 'n/a', 'n/a'];
         }
 
         let lastNext = [null, null, null];
@@ -399,6 +416,7 @@ class TrainerSearchView extends Component {
                     <TrainerSearchSidebar
                         checkboxesDisplayed={this.state.checkboxesDisplayed}
                         checkboxesSelected={this.state.checkboxesSelected}
+                        checkAlls={this.state.checkAlls}
                         handleStateCheckbox={this.handleStateCheckbox}
                         handleSloCheckbox={this.handleSloCheckbox}
                         handleCohortCheckbox={this.handleCohortCheckbox}
