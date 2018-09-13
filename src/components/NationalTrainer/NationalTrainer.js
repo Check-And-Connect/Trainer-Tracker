@@ -19,7 +19,7 @@ const styles = {
 };
 
 const mapStateToProps = state => {
-  
+  user: state.user
 }
 class NationalTrainer extends Component {
   componentDidMount() {
@@ -30,7 +30,12 @@ class NationalTrainer extends Component {
     });
   }
 
+  
+
   componentDidUpdate(prevProps) {
+      if (!this.props.user.isLoading && this.props.user.userName === null) {
+        this.props.history.push("home");
+      }
     if(prevProps.nationalTrainers.allNationalTrainers.length === 0 && this.props.nationalTrainers.allNationalTrainers.length !== 0){
       this.props.dispatch({
         type: NATIONAL_TRAINER_ACTIONS.FETCH_ALL_NATIONAL_TRAINERS

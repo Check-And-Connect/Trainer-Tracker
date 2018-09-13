@@ -104,18 +104,25 @@ router.post("/requestPasswordReset", (req, res) => {
   console.log(token);
 
   let queryText =
-    "UPDATE national_trainer SET pw_reset_token = $1, pw_reset_time = $2 WHERE email = $3";
+    "UPDATE national_trainer SET pw_reset_token = $1, pw_reset_time = $2 WHERE email = $3 RETURNING pw_reset_token";
 
   pool
     .query(queryText, [token, now, req.body.email])
-    .then(respone => {
+    .then(response => {
+
+      console.log(response.rows);
+      
+
       let text = `
       <div>
         <h3>Click the link to reset your password. The following link will expire in 1 hour.</h3>
         <br/>
-        <a href="http://localhost:3000/#/password_reset/${token}">Click here to reset your password</a>
+        <a href="http://localhost:3000/#/password_reset/${response.rows[0].pw_reset_token}">Click here to reset your password</a>
         </div>
       `;
+
+      console.log(token);
+      
 
       let mailOptions = {
         from: "checkandconnect@gmail.com",

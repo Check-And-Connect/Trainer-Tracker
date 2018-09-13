@@ -1,13 +1,18 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { triggerLogin, formError, clearError } from '../../redux/actions/loginActions';
-import { USER_ACTIONS } from '../../redux/actions/userActions';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import {
+  triggerLogin,
+  formError,
+  clearError
+} from "../../redux/actions/loginActions";
+import { USER_ACTIONS } from "../../redux/actions/userActions";
 
+import { withStyles, Button, Paper, TextField } from "@material-ui/core";
 
 const mapStateToProps = state => ({
   user: state.user,
-  login: state.login,
+  login: state.login
 });
 
 class LoginPage extends Component {
@@ -15,8 +20,8 @@ class LoginPage extends Component {
     super(props);
 
     this.state = {
-      username: '',
-      password: '',
+      username: "",
+      password: ""
     };
   }
 
@@ -27,65 +32,68 @@ class LoginPage extends Component {
 
   componentDidUpdate() {
     if (!this.props.user.isLoading && this.props.user.userName !== null) {
-      this.props.history.push('trainersearch');
+      this.props.history.push("trainersearch");
     }
   }
 
-  login = (event) => {
+  login = event => {
     event.preventDefault();
 
-    if (this.state.username === '' || this.state.password === '') {
+    if (this.state.username === "" || this.state.password === "") {
       this.props.dispatch(formError());
     } else {
-      this.props.dispatch(triggerLogin(this.state.username, this.state.password));
+      this.props.dispatch(
+        triggerLogin(this.state.username, this.state.password)
+      );
     }
-  }
+  };
 
-  handleInputChangeFor = propertyName => (event) => {
+  handleInputChangeFor = propertyName => event => {
     this.setState({
-      [propertyName]: event.target.value,
+      [propertyName]: event.target.value
     });
-  }
+  };
 
   renderAlert() {
-    if (this.props.login.message !== '') {
+    if (this.props.login.message !== "") {
       return (
-        <h2
-          className="alert"
-          role="alert"
-        >
-          { this.props.login.message }
+        <h2 className="alert" role="alert">
+          {this.props.login.message}
         </h2>
       );
     }
-    return (<span />);
+    return <span />;
   }
 
   render() {
     return (
-      <div>
-        { this.renderAlert() }
+      <div className="loginContainer">
+        <img
+          className="logo"
+          src={require("../../styles/images/checkconnect_logo_h_rgb.jpg")}
+        />
+        {this.renderAlert()}
         <form onSubmit={this.login}>
-          <h1>Login</h1>
+          <h3></h3>
           <div>
             <label htmlFor="username">
               Username:
-              <input
+              <TextField
                 type="text"
                 name="username"
                 value={this.state.username}
-                onChange={this.handleInputChangeFor('username')}
+                onChange={this.handleInputChangeFor("username")}
               />
             </label>
           </div>
           <div>
             <label htmlFor="password">
               Password:
-              <input
+              <TextField
                 type="password"
                 name="password"
                 value={this.state.password}
-                onChange={this.handleInputChangeFor('password')}
+                onChange={this.handleInputChangeFor("password")}
               />
             </label>
           </div>

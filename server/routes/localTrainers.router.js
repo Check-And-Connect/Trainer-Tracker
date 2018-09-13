@@ -76,6 +76,7 @@ router.get("/", rejectUnauthenticated, (req, res) => {
             local_trainers_id: element.local_trainers_id,
             first_name: element.first_name,
             last_name: element.last_name,
+            status: element.status,
             cohort: {
               cohort_id: element.cohort_id,
               cohort_name: element.name
@@ -326,8 +327,9 @@ router.post("/scheduleForRequirement/:local_trainer_id", (req, res) => {
 // i.e. FROM THE TRAINER DETAILS VIEW
 router.put("/:id", rejectUnauthenticated, (req, res) => {
   console.log("local_trainer PUT route for", req.params.id);
-  const editLocalTrainerDetailsQuery = `UPDATE local_trainers SET first_name = $1, last_name = $2, title = $3, email = $4, phone_number = $5, organization = $6, district = $7, notes = $8
-                                        WHERE local_trainers_id = $9`;
+  console.log(req.body);
+  const editLocalTrainerDetailsQuery = `UPDATE local_trainers SET first_name = $1, last_name = $2, title = $3, email = $4, phone_number = $5, organization = $6, district = $7, notes = $8, cohort_ref_id = $9
+                                        WHERE local_trainers_id = $10`;
   pool
     .query(editLocalTrainerDetailsQuery, [
       req.body.first_name,
@@ -338,6 +340,7 @@ router.put("/:id", rejectUnauthenticated, (req, res) => {
       req.body.organization,
       req.body.district,
       req.body.notes,
+      req.body.cohort_ref_id,
       req.params.id
     ])
     .then(PGres => {
@@ -417,5 +420,19 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
     });
   }
 });
+
+// THIS ROUTE TOGGLES LOCAL TRAINER STATUS AND THAT'S ALL IT DOES
+router.put("/status/:id", (req, res) => {
+  console.log('toggle route reached');
+  const toggleTrainerQuery = `UPDATE local_trainers SET status = NOT status WHERE local_trainers_id = $1;`;
+  pool.query(toggleTrainerQuery, [req.params.id])
+    .then(PGres => {
+      res.sendStatus(200)
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(500);
+    })
+})
 
 module.exports = router;
