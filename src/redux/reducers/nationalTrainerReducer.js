@@ -22,7 +22,31 @@ const oneNationalTrainer = (state = [], action) => {
     }
 }; 
 
+const emailConfirmation = (state = [], action) => {
+    switch (action.type) {
+        case NATIONAL_TRAINER_ACTIONS.SET_EMAIL:
+            return action.payload
+        case   NATIONAL_TRAINER_ACTIONS.UNSET_EMAIL:
+            return []
+        default:
+            return state;
+    }
+};
+
+const passwordResetConfrimation = (state = [] , action) => {
+    switch (action.type) {
+        case NATIONAL_TRAINER_ACTIONS.CONFIRM_PASSWORD_RESET:
+            return action.payload
+        case NATIONAL_TRAINER_ACTIONS.UNSET_COFIRM_PASSWORD_RESET:
+            return []
+        default:
+            return state;
+    }
+}
+
 export default combineReducers({
     allNationalTrainers,
-    oneNationalTrainer
+    oneNationalTrainer,
+    emailConfirmation,
+    passwordResetConfrimation
 });
