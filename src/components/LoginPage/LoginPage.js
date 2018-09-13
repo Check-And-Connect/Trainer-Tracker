@@ -98,8 +98,12 @@ class LoginPage extends Component {
             </label>
           </div>
           <div>
-            <input type="submit" name="submit" value="Log In" />
-            <Link to="/register">Forgot Password?</Link>
+            <input
+              type="submit"
+              name="submit"
+              value="Log In"
+            />
+            <Link to="/confrim_email">Forgot Password</Link>
           </div>
         </form>
       </div>
