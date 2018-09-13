@@ -163,27 +163,27 @@ class TrainerSearchView extends Component {
                 ...this.state.checkAlls,
                 stateCheckAll: !this.state.checkAlls.stateCheckAll
             }
-        })
+        }, this.applyFilters)
 
-        let filteredTrainersList = [];
-        this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
-            if (newSet.has(trainer.state)){
-                sloSet.add(trainer.state_level_organization.state_level_organization_name);
-                cohortSet.add(trainer.cohort.cohort_name);
-                filteredTrainersList.push(trainer)
-            }
-        })
+        // let filteredTrainersList = [];
+        // this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
+        //     if (newSet.has(trainer.state)){
+        //         sloSet.add(trainer.state_level_organization.state_level_organization_name);
+        //         cohortSet.add(trainer.cohort.cohort_name);
+        //         filteredTrainersList.push(trainer)
+        //     }
+        // })
 
-        console.log(sloSet);
+        // console.log(sloSet);
 
-        this.setState({
-            localTrainers: filteredTrainersList,
-            checkboxesDisplayed: {
-                ...this.state.checkboxesDisplayed,
-                state_level_organization_name: sloSet,
-                cohort_name: cohortSet
-            }
-        })
+        // this.setState({
+        //     localTrainers: filteredTrainersList,
+        //     checkboxesDisplayed: {
+        //         ...this.state.checkboxesDisplayed,
+        //         state_level_organization_name: sloSet,
+        //         cohort_name: cohortSet
+        //     }
+        // })
     }
 
     handleSloCheckbox = (e) => {
@@ -288,6 +288,30 @@ class TrainerSearchView extends Component {
         })
     }
 
+    applyFilters = () => {
+        console.log(this.state.checkboxesSelected);
+        let displayedSloCheckboxes = new Set();
+        let displayedCohortCheckboxes = new Set();
+        let filteredTrainers = [];
+
+        this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
+            if (this.state.checkboxesSelected.state_name.has(trainer.state) && this.state.checkboxesSelected.state_level_organization_name.has(trainer.state_level_organization.state_level_organization_name) && this.state.checkboxesSelected.cohort_name.has(trainer.cohort.cohort_name) && ((this.state.checkboxesSelected.status.has('Active') && trainer.status) || (this.state.checkboxesSelected.status.has('Inactive') && !trainer.status))){
+                displayedSloCheckboxes.add(trainer.state_level_organization.state_level_organization_name)
+                displayedCohortCheckboxes.add(trainer.cohort.cohort_name)
+                filteredTrainers.push(trainer)
+            }
+        })
+
+        this.setState({
+            localTrainers: filteredTrainers,
+            checkboxesDisplayed: {
+                ...this.state.checkboxesDisplayed,
+                state_level_organization_name: displayedSloCheckboxes,
+                cohort_name: displayedCohortCheckboxes
+            }
+        })
+    }
+
     handleSearchTable = searchKey => {
         if (this.state.searchKey === "") {
           this.setState({
@@ -307,7 +331,7 @@ class TrainerSearchView extends Component {
 
     handleSearchTableWithKey = () => {
         let flag = false;
-        console.log(this.state.trainersBeforeSearch);
+        // console.log(this.state.trainersBeforeSearch);
     
         let filteredTrainers = this.state.trainersBeforeSearch.filter(
           localTrainer => {
