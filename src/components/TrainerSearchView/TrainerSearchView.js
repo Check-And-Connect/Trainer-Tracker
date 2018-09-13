@@ -14,40 +14,40 @@ import { Table, TableBody, TableHead, TableRow, TableCell } from '@material-ui/c
 
 const styles = {
     mainComponent: {
-      display: "Grid",
-      gridTemplateColumns: "1fr 4fr"
+        display: "Grid",
+        gridTemplateColumns: "1fr 4fr"
     },
     leftPanel: {
-      display: "Grid",
-      gridTemplateRows: "0.3fr 8fr",
+        display: "Grid",
+        gridTemplateRows: "0.3fr 9fr",
     },
     rightPanel: {
-      display : "Grid",
-      gridTemplateRows: "0.3fr 8fr",
-      margin: "0em 1em"
+        display: "Grid",
+        gridTemplateRows: "0.3fr 9fr",
+        margin: "0em 1em"
     },
     tableCell: {
         padding: 0,
         textAlign: "center",
         fontSize: "0.8em"
-      },
-      buttonInCell: {
+    },
+    buttonInCell: {
         fontSize: "0.8em",
         textDecoration: 'none',
-      },
-      textField : {
-        margin : '0em 0em 0.5em 1em',
-      },
-      searchAndExport: {
+    },
+    textField: {
+        margin: '0em 0em 0.5em 1em',
+    },
+    searchAndExport: {
         display: "Grid",
         gridTemplateColumns: "7fr 1fr"
-      },
-      export: {
+    },
+    export: {
         marginTop: "1em",
         textAlign: "center"
-      }
+    }
 
-  };
+};
 
 class TrainerSearchView extends Component {
     constructor(props) {
@@ -100,7 +100,7 @@ class TrainerSearchView extends Component {
             // piece of local state. This ensures that we only ever show checkbox filters for the trainers in the table.
             let displayedTrainersList = [];
             this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
-                if (trainer.status){
+                if (trainer.status) {
                     newDisplayedCheckboxes.state_name.add(trainer.state)
                     newDisplayedCheckboxes.state_level_organization_name.add(trainer.state_level_organization.state_level_organization_name)
                     newDisplayedCheckboxes.cohort_name.add(trainer.cohort.cohort_name)
@@ -140,15 +140,15 @@ class TrainerSearchView extends Component {
         console.log(e.target.checked);
         let newSet = new Set(this.state.checkboxesSelected.state_name);
 
-        if (e.target.value === 'all' && e.target.checked){
+        if (e.target.value === 'all' && e.target.checked) {
             newSet = new Set(this.state.checkboxesDisplayed.state_name)
-        } else if (e.target.value === 'all' && !e.target.checked){
+        } else if (e.target.value === 'all' && !e.target.checked) {
             newSet = new Set();
         }
 
         let sloSet = new Set();
-        let cohortSet= new Set();
-        if (newSet.has(e.target.value)){
+        let cohortSet = new Set();
+        if (newSet.has(e.target.value)) {
             newSet.delete(e.target.value)
         } else {
             newSet.add(e.target.value)
@@ -169,14 +169,14 @@ class TrainerSearchView extends Component {
     handleSloCheckbox = (e) => {
         let newSet = new Set(this.state.checkboxesSelected.state_level_organization_name);
 
-        if (e.target.value === 'all' && e.target.checked){
+        if (e.target.value === 'all' && e.target.checked) {
             newSet = new Set(this.state.checkboxesDisplayed.state_level_organization_name)
-        } else if (e.target.value === 'all' && !e.target.checked){
+        } else if (e.target.value === 'all' && !e.target.checked) {
             newSet = new Set();
         }
 
-        let cohortSet= new Set();
-        if (newSet.has(e.target.value)){
+        let cohortSet = new Set();
+        if (newSet.has(e.target.value)) {
             newSet.delete(e.target.value)
         } else {
             newSet.add(e.target.value)
@@ -193,13 +193,13 @@ class TrainerSearchView extends Component {
     handleCohortCheckbox = (e) => {
         let newSet = new Set(this.state.checkboxesSelected.cohort_name);
 
-        if (e.target.value === 'all' && e.target.checked){
+        if (e.target.value === 'all' && e.target.checked) {
             newSet = new Set(this.state.checkboxesDisplayed.cohort_name)
-        } else if (e.target.value === 'all' && !e.target.checked){
+        } else if (e.target.value === 'all' && !e.target.checked) {
             newSet = new Set();
         }
 
-        if (newSet.has(e.target.value)){
+        if (newSet.has(e.target.value)) {
             newSet.delete(e.target.value)
         } else {
             newSet.add(e.target.value)
@@ -216,7 +216,7 @@ class TrainerSearchView extends Component {
     handleStatusCheckbox = (e) => {
         let newSet = new Set(this.state.checkboxesSelected.status)
 
-        if (newSet.has(e.target.value)){
+        if (newSet.has(e.target.value)) {
             newSet.delete(e.target.value)
         } else {
             newSet.add(e.target.value)
@@ -236,22 +236,22 @@ class TrainerSearchView extends Component {
         let displayedSloCheckboxes = this.state.checkboxesDisplayed.state_level_organization_name;
         let displayedCohortCheckboxes = this.state.checkboxesDisplayed.cohort_name;
 
-        if (category === 'state'){
+        if (category === 'state') {
             displayedSloCheckboxes = new Set();
         }
-        if (category === 'state' || category === 'slo'){
+        if (category === 'state' || category === 'slo') {
             displayedCohortCheckboxes = new Set();
         }
 
         this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
-            if (this.state.checkboxesSelected.state_name.has(trainer.state) 
-                && this.state.checkboxesSelected.state_level_organization_name.has(trainer.state_level_organization.state_level_organization_name) 
-                && this.state.checkboxesSelected.cohort_name.has(trainer.cohort.cohort_name) 
-                && ((this.state.checkboxesSelected.status.has('Active') && trainer.status) || (this.state.checkboxesSelected.status.has('Inactive') && !trainer.status))){
-                if (category === 'state'){
+            if (this.state.checkboxesSelected.state_name.has(trainer.state)
+                && this.state.checkboxesSelected.state_level_organization_name.has(trainer.state_level_organization.state_level_organization_name)
+                && this.state.checkboxesSelected.cohort_name.has(trainer.cohort.cohort_name)
+                && ((this.state.checkboxesSelected.status.has('Active') && trainer.status) || (this.state.checkboxesSelected.status.has('Inactive') && !trainer.status))) {
+                if (category === 'state') {
                     displayedSloCheckboxes.add(trainer.state_level_organization.state_level_organization_name);
                 }
-                if (category === 'state' || category === 'slo'){
+                if (category === 'state' || category === 'slo') {
                     displayedCohortCheckboxes.add(trainer.cohort.cohort_name)
                 }
                 filteredTrainers.push(trainer)
@@ -270,75 +270,79 @@ class TrainerSearchView extends Component {
 
     handleSearchTable = searchKey => {
         if (this.state.searchKey === "") {
-          this.setState({
-            trainersBeforeSearch: this.state.localTrainers
-          });
+            this.setState({
+                trainersBeforeSearch: this.state.localTrainers
+            });
         }
-    
+
         this.setState(
-          {
-            searchKey: searchKey
-          },
-          () => {
-            this.handleSearchTableWithKey();
-          }
+            {
+                searchKey: searchKey
+            },
+            () => {
+                this.handleSearchTableWithKey();
+            }
         );
-      };
+    };
 
     handleSearchTableWithKey = () => {
         let flag = false;
         // console.log(this.state.trainersBeforeSearch);
-    
-        let filteredTrainers = this.state.trainersBeforeSearch.filter(
-          localTrainer => {
-            flag = false;
-            let checkStringEquality = object => {
-              Object.keys(object).forEach(key => {
-                if (typeof object[key] === "string" || typeof object[key] === 'number') {
 
-                  if (object[key].toString().toLowerCase().includes(this.state.searchKey.toLowerCase())) {
-                    // console.log(object[key].toString().toLowerCase() + ' includes ' + this.state.searchKey);
-                    
-                    flag = true;
-                    
-                  }
-                } else if (Array.isArray(object[key])) {
-    
-                  object[key].forEach(objectInKey => {
-                    checkStringEquality(objectInKey);
-                  });
-                } else if (typeof object[key] === "object" && object[key] !== null) {
-    
-                  checkStringEquality(object[key]);
-                }
-              });
-            };
-    
-            checkStringEquality(localTrainer);
-            
-            return flag;
-          }
+        let filteredTrainers = this.state.trainersBeforeSearch.filter(
+            localTrainer => {
+                flag = false;
+                let checkStringEquality = object => {
+                    Object.keys(object).forEach(key => {
+                        if (typeof object[key] === "string" || typeof object[key] === 'number') {
+
+                            if (object[key].toString().toLowerCase().includes(this.state.searchKey.toLowerCase())) {
+                                // console.log(object[key].toString().toLowerCase() + ' includes ' + this.state.searchKey);
+
+                                flag = true;
+
+                            }
+                        } else if (Array.isArray(object[key])) {
+
+                            object[key].forEach(objectInKey => {
+                                checkStringEquality(objectInKey);
+                            });
+                        } else if (typeof object[key] === "object" && object[key] !== null) {
+
+                            checkStringEquality(object[key]);
+                        }
+                    });
+                };
+
+                checkStringEquality(localTrainer);
+
+                return flag;
+            }
         );
-    
+
         this.setState({
-          localTrainers : filteredTrainers
+            localTrainers: filteredTrainers
         })
-      };
+    };
 
     getLastNext = (requirementsArray) => {
+        if (!requirementsArray) {
+            return;
+        }
+
         let lastNext = [null, null, null];
         requirementsArray.sort((a, b) => {
             return a.requirement_id - b.requirement_id
         })
-        for (let i=0; i<requirementsArray.length; i++){
-            if (requirementsArray[i].completed === null){
+        for (let i = 0; i < requirementsArray.length; i++) {
+            if (requirementsArray[i].completed === null) {
                 lastNext[1] = requirementsArray[i].requirement_name;
                 lastNext[2] = moment(requirementsArray[i].requirement_due_date).format("MM-DD-YYYY");
-                if (i === 0){
+                if (i === 0) {
                     lastNext[0] = 'n/a';
                     return lastNext
                 } else {
-                    lastNext[0] = requirementsArray[i-1].requirement_name;
+                    lastNext[0] = requirementsArray[i - 1].requirement_name;
                     return lastNext;
                 }
             }
@@ -356,7 +360,7 @@ class TrainerSearchView extends Component {
                 return (
                     <TableRow key={trainer.local_trainers_id}>
                         <TableCell className={classes.tableCell}>
-                            <Link 
+                            <Link
                                 to={"/cohort" + trainer.cohort.cohort_id}
                                 className={classes.buttonInCell}
                             >
@@ -364,7 +368,7 @@ class TrainerSearchView extends Component {
                             </Link>
                         </TableCell>
                         <TableCell className={classes.tableCell}>
-                            <Link 
+                            <Link
                                 to={"/trainerdetails/" + trainer.local_trainers_id}
                                 className={classes.buttonInCell}
                             >
@@ -372,7 +376,7 @@ class TrainerSearchView extends Component {
                             </Link>
                         </TableCell>
                         <TableCell className={classes.tableCell} >
-                            <Link 
+                            <Link
                                 to={"/trainerdetails/" + trainer.local_trainers_id}
                                 className={classes.buttonInCell}
                             >
@@ -390,50 +394,48 @@ class TrainerSearchView extends Component {
         }
 
         return (
-            <React.Fragment>
             <div className={classes.mainComponent}>
-                 <div className={classes.leftPanel} >
-                    <TrainerSearchSidebar 
+                <div className={classes.leftPanel} >
+                    <TrainerSearchSidebar
                         checkboxesDisplayed={this.state.checkboxesDisplayed}
                         checkboxesSelected={this.state.checkboxesSelected}
                         handleStateCheckbox={this.handleStateCheckbox}
                         handleSloCheckbox={this.handleSloCheckbox}
                         handleCohortCheckbox={this.handleCohortCheckbox}
                         handleStatusCheckbox={this.handleStatusCheckbox}
-                    />                 
+                    />
                 </div>
                 <div className={classes.rightPanel}>
                     <div className={classes.searchAndExport}>
-                        <TrainerTableSearch 
+                        <TrainerTableSearch
                             search={this.handleSearchTable}
-                            searchKey={this.state.searchKey} 
+                            searchKey={this.state.searchKey}
                         />
-                            <div>
-                                <Button className={classes.export}>Export</Button>
-                            </div>
+                        <div>
+                            <Button className={classes.export}>Export</Button>
+                        </div>
                     </div>
-                <Paper>
-                <Table id="trainer-search-table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell className={classes.tableCell} >Cohort</TableCell>
-                            <TableCell className={classes.tableCell} >First Name</TableCell>
-                            <TableCell className={classes.tableCell} >Last Name</TableCell>
-                            <TableCell className={classes.tableCell} >State</TableCell>
-                            <TableCell className={classes.tableCell} >State-Level Org.</TableCell>
-                            <TableCell className={classes.tableCell} >Last Completed Req.</TableCell>
-                            <TableCell className={classes.tableCell} >Upcoming Req.</TableCell>
-                            <TableCell className={classes.tableCell} >Due Date</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {trainersTableBody}
-                    </TableBody>
-                </Table>
-                </Paper>
+                    <Paper>
+                        <Table id="trainer-search-table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell className={classes.tableCell} >Cohort</TableCell>
+                                    <TableCell className={classes.tableCell} >First Name</TableCell>
+                                    <TableCell className={classes.tableCell} >Last Name</TableCell>
+                                    <TableCell className={classes.tableCell} >State</TableCell>
+                                    <TableCell className={classes.tableCell} >State-Level Org.</TableCell>
+                                    <TableCell className={classes.tableCell} >Last Completed Req.</TableCell>
+                                    <TableCell className={classes.tableCell} >Upcoming Req.</TableCell>
+                                    <TableCell className={classes.tableCell} >Due Date</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {trainersTableBody}
+                            </TableBody>
+                        </Table>
+                    </Paper>
                 </div>
             </div>
-            </React.Fragment>
         )
     }
 };
