@@ -4,17 +4,13 @@ import { connect } from 'react-redux';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { NATIONAL_TRAINER_ACTIONS } from '../../redux/actions/nationalTrainerActions';
 
-import { Edit, Save } from '@material-ui/icons';
-
 import axios from 'axios';
 
 import {
     TextField,
     withStyles,
-    Grid,
     Button,
-    Divider,
-    InputLabel
+    Typography
 } from '@material-ui/core';
 
 const mapStateToProps = state => ({
@@ -25,8 +21,13 @@ const mapStateToProps = state => ({
 const styles = {
     textField: {
         margin: '0em 0em 0.5em 0em',
-        width: "14em"
+        width: "12em",
+        textAlign: "center"
+    },
+    button: {
+        margin: '0em 0em 0.5em 0em',
     }
+
 }
 
 class AccountDetails extends Component {
@@ -98,130 +99,89 @@ class AccountDetails extends Component {
         if (this.props.user.userName && this.state.editDetails === false) {
             content = (
                 <div>
-                    <Grid container>
-                        <Grid item xs={12}></Grid>
-                        <Grid item xs={5}></Grid>
-                        <Grid item xs={4}>
-                            <h2>Account Details</h2>
-                        </Grid>
-                        <Grid item xs={3}></Grid>
-                    </Grid>
-                    <Grid container>
-                        <Grid item xs={5}></Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                className={this.props.classes.textField}
-                                label="First Name"
-                                value={this.state.nationalTrainer.first_name}
-                                onChange={this.handleChangeFor('first_name')}
-                                margin="normal"
-                            />
-                        </Grid>
-                        <Grid item xs={3}></Grid>
-
-                        <Grid item xs={5}></Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                className={this.props.classes.textField}
-                                label="Last Name"
-                                value={this.state.nationalTrainer.last_name}
-                                onChange={this.handleChangeFor('last_name')}
-                                margin="normal"
-                            />
-                        </Grid>
-                        <Grid item xs={3}></Grid>
-
-                        <Grid item xs={5}></Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                className={this.props.classes.textField}
-                                label="Title"
-                                value={this.state.nationalTrainer.title}
-                                onChange={this.handleChangeFor('title')}
-                                margin="normal"
-                            />
-                        </Grid>
-                        <Grid item xs={3}></Grid>
-
-                        <Grid item xs={5}></Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                className={this.props.classes.textField}
-                                label="Email"
-                                value={this.state.nationalTrainer.email}
-                                onChange={this.handleChangeFor('email')}
-                                margin="normal"
-                            />
-                        </Grid>
-                        <Grid item xs={3}></Grid>
-                    </Grid>
+                    <Typography className='centerHeadings' variant="display2">Account Details</Typography>
+                    <div className='centerHeadings'>
+                        <TextField
+                            className={this.props.classes.textField}
+                            label="First Name"
+                            value={this.state.nationalTrainer.first_name}
+                            onChange={this.handleChangeFor('first_name')}
+                            margin="normal"
+                        />
+                    </div>
+                    <div className='centerHeadings'>
+                        <TextField
+                            className={this.props.classes.textField}
+                            label="Last Name"
+                            value={this.state.nationalTrainer.last_name}
+                            onChange={this.handleChangeFor('last_name')}
+                            margin="normal"
+                        />
+                    </div>
+                    <div className='centerHeadings'>
+                        <TextField
+                            className={this.props.classes.textField}
+                            label="Title"
+                            value={this.state.nationalTrainer.title}
+                            onChange={this.handleChangeFor('title')}
+                            margin="normal"
+                        />
+                    </div>
+                    <div className='centerHeadings'>
+                        <TextField
+                            className={this.props.classes.textField}
+                            label="Email"
+                            value={this.state.nationalTrainer.email}
+                            onChange={this.handleChangeFor('email')}
+                            margin="normal"
+                        />
+                    </div>
                 </div>
             );
         } else {
             content = (
                 <div>
-                    <Grid container>
-                        <Grid item xs={12}></Grid>
-                        <Grid item xs={5}></Grid>
-                        <Grid item xs={7}>
-                            <h2>Account Details</h2>
-                        </Grid>
-                    </Grid>
-                    <Grid container>
-                        <Grid item xs={5}></Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                className={this.props.classes.textField}
-                                label="First Name"
-                                value={this.state.nationalTrainer.first_name}
-                                onChange={this.handleChangeFor('first_name')}
-                                margin="normal"
-                            />
-                        </Grid>
-                        <Grid item xs={3}></Grid>
+                    <Typography className='centerHeadings' variant="display2">Account Details</Typography>
+                    <div className='centerHeadings'>
+                        <TextField
+                            className={this.props.classes.textField}
+                            label="First Name"
+                            value={this.state.nationalTrainer.first_name}
+                            onChange={this.handleChangeFor('first_name')}
+                            margin="normal"
+                        />
+                    </div>
+                    <div className='centerHeadings'>
+                        <TextField
+                            className={this.props.classes.textField}
+                            label="Last Name"
+                            value={this.state.nationalTrainer.last_name}
+                            onChange={this.handleChangeFor('last_name')}
+                            margin="normal"
+                        />
+                    </div>
+                    <div className='centerHeadings'>
+                        <TextField
+                            className={this.props.classes.textField}
+                            label="Title"
+                            value={this.state.nationalTrainer.title}
+                            onChange={this.handleChangeFor('title')}
+                            margin="normal"
+                        />
+                    </div>
+                    <div className='centerHeadings'>
+                        <TextField
+                            className={this.props.classes.textField}
+                            label="Email"
+                            value={this.state.nationalTrainer.email}
+                            onChange={this.handleChangeFor('email')}
+                            margin="normal"
+                        />
+                    </div>
+                    <div className='centerHeadings'>
+                                <Button className={this.props.classes.button} variant="outlined" onClick={this.saveNationalTrainer}>Save</Button>
+                    </div>
 
-                        <Grid item xs={5}></Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                className={this.props.classes.textField}
-                                label="Last Name"
-                                value={this.state.nationalTrainer.last_name}
-                                onChange={this.handleChangeFor('last_name')}
-                                margin="normal"
-                            />
-                        </Grid>
-                        <Grid item xs={3}></Grid>
-
-                        <Grid item xs={5}></Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                className={this.props.classes.textField}
-                                label="Title"
-                                value={this.state.nationalTrainer.title}
-                                onChange={this.handleChangeFor('title')}
-                                margin="normal"
-                            />
-                        </Grid>
-                        <Grid item xs={3}></Grid>
-
-                        <Grid item xs={5}></Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                className={this.props.classes.textField}
-                                label="Email"
-                                value={this.state.nationalTrainer.email}
-                                onChange={this.handleChangeFor('email')}
-                                margin="normal"
-                            />
-                        </Grid>
-                        <Grid item xs={3}></Grid>
-                        <Grid item xs={5}></Grid>
-                        <Grid item xs={7}>
-                            <h2>
-                                <Button variant="raised" onClick={this.saveNationalTrainer}>Save</Button>
-                            </h2>
-                        </Grid>
-                    </Grid>
                 </div>
             );
         }

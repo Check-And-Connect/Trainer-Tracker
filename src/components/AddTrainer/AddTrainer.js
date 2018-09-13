@@ -18,7 +18,8 @@ import {
     TableCell,
     TableHead,
     TableRow,
-    Paper
+    Paper,
+    Typography
 } from '@material-ui/core';
 
 const mapStateToProps = state => ({
@@ -30,18 +31,18 @@ const mapStateToProps = state => ({
 
 const styles = {
     textField: {
-        margin: '0em 0em 0.5em 1em',
+        margin: '0em 0em 0.5em 0em',
         width: "14em"
     },
     dropDown: {
         width: "10em"
     },
     formControl: {
-        margin: '0em 0em 0.5em 1em',
+        margin: '0em 0em 0.5em 0em',
         width: "14em"
     },
     selectEmpty: {
-        marginTop: '0em 0em 0.5em 1em' * 2,
+        marginTop: '0em 0em 0.5em 0em' * 2,
     }
 }
 
@@ -157,7 +158,6 @@ class AddTrainer extends Component {
             return <MenuItem key={index} value={item.cohort_id}>{item.name}</MenuItem>
         })
         let recentListArray = this.state.recentlyAdded.map((item, index) => {
-            // return <li key={index}>NAME: {item.first_name} {item.last_name} STATE: {item.state}</li>
             return <TableRow key={index}>
                 <TableCell>
                     {item.first_name}
@@ -176,13 +176,14 @@ class AddTrainer extends Component {
         if (this.props.user.userName) {
             content = (
                 <div>
-                    <h2 className='centerHeadings'>Create New Trainer</h2>
+                    <Typography className='centerHeadings' variant="display2">Create New Trainer</Typography>
                     <Grid container>
-                        <Grid item xs={3}></Grid>
-                        <Grid item xs={9}>
+                        <Grid item xs={2}></Grid>
+                        <Grid item xs={8}>
                             <form className='trainerForm'>
                                 <Grid container>
-                                    <Grid item xs={4}>
+                                    <Grid item xs={2}></Grid>
+                                    <Grid item xs={5}>
                                         <TextField
                                             className={this.props.classes.textField}
                                             label="First Name"
@@ -191,7 +192,7 @@ class AddTrainer extends Component {
                                             margin="normal"
                                         />
                                     </Grid>
-                                    <Grid item xs={8}>
+                                    <Grid item xs={4}>
                                         <FormControl className={this.props.classes.formControl}>
                                             <InputLabel>State</InputLabel>
                                             <Select
@@ -206,7 +207,9 @@ class AddTrainer extends Component {
                                             </Select>
                                         </FormControl>
                                     </Grid>
-                                    <Grid item xs={4}>
+                                    <Grid item xs={1}></Grid>
+                                    <Grid item xs={2}></Grid>
+                                    <Grid item xs={5}>
                                         <TextField
                                             className={this.props.classes.textField}
                                             label="Last Name"
@@ -215,7 +218,7 @@ class AddTrainer extends Component {
                                             margin="normal"
                                         />
                                     </Grid>
-                                    <Grid item xs={8}>
+                                    <Grid item xs={4}>
                                         <FormControl className={this.props.classes.formControl}>
                                             <InputLabel>State Level Organization</InputLabel>
                                             <Select
@@ -230,7 +233,9 @@ class AddTrainer extends Component {
                                             </Select>
                                         </FormControl>
                                     </Grid>
-                                    <Grid item xs={4}>
+                                    <Grid item xs={1}></Grid>
+                                    <Grid item xs={2}></Grid>
+                                    <Grid item xs={5}>
                                         <TextField
                                             className={this.props.classes.textField}
                                             label="Title"
@@ -239,7 +244,7 @@ class AddTrainer extends Component {
                                             margin="normal"
                                         />
                                     </Grid>
-                                    <Grid item xs={8}>
+                                    <Grid item xs={4}>
                                         <FormControl className={this.props.classes.formControl}>
                                             <InputLabel>Cohort</InputLabel>
                                             <Select
@@ -254,7 +259,9 @@ class AddTrainer extends Component {
                                             </Select>
                                         </FormControl>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid item xs={1}></Grid>
+                                    <Grid item xs={2}></Grid>
+                                    <Grid item xs={10}>
                                         <TextField
                                             className={this.props.classes.textField}
                                             label="Email"
@@ -263,7 +270,8 @@ class AddTrainer extends Component {
                                             margin="normal"
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid item xs={2}></Grid>
+                                    <Grid item xs={10}>
                                         <TextField
                                             className={this.props.classes.textField}
                                             label="Phone Number"
@@ -272,7 +280,8 @@ class AddTrainer extends Component {
                                             margin="normal"
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid item xs={2}></Grid>
+                                    <Grid item xs={10}>
                                         <TextField
                                             className={this.props.classes.textField}
                                             label="Organization"
@@ -281,6 +290,7 @@ class AddTrainer extends Component {
                                             margin="normal"
                                         />
                                     </Grid>
+                                    <Grid item xs={2}></Grid>
                                     <Grid item xs={5}>
                                         <TextField
                                             className={this.props.classes.textField}
@@ -290,14 +300,16 @@ class AddTrainer extends Component {
                                             margin="normal"
                                         />
                                     </Grid>
-                                    <Grid item xs={7}>
-                                        <Button variant="raised" onClick={this.addNewTrainer}>Submit</Button>
+                                    <Grid item xs={2}>
+                                        <Button variant="outlined" onClick={this.addNewTrainer}>Submit</Button>
                                     </Grid>
+                                    <Grid item xs={3}></Grid>
                                 </Grid>
                             </form>
                         </Grid>
+                        <Grid item xs={2}></Grid>
                     </Grid>
-                    <h2 className='centerHeadings'>Recently Added</h2>
+                    <Typography className='centerHeadings' variant="display1">Recently Added</Typography>
                     <Grid container>
                         <Grid item xs={1}></Grid>
                         <Grid item xs={10}>

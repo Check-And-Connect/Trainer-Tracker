@@ -113,6 +113,14 @@ li a:hover {
   float: left;
 }
 
+.leftAlign {
+    float: left;
+}
+
+.rightAlign {
+    float: right;
+} 
+
 /* center headings */
 .centerHeadings {
   text-align: center;
