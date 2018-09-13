@@ -11,7 +11,16 @@ const allNationalTrainers = (state = [], action) => {
         default:
             return state;
     }
-};
+}; 
+
+const oneNationalTrainer = (state = [], action) => {
+    switch (action.type) {
+        case NATIONAL_TRAINER_ACTIONS.SET_ONE_NATIONAL_TRAINER:
+            return action.payload
+        default:
+            return state;
+    }
+}; 
 
 const emailConfirmation = (state = [], action) => {
     switch (action.type) {
@@ -37,6 +46,7 @@ const passwordResetConfrimation = (state = [] , action) => {
 
 export default combineReducers({
     allNationalTrainers,
+    oneNationalTrainer,
     emailConfirmation,
     passwordResetConfrimation
 });

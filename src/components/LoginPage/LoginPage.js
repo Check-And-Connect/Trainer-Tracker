@@ -67,6 +67,7 @@ class LoginPage extends Component {
 
   render() {
     return (
+      <div className="outer-div">
       <div className="loginContainer">
         <img
           className="logo"
@@ -106,6 +107,7 @@ class LoginPage extends Component {
             <Link to="/confrim_email">Forgot Password</Link>
           </div>
         </form>
+      </div>
       </div>
     );
   }

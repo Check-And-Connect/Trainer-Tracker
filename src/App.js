@@ -20,6 +20,7 @@ import TrainerSearchView from './components/TrainerSearchView/TrainerSearchView'
 import TrainerDetails from './components/TrainerDetails/TrainerDetails';
 import NationalTrainer from './components/NationalTrainer/NationalTrainer';
 import AddCohort from './components/AddCohort/AddCohort';
+import AccountDetails from './components/AccountDetails/AccountDetails';
 import AddStateLevelOrg from './components/AddStateLevelOrg/AddStateLevelOrg';
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import ConfirmEmail from "./components/ConfirmEmail/ConfirmEmail";
@@ -76,6 +77,10 @@ const App = (props) => (
           path="/state_level_org"
           component={AddStateLevelOrg}
         />
+        <Route
+          path="/accountdetails"
+          component={AccountDetails}
+          />
         {/* OTHERWISE (no path!) */}
         <Route render={() => <h1>404</h1>} />
 
