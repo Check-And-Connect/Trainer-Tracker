@@ -81,6 +81,12 @@ class TrainerDetails extends Component{
             })
     }
 
+    componentDidUpdate = () => {
+        if (!this.props.user.isLoading && this.props.user.userName === null) {
+          this.props.history.push("home");
+        }
+      }
+
     handleInputChange = (e) => {
         if (e.target.name === 'notes' && !this.state.editingNotes){
             this.setState({
@@ -465,7 +471,8 @@ class TrainerDetails extends Component{
 };
 
 const mapStateToProps = state => ({
-    cohortReducer: state.cohortReducer
+    cohortReducer: state.cohortReducer,
+    user: state.user
 })
 
 const styledComponent = withStyles(styles)(TrainerDetails);
