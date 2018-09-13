@@ -25,7 +25,22 @@ const styles = {
     },
     selectEmpty: {
         marginTop: '0em 0em 0.5em 1em' * 2,
-    }
+    },
+    notesField: {
+        margin: '0em 0em 0.5em 1em',
+        width: "36em"
+    },
+    colorSwitchBase: {
+        color: '#d2d2d2',
+        '&$colorChecked': {
+          color: '#F4C256',
+          '& + $colorBar': {
+            backgroundColor: '#F4C256',
+          },
+        },
+    },
+    colorBar: {},
+    colorChecked: {},
 }
 
 class TrainerDetails extends Component{
@@ -256,15 +271,17 @@ class TrainerDetails extends Component{
                                     value={this.state.trainer.district} 
                                     onChange={this.handleInputChange}
                                 />
-                notesField = <textarea 
+                notesField = <TextField
+                                className={this.props.classes.notesField}
+                                multiline
                                 rows="10" 
-                                cols="100" 
+                                cols="500" 
                                 type="text" 
                                 name="notes" 
                                 placeholder="notes" 
                                 value={this.state.trainer.notes} 
-                                onChange={this.handleInputChange}>
-                            </textarea>
+                                onChange={this.handleInputChange}
+                            />
                 stateField = <span>
                                 <InputLabel>
                                     State
@@ -316,6 +333,11 @@ class TrainerDetails extends Component{
                                             <Switch
                                             checked={this.state.trainer.status}
                                             onChange={this.toggleStatus}
+                                            classes={{
+                                                switchBase: this.props.classes.colorSwitchBase,
+                                                checked: this.props.classes.colorChecked,
+                                                bar: this.props.classes.colorBar
+                                            }}
                                         />
                                         }
                                         label={this.state.trainer.status ? 'Active' : 'Inactive'}
@@ -337,18 +359,18 @@ class TrainerDetails extends Component{
 
         let detailsButtonArea = null;
         if (this.state.editingDetails){
-            detailsButtonArea = <Button onClick={this.handleIconClick}>{this.state.editingDetails ? "Save Changes" : ""}</Button>
+            detailsButtonArea = <Button variant="outlined" onClick={this.handleIconClick}>{this.state.editingDetails ? "Save Changes" : ""}</Button>
         }
 
         let notesButtonArea = null;
         if (this.state.editingNotes){
-            notesButtonArea = <Button onClick={this.handleIconClick}>{this.state.editingNotes ? "Save Changes" : ""}</Button>
+            notesButtonArea = <Button variant="outline" onClick={this.handleIconClick}>{this.state.editingNotes ? "Save Changes" : ""}</Button>
         }
 
         return(
             <React.Fragment>
             <div>
-                    <h2 className='centerHeadings'>Trainer Details{detailsButtonArea}</h2>
+                    <h2 className='centerHeadings'>Trainer Details</h2>
                     <Grid container>
                         <Grid item xs={3}></Grid>
                         <Grid item xs={9}>
@@ -387,8 +409,13 @@ class TrainerDetails extends Component{
                                             {statusSwitch}
                                         </FormControl>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid item xs={4}>
                                         {phoneField}
+                                    </Grid>
+                                    <Grid item={8}>
+                                        <FormControl className={this.props.classes.formControl}>
+                                            {detailsButtonArea}
+                                        </FormControl>
                                     </Grid>
                                     <Grid item xs={12}>
                                         {organizationField}
