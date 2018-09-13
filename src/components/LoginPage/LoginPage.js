@@ -8,10 +8,7 @@ import {
 } from "../../redux/actions/loginActions";
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 
-import Button from "@material-ui/core/Button";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import { withStyles } from "@material-ui/core";
+import { withStyles, Button, Paper, TextField } from "@material-ui/core";
 
 const mapStateToProps = state => ({
   user: state.user,
@@ -81,7 +78,7 @@ class LoginPage extends Component {
           <div>
             <label htmlFor="username">
               Username:
-              <input
+              <TextField
                 type="text"
                 name="username"
                 value={this.state.username}
@@ -92,7 +89,7 @@ class LoginPage extends Component {
           <div>
             <label htmlFor="password">
               Password:
-              <input
+              <TextField
                 type="password"
                 name="password"
                 value={this.state.password}
