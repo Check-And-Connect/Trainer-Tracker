@@ -347,6 +347,23 @@ class TrainerSearchView extends Component {
         })
     };
 
+    sortBy = (column) => {
+        console.log('sorting');
+        let sortedTrainers = this.state.localTrainers.sort((a, b) => {
+            if (a[column] > b[column]){
+                return 1;
+            } else if (b.first_name > a.first_name){
+                return -1;
+            } else {
+                return 0;
+            }
+        })
+        console.log(sortedTrainers);
+        this.setState({
+            localTrainers: sortedTrainers
+        })
+    } 
+
     getLastNext = (requirementsArray) => {
         if (!requirementsArray) {
             return ['n/a', 'n/a', 'n/a'];
@@ -444,10 +461,10 @@ class TrainerSearchView extends Component {
                         <Table id="trainer-search-table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell className={classes.tableCell} >Cohort</TableCell>
-                                    <TableCell className={classes.tableCell} >First Name</TableCell>
-                                    <TableCell className={classes.tableCell} >Last Name</TableCell>
-                                    <TableCell className={classes.tableCell} >State</TableCell>
+                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('cohort')}>Cohort</TableCell>
+                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('first_name')}>First Name</TableCell>
+                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('last_name')}>Last Name</TableCell>
+                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('state')}>State</TableCell>
                                     <TableCell className={classes.tableCell} >State-Level Org.</TableCell>
                                     <TableCell className={classes.tableCell} >Last Completed Req.</TableCell>
                                     <TableCell className={classes.tableCell} >Upcoming Req.</TableCell>

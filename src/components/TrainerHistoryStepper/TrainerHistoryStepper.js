@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {Timeline, Event} from 'react-timeline-scribble';
+import {Timeline, Event} from '../../vendors/build/index';
 import moment from 'moment'
 
 
