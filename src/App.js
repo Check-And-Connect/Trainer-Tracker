@@ -42,10 +42,10 @@ const App = (props) => (
           path="/national_trainer"
           component={NationalTrainer}
         />
-        <Route
+        {/* <Route
           path="/user"
           component={UserPage}
-        />
+        /> */}
         <Route
           path="/cohort_manager"
           component={CohortManager}

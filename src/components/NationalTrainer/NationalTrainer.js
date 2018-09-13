@@ -19,7 +19,7 @@ const styles = {
 };
 
 const mapStateToProps = state => {
-  
+  user: state.user
 }
 class NationalTrainer extends Component {
   componentDidMount() {

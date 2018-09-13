@@ -427,7 +427,8 @@ class TrainerDetails extends Component{
 };
 
 const mapStateToProps = state => ({
-    cohortReducer: state.cohortReducer
+    cohortReducer: state.cohortReducer,
+    user: state.user
 })
 
 const styledComponent = withStyles(styles)(TrainerDetails);
