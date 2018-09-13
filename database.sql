@@ -12,7 +12,7 @@ CREATE TABLE "national_trainer1" (
  "title" varchar(255),
  "status" boolean DEFAULT true,
  "pw_reset_token" text DEFAULT NULL,
- "pw_reset_time" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+ "pw_reset_time" text DEFAULT NULL
 );
 
 CREATE TABLE "state_level_organization" (
