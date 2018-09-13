@@ -26,7 +26,6 @@ class TrainerHistoryStepper extends Component{
       <Timeline>
         {displayedRequirementHistory}
       </Timeline>
-        {JSON.stringify(this.props.requirements)}
       </div>
     )
   }
