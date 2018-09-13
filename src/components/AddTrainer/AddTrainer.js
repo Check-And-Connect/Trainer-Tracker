@@ -126,7 +126,6 @@ class AddTrainer extends Component {
     addNewTrainer = event => {
         event.preventDefault();
         this.props.dispatch({ type: 'ADD_LT', payload: this.state.newTrainer })
-        // this.state.recentlyAdded.unshift(this.state.newTrainer);
         this.setState({
             recentlyAdded: [
                 ...this.state.recentlyAdded,
@@ -313,9 +312,6 @@ class AddTrainer extends Component {
                     <Grid container>
                         <Grid item xs={1}></Grid>
                         <Grid item xs={10}>
-                            {/* <ul>
-                                {recentListArray}
-                            </ul> */}
                             <Paper>
                                 <Table>
                                     <TableHead>
