@@ -359,12 +359,12 @@ class TrainerDetails extends Component{
 
         let detailsButtonArea = null;
         if (this.state.editingDetails){
-            detailsButtonArea = <Button variant="outlined" onClick={this.handleIconClick}>{this.state.editingDetails ? "Save Changes" : ""}</Button>
+            detailsButtonArea = <Button variant="outlined" onClick={this.handleIconClick}>{this.state.editingDetails ? "Save Details" : ""}</Button>
         }
 
         let notesButtonArea = null;
         if (this.state.editingNotes){
-            notesButtonArea = <Button variant="outline" onClick={this.handleIconClick}>{this.state.editingNotes ? "Save Changes" : ""}</Button>
+            notesButtonArea = <Button variant="outlined" onClick={this.handleIconClick}>{this.state.editingNotes ? "Save Notes" : ""}</Button>
         }
 
         return(
@@ -427,10 +427,27 @@ class TrainerDetails extends Component{
                             </form>
                         </Grid>
                     </Grid>
-                    <h2 className='centerHeadings'>Notes{notesButtonArea}</h2>
                     <Grid container>
                     <Grid item xs={3}></Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={6} container>
+                            <Grid item xs={6}></Grid>
+                            <Grid item xs={6}>
+                                <FormControl className={this.props.classes.formControl}>
+                                    {notesButtonArea}
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <h2 className='centerHeadings'>Notes</h2>
+                    <Grid container>
+                    <Grid item xs={3}></Grid>
+                        <Grid item xs={6} container>
+                            <Grid item xs={6}></Grid>
+                            <Grid item xs={6}>
+                                {/* <FormControl className={this.props.classes.formControl}>
+                                    {notesButtonArea}
+                                </FormControl> */}
+                            </Grid>
                             {notesField}
                         </Grid>
                     </Grid>
