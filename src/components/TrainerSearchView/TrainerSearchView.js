@@ -163,31 +163,10 @@ class TrainerSearchView extends Component {
                 ...this.state.checkAlls,
                 stateCheckAll: !this.state.checkAlls.stateCheckAll
             }
-        }, this.applyFilters)
-
-        // let filteredTrainersList = [];
-        // this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
-        //     if (newSet.has(trainer.state)){
-        //         sloSet.add(trainer.state_level_organization.state_level_organization_name);
-        //         cohortSet.add(trainer.cohort.cohort_name);
-        //         filteredTrainersList.push(trainer)
-        //     }
-        // })
-
-        // console.log(sloSet);
-
-        // this.setState({
-        //     localTrainers: filteredTrainersList,
-        //     checkboxesDisplayed: {
-        //         ...this.state.checkboxesDisplayed,
-        //         state_level_organization_name: sloSet,
-        //         cohort_name: cohortSet
-        //     }
-        // })
+        }, () => this.applyFilters('state'))
     }
 
     handleSloCheckbox = (e) => {
-        console.log('handling slo checkbox');
         let newSet = new Set(this.state.checkboxesSelected.state_level_organization_name);
 
         if (e.target.value === 'all' && e.target.checked){
@@ -208,27 +187,10 @@ class TrainerSearchView extends Component {
                 ...this.state.checkboxesSelected,
                 state_level_organization_name: newSet
             }
-        })
-
-        let filteredTrainersList = [];
-        this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
-            if (newSet.has(trainer.state_level_organization.state_level_organization_name)){
-                cohortSet.add(trainer.cohort.cohort_name);
-                filteredTrainersList.push(trainer)
-            }
-        })
-
-        this.setState({
-            localTrainers: filteredTrainersList,
-            checkboxesDisplayed: {
-                ...this.state.checkboxesDisplayed,
-                cohort_name: cohortSet
-            }
-        })
+        }, () => this.applyFilters('slo'));
     }
 
     handleCohortCheckbox = (e) => {
-        console.log('handling cohort checkbox');
         let newSet = new Set(this.state.checkboxesSelected.cohort_name);
 
         if (e.target.value === 'all' && e.target.checked){
@@ -248,22 +210,10 @@ class TrainerSearchView extends Component {
                 ...this.state.checkboxesSelected,
                 cohort_name: newSet
             }
-        })
-
-        let filteredTrainersList = [];
-        this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
-            if (newSet.has(trainer.cohort.cohort_name)){
-                filteredTrainersList.push(trainer)
-            }
-        })
-
-        this.setState({
-            localTrainers: filteredTrainersList
-        })
+        }, () => this.applyFilters('cohort'))
     }
 
     handleStatusCheckbox = (e) => {
-        console.log('handling status checkbox');
         let newSet = new Set(this.state.checkboxesSelected.status)
 
         if (newSet.has(e.target.value)){
@@ -272,32 +222,38 @@ class TrainerSearchView extends Component {
             newSet.add(e.target.value)
         }
 
-        let filteredTrainersList = [];
-        this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
-            if ((trainer.status && newSet.has('Active')) || (!trainer.status && newSet.has('Inactive'))){
-                filteredTrainersList.push(trainer)
-            }
-        })
-
         this.setState({
             checkboxesSelected: {
                 ...this.state.checkboxesSelected,
                 status: newSet
-            },
-            localTrainers: filteredTrainersList
-        })
+            }
+        }, () => this.applyFilters('status'))
     }
 
-    applyFilters = () => {
+    applyFilters = (category) => {
         console.log(this.state.checkboxesSelected);
-        let displayedSloCheckboxes = new Set();
-        let displayedCohortCheckboxes = new Set();
         let filteredTrainers = [];
+        let displayedSloCheckboxes = this.state.checkboxesDisplayed.state_level_organization_name;
+        let displayedCohortCheckboxes = this.state.checkboxesDisplayed.cohort_name;
+
+        if (category === 'state'){
+            displayedSloCheckboxes = new Set();
+        }
+        if (category === 'state' || category === 'slo'){
+            displayedCohortCheckboxes = new Set();
+        }
 
         this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
-            if (this.state.checkboxesSelected.state_name.has(trainer.state) && this.state.checkboxesSelected.state_level_organization_name.has(trainer.state_level_organization.state_level_organization_name) && this.state.checkboxesSelected.cohort_name.has(trainer.cohort.cohort_name) && ((this.state.checkboxesSelected.status.has('Active') && trainer.status) || (this.state.checkboxesSelected.status.has('Inactive') && !trainer.status))){
-                displayedSloCheckboxes.add(trainer.state_level_organization.state_level_organization_name)
-                displayedCohortCheckboxes.add(trainer.cohort.cohort_name)
+            if (this.state.checkboxesSelected.state_name.has(trainer.state) 
+                && this.state.checkboxesSelected.state_level_organization_name.has(trainer.state_level_organization.state_level_organization_name) 
+                && this.state.checkboxesSelected.cohort_name.has(trainer.cohort.cohort_name) 
+                && ((this.state.checkboxesSelected.status.has('Active') && trainer.status) || (this.state.checkboxesSelected.status.has('Inactive') && !trainer.status))){
+                if (category === 'state'){
+                    displayedSloCheckboxes.add(trainer.state_level_organization.state_level_organization_name);
+                }
+                if (category === 'state' || category === 'slo'){
+                    displayedCohortCheckboxes.add(trainer.cohort.cohort_name)
+                }
                 filteredTrainers.push(trainer)
             }
         })
