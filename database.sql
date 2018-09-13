@@ -10,7 +10,9 @@ CREATE TABLE "national_trainer" (
   "password" text NOT NULL,
   "email" varchar(255) NOT NULL,
   "title" varchar(255),
-  "status" boolean DEFAULT true
+  "status" boolean DEFAULT true,
+  "pw_reset_token" text DEFAULT NULL,
+  "pw_reset_time" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "state_level_organization" (
@@ -50,7 +52,7 @@ CREATE TABLE "cohort" (
 CREATE TABLE "cohort_requirements" (
   "cohort_req_id" SERIAL PRIMARY KEY,
   "cohort_id" INTEGER REFERENCES cohort(cohort_id),
-  "requirement_ref_id" INTEGER REFERENCES requirements(requirements_id),
+  "requirement_id" INTEGER REFERENCES requirements(requirements_id),
   "due_date" date NOT NULL,
   "notes" text,
   "notification_1_date" date,
