@@ -18,7 +18,9 @@ import {
   Table,
   TableHead,
   TableBody,
-  TableCell
+  TableCell,
+  Slide,
+  Snackbar
 } from "@material-ui/core";
 
 import MomentUtils from "material-ui-pickers/utils/moment-utils";
@@ -32,6 +34,10 @@ const mapStateToProps = state => ({
   cohortReducer: state.cohortReducer,
   stateLeadReducer: state.stateLeadReducer
 });
+
+function TransitionRight(props) {
+  return <Slide {...props} direction="left" />;
+}
 
 const styles = theme => ({
   mainFormComponent: {
@@ -71,7 +77,8 @@ class AddCohort extends Component {
         requirements: []
       },
       chosenDate: moment().format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ"),
-      errorMessage: ""
+      errorMessage: "",
+      snackOpen: ""
     };
   }
 
@@ -106,9 +113,18 @@ class AddCohort extends Component {
 
       this.setState({
         newCohort: {
-            ...this.state.newCohort,
+          ...this.state.newCohort,
           name: nextCohort
         }
+      });
+    }
+
+    if (
+      prevProps.cohortReducer.taskConfirmer.cohort_created === false &&
+      this.props.cohortReducer.taskConfirmer.cohort_created === true
+    ) {
+      this.setState({
+        snackOpen: true
       });
     }
   }
@@ -308,17 +324,17 @@ class AddCohort extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    if (this.state.newCohort.name === "") {
+    if  (this.state.newCohort.state_level_organization === "") {
       this.setState({
-        errorMessage: "Please Enter the Cohort Name"
+        errorMessage: "Please Pick a State Level Org."
       });
     } else if (this.state.newCohort.state === "") {
       this.setState({
         errorMessage: "Please Pick a State"
       });
-    } else if (this.state.newCohort.state_level_organization === "") {
+    } else if (this.state.newCohort.name === "") {
       this.setState({
-        errorMessage: "Please Pick a State Level Org."
+        errorMessage: "Please Enter the Cohort Name"
       });
     } else {
       this.setState({
@@ -330,6 +346,10 @@ class AddCohort extends Component {
         payload: this.state
       });
     }
+  };
+
+  handleClose = () => {
+    this.setState({ snackOpen: false });
   };
 
   render() {
@@ -440,16 +460,17 @@ class AddCohort extends Component {
             <Typography variant="subheading" color="error">
               {this.state.errorMessage}
             </Typography>
+            <Snackbar
+              open={this.state.snackOpen}
+              onClose={this.handleClose}
+              TransitionComponent={TransitionRight}
+              message={<span> Cohort Created</span>}
+            />
           </div>
         </div>
       );
     }
 
-    console.log(
-      moment(this.state.chosenDate)
-        .add(1, "day")
-        .toString()
-    );
 
     return (
       <div>

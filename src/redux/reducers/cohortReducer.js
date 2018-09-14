@@ -71,15 +71,37 @@ const requirements = (state = [], action) => {
 };
 
 const latestCohort = (state = [], action) => {
-    switch (action.type) {
-        case COHORT_ACTIONS.UNSET_LATEST_COHORT:
-          return [];
-        case COHORT_ACTIONS.SET_LATEST_COHORT:
-        return action.payload;
-        default:
-          return state;
+  
+  switch (action.type) {
+    case COHORT_ACTIONS.UNSET_LATEST_COHORT:
+      return [];
+    case COHORT_ACTIONS.SET_LATEST_COHORT:
+      if(action.payload.length === 0){
+        return [{name : 'Cohort 0'}]
       }
-}
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const taskConfirmer = (
+  state = { cohort_created: false, slo_created: true },
+  action
+) => {
+  switch (action.type) {
+    case COHORT_ACTIONS.UNSET_COHORT_CREATION_CONFIRMATION:
+      return { ...state, cohort_created: false };
+    case COHORT_ACTIONS.SET_COHORT_CREATION_CONFIRMATION:
+      return { ...state, cohort_created: true };
+    case COHORT_ACTIONS.UNSET_SLO_CREATION_CONFIRMATION:
+      return { ...state, slo_created: false };
+    case COHORT_ACTIONS.SET_SLO_CREATION_CONFIRMATION:
+      return { ...state, slo_created: true };
+    default:
+      return state;
+  }
+};
 
 export default combineReducers({
   state_dropDown,
@@ -87,5 +109,6 @@ export default combineReducers({
   trainer_cohorts,
   cohort_dropDown,
   requirements,
-  latestCohort
+  latestCohort,
+  taskConfirmer
 });
