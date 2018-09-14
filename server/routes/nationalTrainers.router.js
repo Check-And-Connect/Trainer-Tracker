@@ -31,6 +31,21 @@ router.get("/", (req, res) => {
     });
 });
 
+router.get("/getNTDetails", (req, res) => {
+  let getNTDetailsQuery =
+    "SELECT national_trainer_id, first_name, last_name, email, title FROM national_trainer WHERE national_trainer_id = $1";
+  pool
+    .query(getNTDetailsQuery, [req.user.national_trainer_id])
+    .then(response => {
+      console.log('NTDetails', response.rows[0]);
+      res.send(response.rows[0]);
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(500);
+    });
+});
+
 router.post("/addNew", (req, res) => {
   console.log("req: ", req.body);
 
@@ -196,6 +211,26 @@ router.put("/resetPassword", (req, res) => {
       console.log(err);
       res.sendStatus(500);
     });
+});
+
+router.put('/updateNT', (req, res) => {
+  console.log('got to put', req.body)
+  if (req.isAuthenticated) {
+      const queryText = `Update "national_trainer" 
+                          SET "first_name" = $1, 
+                          "last_name" = $2, 
+                          "email" = $3, 
+                          "title" = $4 
+                          WHERE national_trainer_id=$5;`;
+      pool.query(queryText, [req.body.first_name, req.body.last_name, req.body.email, req.body.title, req.user.national_trainer_id])
+          .then(() => { res.sendStatus(200); })
+          .catch((err) => {
+              console.log('Error updating', err);
+              res.sendStatus(500);
+          });
+  } else {
+      res.sendStatus(403);
+  }
 });
 
 module.exports = router;
