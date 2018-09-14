@@ -10,7 +10,9 @@ import {
   FormControl,
   MenuItem,
   InputLabel,
-  Select
+  Select,
+  Slide,
+  Snackbar
 } from "@material-ui/core";
 
 const mapStateToProps = state => ({
@@ -28,11 +30,18 @@ const styles = {
     justifyContent: "center"
   }
 };
+
+function TransitionRight(props) {
+  return <Slide {...props} direction="left" />;
+}
+
+
 class AddStateLevelOrg extends Component {
   state = {
     state: "",
     sloName: "",
     errorMessage: "",
+    snackOpen : false,
     
     allStates: [
       {
@@ -277,6 +286,16 @@ class AddStateLevelOrg extends Component {
     if (!this.props.user.isLoading && this.props.user.userName === null) {
       this.props.history.push("home");
     }
+
+
+    if (
+      prevProps.cohortReducer.taskConfirmer.slo_created === false &&
+      this.props.cohortReducer.taskConfirmer.slo_created === true
+    ) {
+      this.setState({
+        snackOpen: true
+      });
+    }
   }
 
   handleChangeFor = property => event => {
@@ -311,6 +330,11 @@ class AddStateLevelOrg extends Component {
       });
     }
   };
+
+  handleClose = () => {
+    this.setState({ snackOpen: false });
+  };
+
   render() {
     let { classes } = this.props;
     console.log(this.state.state);
@@ -358,6 +382,12 @@ class AddStateLevelOrg extends Component {
             </Typography>
           </div>
         </form>
+        <Snackbar
+              open={this.state.snackOpen}
+              onClose={this.handleClose}
+              TransitionComponent={TransitionRight}
+              message={<span> Cohort Created</span>}
+            />
       </div>
     );
   }

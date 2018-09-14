@@ -77,7 +77,7 @@ class Header extends Component {
                       Log Out
                     </button>  */}
 
-                    <Link to="/" style={{ textDecoration: "none" }}>
+                    <Link to="/accountdetails" style={{ textDecoration: "none" }}>
                       {" "}
                       <h5 className="linkText">Account Details</h5>
                     </Link>

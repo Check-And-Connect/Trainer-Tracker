@@ -105,7 +105,14 @@ function* getRequirements() {
 
 function* createNewCohort(action) {
   try {
+    yield dispatch({
+      type : COHORT_ACTIONS.UNSET_COHORT_CREATION_CONFIRMATION
+    })
     yield call(axios.post, "api/cohorts/addNewCohort", action.payload);
+
+    yield dispatch({
+      type : COHORT_ACTIONS.SET_COHORT_CREATION_CONFIRMATION
+    })
     
   } catch (error) {
     console.log(error);
@@ -114,7 +121,14 @@ function* createNewCohort(action) {
 
 function* createStateLevelOrg(action) {
     try {
+      yield dispatch({
+        type : COHORT_ACTIONS.UNSET_SLO_CREATION_CONFIRMATION
+      })
         yield call(axios.post, 'api/cohorts/addNewSLO' , action.payload)
+
+        yield dispatch({
+          type : COHORT_ACTIONS.SET_SLO_CREATION_CONFIRMATION
+        })
     } catch (error) {
         console.log(error);
         
