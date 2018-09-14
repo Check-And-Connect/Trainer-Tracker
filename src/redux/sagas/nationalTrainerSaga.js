@@ -50,6 +50,8 @@ function* updateOneNationalTrainer(action) {
 function* addNewTrainer(action) {
   
   try {
+
+    
     
     yield call(axios.post, "api/nationalTrainers/addNew", action.payload);
 
