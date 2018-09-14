@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withStyles, TextField, Button } from "@material-ui/core";
+import { withStyles, TextField, Button} from "@material-ui/core";
 import { NATIONAL_TRAINER_ACTIONS } from "../../redux/actions/nationalTrainerActions";
 
 const mapStateToProps = state => ({

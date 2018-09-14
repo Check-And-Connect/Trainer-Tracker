@@ -2,7 +2,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Export from "../Exporter/Exporter";
 
-import { withStyles, Button, Typography } from "@material-ui/core";
+import {
+  withStyles,
+  Button,
+  Typography,
+  Slide,
+  Snackbar
+} from "@material-ui/core";
 
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 import { LOCAL_TRAINERS_ACTIONS } from "../../redux/actions/localTrainerActions";
@@ -20,6 +26,10 @@ const mapStateToProps = state => ({
   localTrainers: state.localTrainerReducer
 });
 
+function TransitionRight(props) {
+  return <Slide {...props} direction="left" />;
+}
+
 const styles = {
   mainComponent: {
     display: "Grid",
@@ -27,7 +37,7 @@ const styles = {
   },
   leftPanel: {
     display: "Grid",
-    gridTemplateRows: "0.3fr 9fr"
+    gridTemplateRows: "0.0fr 9fr"
   },
   rightPanel: {
     display: "Grid",
@@ -61,7 +71,9 @@ class CohortManager extends Component {
     },
     dialogOpen: false,
     checkedIDs: [],
-    searchKey: ""
+    searchKey: "",
+    snackOpen: false,
+    snackMessege: ""
   };
 
   componentDidMount() {
@@ -109,6 +121,28 @@ class CohortManager extends Component {
         });
       }
     }
+
+    if (
+      prevProps.localTrainers.taskConfirmer.schedule_created === false &&
+      this.props.localTrainers.taskConfirmer.schedule_created === true
+    ) {
+      this.setState({
+        snackOpen: true,
+        snackMessege: "Schedule Created Successfuly"
+      });
+    }
+
+    if (
+      prevProps.localTrainers.taskConfirmer.completion === false &&
+      this.props.localTrainers.taskConfirmer.completion === true
+    ) {
+      this.setState({
+        snackOpen: true,
+        snackMessege: "Marked Complete"
+      });
+    }
+
+    
   }
 
   handleCellClick = (localTrainerId, requirementId) => {
@@ -338,6 +372,10 @@ class CohortManager extends Component {
     return <Export localTrainers={localTrainers} />;
   };
 
+  handleClose = () => {
+    this.setState({ snackOpen: false });
+  };
+
   render() {
     let { classes } = this.props;
     let states, cohorts, stateOrgs;
@@ -374,7 +412,7 @@ class CohortManager extends Component {
 
             {this.state.checkedIDs.length === 0 && (
               <Typography className={classes.note}>
-              <br/>
+                <br />
                 *Click on Checkboxes to Schedule or Mark Complete
               </Typography>
             )}
@@ -395,11 +433,7 @@ class CohortManager extends Component {
                 <Export
                   localTrainers={localTrainers}
                   button={
-                    <Button
-                      className={classes.export}
-                    >
-                      Export Table
-                    </Button>
+                    <Button className={classes.export}>Export Table</Button>
                   }
                 />
               </div>
@@ -418,6 +452,12 @@ class CohortManager extends Component {
               />
             )}
           </div>
+          <Snackbar
+            open={this.state.snackOpen}
+            onClose={this.handleClose}
+            TransitionComponent={TransitionRight}
+            message={this.state.snackMessege}
+          />
         </div>
       </div>
     );
