@@ -1,10 +1,11 @@
-import React from 'react';
+import React from "react";
 import {
   HashRouter as Router,
   Route,
   Redirect,
-  Switch,
-} from 'react-router-dom';
+  Switch
+} from "react-router-dom";
+
 
 import { connect } from 'react-redux';
 
@@ -19,7 +20,10 @@ import TrainerSearchView from './components/TrainerSearchView/TrainerSearchView'
 import TrainerDetails from './components/TrainerDetails/TrainerDetails';
 import NationalTrainer from './components/NationalTrainer/NationalTrainer';
 import AddCohort from './components/AddCohort/AddCohort';
-import AddStateLevelOrg from './components/AddStateLevelOrg/AddStateLevelOrg'
+import AccountDetails from './components/AccountDetails/AccountDetails';
+import AddStateLevelOrg from './components/AddStateLevelOrg/AddStateLevelOrg';
+import ResetPassword from "./components/ResetPassword/ResetPassword";
+import ConfirmEmail from "./components/ConfirmEmail/ConfirmEmail";
 import './styles/main.css';
 
 const mapStateToProps = state => ({
@@ -28,9 +32,9 @@ const mapStateToProps = state => ({
 
 const App = (props) => (
   <div>
-
     <Router>
       <div>
+
       {props.user.id && <Header title="" />}
       <Switch>
         <Redirect exact from="/" to="/home" />
@@ -38,6 +42,9 @@ const App = (props) => (
           path="/home"
           component={LoginPage}
         />
+        <Route exact path="/password_reset/:token" component={ResetPassword} />
+        <Route exact path="/confrim_email" component={ConfirmEmail} />
+
         <Route
           path="/national_trainer"
           component={NationalTrainer}
@@ -70,8 +77,13 @@ const App = (props) => (
           path="/state_level_org"
           component={AddStateLevelOrg}
         />
+        <Route
+          path="/accountdetails"
+          component={AccountDetails}
+          />
         {/* OTHERWISE (no path!) */}
         <Route render={() => <h1>404</h1>} />
+
         </Switch>
       </div>
     </Router>

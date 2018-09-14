@@ -251,7 +251,7 @@ class CohortManagerModal extends Component {
                       {!this.state.editInfo && (
                         <div>
                           <Typography>
-                            Comleted :{" "}
+                            Completed :{" "}
                             {(moment(
                               localTrainer.requirements[0].completed
                             ).isValid() &&

@@ -55,7 +55,7 @@ class TrainerSearchSidebar extends Component {
                                     onChange={this.props.handleStateCheckbox}
                                     value="all"
                                 />
-                                <span>Select/Unselect All</span>
+                                <span>{this.props.checkAlls.stateCheckAll ? 'Unselect All' : 'Select All'}</span>
                                 </div>, 
                                 ...stateCheckboxes
                             ]
@@ -84,7 +84,7 @@ class TrainerSearchSidebar extends Component {
                                     onChange={this.props.handleSloCheckbox}
                                     value="all"
                                 />
-                                <span>Select/Unselect All</span>
+                                <span>{this.props.checkAlls.sloCheckAll ? 'Unselect All' : 'Select All'}</span>
                                 </div>, 
                                 ...stateLevelOrgCheckboxes
                             ]
@@ -109,11 +109,11 @@ class TrainerSearchSidebar extends Component {
         if (cohortNameCheckboxes.length > 0){
             cohortNameCheckboxes = [<div>
                                 <Checkbox
-                                    defaultChecked
+                                    checked={this.props.checkAlls.cohortCheckAll}
                                     onChange={this.props.handleCohortCheckbox}
                                     value="all"
                                 />
-                                <span>Select/Unselect All</span>
+                                <span>{this.props.checkAlls.cohortCheckAll ? 'Unselect All' : 'Select All'}</span>
                                 </div>, 
                                 ...cohortNameCheckboxes
                             ]

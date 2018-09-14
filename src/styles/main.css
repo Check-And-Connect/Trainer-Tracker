@@ -113,6 +113,14 @@ li a:hover {
   float: left;
 }
 
+.leftAlign {
+    float: left;
+}
+
+.rightAlign {
+    float: right;
+} 
+
 /* center headings */
 .centerHeadings {
   text-align: center;
@@ -167,6 +175,7 @@ li a:hover {
   display: grid;
   grid-template-rows: 1fr;
   /* padding: 0 0 0 15px; */
+  padding: 0px 20px 0px 0px;
 }
 .item3c2 {
   display: grid;
@@ -198,3 +207,9 @@ li a:hover {
   grid-template-rows: 1fr;
   justify-content: center;
 }
+
+.outer-div
+{
+     padding: 150px;
+}
+
