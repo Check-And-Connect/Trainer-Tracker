@@ -25,8 +25,8 @@ function* addNewLT(action) {
 function* fetchLocalTrainers() {
   try {
     yield dispatch({
-      type : LOCAL_TRAINERS_ACTIONS.UNSET_LOCAL_TRAINERS
-    })
+      type: LOCAL_TRAINERS_ACTIONS.UNSET_LOCAL_TRAINERS
+    });
     let allTrainers = yield call(axios.get, "/api/localTrainers/");
 
     console.log(allTrainers);
@@ -62,13 +62,16 @@ function* fetchRequirementForLocalTrainer(action) {
 function* markComplete(action) {
   try {
     yield dispatch({
-      type : LOCAL_TRAINERS_ACTIONS.UNSET_TRAINER_REQUIREMENT_SINGLE
-    })
+      type: LOCAL_TRAINERS_ACTIONS.UNSET_CONFIRM_COMPLETION
+    });
+    yield dispatch({
+      type: LOCAL_TRAINERS_ACTIONS.UNSET_TRAINER_REQUIREMENT_SINGLE
+    });
     let actualPayload = {
       requirement_id: action.payload.requirement_id,
       date_marked_complete: action.payload.date_marked_complete,
-      national_trainer : action.payload.national_trainer,
-      note : action.payload.note
+      national_trainer: action.payload.national_trainer,
+      note: action.payload.note
     };
 
     yield all(
@@ -82,20 +85,22 @@ function* markComplete(action) {
     );
 
     console.log(action.payload);
-    
+
     yield dispatch({
-      type : LOCAL_TRAINERS_ACTIONS.FETCH_TRAINER_REQUIREMENT_SINGLE,
-      payload : {
+      type: LOCAL_TRAINERS_ACTIONS.FETCH_TRAINER_REQUIREMENT_SINGLE,
+      payload: {
         requirementId: action.payload.requirement_id,
-        localTrainerId : action.payload.localTrainerIDs[0]
+        localTrainerId: action.payload.localTrainerIDs[0]
       }
-    })
+    });
 
     yield dispatch({
-      type : LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINERS
-    })
+      type: LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINERS
+    });
 
-    
+    yield dispatch({
+      type: LOCAL_TRAINERS_ACTIONS.SET_CONFIRM_COMPLETION
+    });
   } catch (error) {
     console.log(error);
   }
@@ -103,6 +108,10 @@ function* markComplete(action) {
 
 function* scheduleForRequirement(action) {
   try {
+    yield dispatch({
+      type: LOCAL_TRAINERS_ACTIONS.UNSET_CONFRIM_SCHEDULE_CREATED
+    });
+
     let actualPayload = {
       requirement_id: action.payload.requirement_id,
       date_scheduled: action.payload.date_scheduled
@@ -119,8 +128,12 @@ function* scheduleForRequirement(action) {
     );
 
     yield dispatch({
-      type : LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINERS
-    })
+      type: LOCAL_TRAINERS_ACTIONS.FETCH_LOCAL_TRAINERS
+    });
+
+    yield dispatch({
+      type: LOCAL_TRAINERS_ACTIONS.SET_CONFIRM_SCHEDULE_CREATED
+    });
   } catch (error) {
     console.log(error);
   }
@@ -137,7 +150,10 @@ function* addSaga() {
     fetchRequirementForLocalTrainer
   );
   yield takeLatest(LOCAL_TRAINERS_ACTIONS.MARK_COMPLETE, markComplete);
-  yield takeLatest(LOCAL_TRAINERS_ACTIONS.SCHEDULE_FOR_REQUIREMENT, scheduleForRequirement)
+  yield takeLatest(
+    LOCAL_TRAINERS_ACTIONS.SCHEDULE_FOR_REQUIREMENT,
+    scheduleForRequirement
+  );
 }
 
 export default addSaga;
