@@ -24,10 +24,20 @@ import { LOCAL_TRAINERS_ACTIONS } from '../actions/localTrainerActions';
   }
 }
 
+const exportArray =  (state = [], action) => {
+    switch (action.type) {
+        case LOCAL_TRAINERS_ACTIONS.EXPORT_LOCAL_TRAINERS:
+            return action.payload
+        default:
+            return state;
+    }
+  }
+
 
 export default combineReducers({
   allLocalTrainers,
-  singleTrainerReqInfo
+  singleTrainerReqInfo,
+  exportArray
 });
 
 

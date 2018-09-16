@@ -18,7 +18,9 @@ router.get("/", rejectUnauthenticated, (req, res) => {
 
   const queryForPerson =
     getAllLocalTrainersQuery +
-    ` WHERE local_trainers.local_trainers_id = $1 AND cohort_requirements.requirement_id = $2 `;
+    ` WHERE local_trainers.local_trainers_id = $1 AND cohort_requirements.requirement_id = $2
+    ORDER BY cohort_requirements.requirement_id`;
+    // added order by
 
   let poolQuery = () => {
     if (req.query.hasOwnProperty("requirementId")) {
@@ -375,7 +377,7 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
   const getTrainerRequirementsQuery = `SELECT * FROM local_trainers_requirements
   JOIN cohort_requirements ON local_trainers_requirements.cohort_requirements_ref_id = cohort_requirements.cohort_req_id
   JOIN requirements ON requirements.requirements_id = cohort_requirements.requirement_id
-  WHERE local_trainers_ref_id = $1`;
+  WHERE local_trainers_ref_id = $1;`;
   const trainerRequirementsArray = await pool
     .query(getTrainerRequirementsQuery, [req.params.id])
     .then(PGres => {
