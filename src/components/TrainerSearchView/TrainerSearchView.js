@@ -450,6 +450,13 @@ class TrainerSearchView extends Component {
         let { classes } = this.props;
         let trainersTableBody = null;
 
+        let sortByIndicator;
+        if (this.state.orderBy.ascending){
+            sortByIndicator = '▼';
+        } else {
+            sortByIndicator = '▲';
+        }
+
         if (this.state.localTrainers) {
             trainersTableBody = this.state.localTrainers.map((trainer) => {
                 trainer.lastNext = this.getLastNext(trainer.requirements)
@@ -518,14 +525,14 @@ class TrainerSearchView extends Component {
                         <Table id="trainer-search-table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('cohort')}>Cohort</TableCell>
-                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('first_name')}>First Name</TableCell>
-                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('last_name')}>Last Name</TableCell>
-                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('state')}>State</TableCell>
-                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('slo')}>State-Level Org.</TableCell>
-                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('last')}>Last Completed Req.</TableCell>
-                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('next')}>Upcoming Req.</TableCell>
-                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('due')}>Due Date</TableCell>
+                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('cohort')}>Cohort {this.state.orderBy.columnName === 'cohort' ? sortByIndicator : ' '}</TableCell>
+                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('first_name')}>First Name {this.state.orderBy.columnName === 'first_name' ? sortByIndicator : ' '}</TableCell>
+                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('last_name')}>Last Name {this.state.orderBy.columnName === 'last_name' ? sortByIndicator : ' '}</TableCell>
+                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('state')}>State {this.state.orderBy.columnName === 'state' ? sortByIndicator : ' '}</TableCell>
+                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('slo')}>State-Level Org. {this.state.orderBy.columnName === 'slo' ? sortByIndicator : ' '}</TableCell>
+                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('last')}>Last Complete Req. {this.state.orderBy.columnName === 'last' ? sortByIndicator : ' '}</TableCell>
+                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('next')}>Upcoming Req.{this.state.orderBy.columnName === 'next' ? sortByIndicator : ' '}</TableCell>
+                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('due')}>Due Date {this.state.orderBy.columnName === 'due' ? sortByIndicator : ' '}</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
