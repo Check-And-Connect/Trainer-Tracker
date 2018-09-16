@@ -64,7 +64,9 @@ class AddTrainer extends Component {
                 district: '',
                 cohort: ''
             },
-            recentlyAdded: []
+            recentlyAdded: [],
+            errorMessage: "",
+            showRecentlyAdded: this.props.localTrainerReducer.recentlyAdded
         }
     }
 
@@ -85,7 +87,8 @@ class AddTrainer extends Component {
                 newTrainer: {
                     ...this.state.newTrainer,
                     [propertyName]: event.target.value
-                }
+                },
+                errorMessage: ""
             })
         }
     }
@@ -96,7 +99,8 @@ class AddTrainer extends Component {
                 newTrainer: {
                     ...this.state.newTrainer,
                     [propertyName]: event.target.value
-                }
+                },
+                errorMessage: ""
             })
             this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_STATE, payload: event.target.value });
         }
@@ -108,7 +112,8 @@ class AddTrainer extends Component {
                 newTrainer: {
                     ...this.state.newTrainer,
                     [propertyName]: event.target.value
-                }
+                },
+                errorMessage: ""
             })
             this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_SLO, payload: event.target.value });
         }
@@ -125,25 +130,50 @@ class AddTrainer extends Component {
 
     addNewTrainer = event => {
         event.preventDefault();
-        this.props.dispatch({ type: 'ADD_LT', payload: this.state.newTrainer })
-        this.setState({
-            recentlyAdded: [
-                ...this.state.recentlyAdded,
-                this.state.newTrainer
-            ]
-        })
-        this.setState({
-            newTrainer: {
-                first_name: '',
-                last_name: '',
-                title: '',
-                email: '',
-                phone_number: '',
-                organization: '',
-                district: ''
-            }
-        });
-        this.reset();
+        if (this.state.newTrainer.first_name === "") {
+            this.setState({
+                errorMessage: "Please Enter a First Name"
+            });
+        } else if (this.state.newTrainer.last_name === "") {
+            this.setState({
+                errorMessage: "Please Enter a Last Name"
+            });
+        } else if (this.state.newTrainer.state === "") {
+            this.setState({
+                errorMessage: "Please Pick a State."
+            });
+        } else if (this.state.newTrainer.state_level_organization === "") {
+            this.setState({
+                errorMessage: "Please Pick a State Level Org."
+            });
+        } else if (this.state.newTrainer.cohort === "") {
+            this.setState({
+                errorMessage: "Please Pick a Cohort."
+            });
+        } else {
+            this.setState({
+                errorMessage: ""
+            });
+            this.props.dispatch({ type: 'ADD_LT', payload: this.state.newTrainer })
+            this.setState({
+                recentlyAdded: [
+                    ...this.state.recentlyAdded,
+                    this.state.newTrainer
+                ]
+            })
+            this.setState({
+                newTrainer: {
+                    first_name: '',
+                    last_name: '',
+                    title: '',
+                    email: '',
+                    phone_number: '',
+                    organization: '',
+                    district: ''
+                }
+            });
+            this.reset();
+        }
     }
 
     render() {
@@ -280,7 +310,7 @@ class AddTrainer extends Component {
                                         />
                                     </Grid>
                                     <Grid item xs={2}></Grid>
-                                    <Grid item xs={10}>
+                                    <Grid item xs={5}>
                                         <TextField
                                             className={this.props.classes.textField}
                                             label="Organization"
@@ -288,6 +318,11 @@ class AddTrainer extends Component {
                                             onChange={this.handleChangeFor('organization')}
                                             margin="normal"
                                         />
+                                    </Grid>
+                                    <Grid item xs={5}>                                        
+                                        <Typography variant="subheading" color="error">
+                                            {this.state.errorMessage}
+                                        </Typography>
                                     </Grid>
                                     <Grid item xs={2}></Grid>
                                     <Grid item xs={5}>
@@ -310,6 +345,10 @@ class AddTrainer extends Component {
                     </Grid>
                     <Typography className='centerHeadings' variant="display1">Recently Added</Typography>
                     <Grid container>
+                    <Grid item xs={3}></Grid>
+                    <Grid item xs={9}>
+                        <h2 className='red'>{this.props.localTrainerReducer.recentlyAdded}</h2>
+                    </Grid>
                         <Grid item xs={1}></Grid>
                         <Grid item xs={10}>
                             <Paper>
@@ -327,8 +366,8 @@ class AddTrainer extends Component {
                                             </TableCell>
                                         </TableRow>
                                     </TableHead>
-                                    <TableBody>
-                                        {recentListArray}
+                                    <TableBody>                       
+                                        {recentListArray}                                        
                                     </TableBody>
                                 </Table>
                             </Paper>
@@ -337,7 +376,7 @@ class AddTrainer extends Component {
                     </Grid>
                 </div>
             );
-        }
+        } 
 
         return (
             <div>

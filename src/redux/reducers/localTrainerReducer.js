@@ -33,11 +33,25 @@ const exportArray =  (state = [], action) => {
     }
   }
 
+const recentlyAdded = (state = '', action) => {
+    switch (action.type) {
+        case LOCAL_TRAINERS_ACTIONS.SHOW_RECENT_ADD:
+            if (action.payload.response.status === 500){
+                return 'Failed to add most recent trainer to database'
+            } else {
+                return state
+            }
+        default:
+            return state;
+    }
+  }
+
 
 export default combineReducers({
   allLocalTrainers,
   singleTrainerReqInfo,
-  exportArray
+  exportArray,
+  recentlyAdded
 });
 
 
