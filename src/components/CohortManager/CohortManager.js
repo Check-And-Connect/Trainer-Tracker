@@ -231,6 +231,7 @@ class CohortManager extends Component {
       currentTrainers: filteredLocalTrainers,
       checkedIDs: []
     });
+
   };
 
   handleChecked = local_trainer_id => {
@@ -351,25 +352,74 @@ class CohortManager extends Component {
     });
   };
 
-  handleExport = () => {
-    console.log("triggered");
+//reformats array to send to excel file
+  handleExport = (currentTrainers) => {
+    console.log("triggered=============", currentTrainers);
+    let localTrainers = [];
+    let newObject = {};
 
-    let localTrainers = [
-      {
-        first_name: "Isaac",
-        last_name: "Negatu",
-        cohort_name: "Cohort 1"
-      },
-      {
-        first_name: "Yishak",
-        last_name: "Turga",
-        cohort_name: "Cohort 2"
+    for (let i = 0; i < currentTrainers.length; i++) {
+      let initialTTTWorkshop = '';
+      let TTTTermsOfAgreement = '';
+      let observedTrainingSession = '';
+      let nationalTrainerThatObserved = '';
+      let certification = '';
+      let CCTraining = '';
+      let recertification = '';
+
+      for (let i = 0; i < currentTrainers[i].requirements.length; i++) {
+          switch (currentTrainers[i].requirements[i].requirement_id) {
+            case 1:
+              initialTTTWorkshop = currentTrainers[i].requirements[i].requirement_due_date;
+              console.log('--------', currentTrainers[i].requirements[i].requirement_due_date.split('T', 1))
+              break;
+            case 2:
+              TTTTermsOfAgreement = currentTrainers[i].requirements[i].requirement_due_date;
+              break;
+            case 3:
+              observedTrainingSession = currentTrainers[i].requirements[i].requirement_due_date;
+              nationalTrainerThatObserved = currentTrainers[i].requirements[i].national_trainer_first_name + ' ' + currentTrainers[i].requirements[i].national_trainer_last_name;
+              break;
+            case 4:
+              certification = currentTrainers[i].requirements[i].requirement_due_date;
+              break;
+            case 5:
+              CCTraining = currentTrainers[i].requirements[i].requirement_due_date;
+              break;
+            case 6:
+              recertification = currentTrainers[i].requirements[i].requirement_due_date;
+              break;
+            default:
+              console.log('Failed to load requirements')
+              break;
+          }
+        }
+
+      newObject = {
+        first_name: currentTrainers[i].first_name,
+        last_name: currentTrainers[i].last_name,
+        state: currentTrainers[i].state,
+        state_level_organization: currentTrainers[i].state_level_organization.state_level_organization_name,
+        cohort: currentTrainers[i].cohort.cohort_name,
+        initial_TTT_Workshop: initialTTTWorkshop,
+        TTT_Terms_Of_Agreement: TTTTermsOfAgreement,
+        observed_Training_Session: observedTrainingSession,
+        national_Trainer_That_Observed: nationalTrainerThatObserved,
+        certification_requirement: certification,
+        CC_Training: CCTraining,
+        re_certification: recertification 
       }
-    ];
+      localTrainers.push(newObject);
+    }
 
     console.log(<Export />);
+    console.log('local trainers', localTrainers);
+    return this.props.dispatch({
+      type: LOCAL_TRAINERS_ACTIONS.EXPORT_LOCAL_TRAINERS,
+      payload: localTrainers
+    });
+    <Export localTrainers={localTrainers} />;
 
-    return <Export localTrainers={localTrainers} />;
   };
 
   handleClose = () => {
@@ -385,19 +435,6 @@ class CohortManager extends Component {
       cohorts = this.getCohorts();
       stateOrgs = this.getStateOrgsAndCohort();
     }
-
-    let localTrainers = [
-      {
-        first_name: "Isaac",
-        last_name: "Negatu",
-        cohort_name: "Cohort 1"
-      },
-      {
-        first_name: "Yishak",
-        last_name: "Turga",
-        cohort_name: "Cohort 2"
-      }
-    ];
 
     return (
       <div>
@@ -431,11 +468,16 @@ class CohortManager extends Component {
               />
               <div>
                 <Export
-                  localTrainers={localTrainers}
-                  button={
-                    <Button className={classes.export}>Export Table</Button>
-                  }
-                />
+                  // {/* localTrainers={localTrainers}  */}
+                    button={  
+                    <Button
+                      className={classes.export}
+                      onClick={()=>this.handleExport(this.state.currentTrainers)}
+                    >
+                      Export Table
+                    </Button>
+                   } 
+                 /> 
               </div>
             </div>
             <CohortManagerTable

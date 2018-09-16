@@ -10,9 +10,15 @@ import { LOCAL_TRAINERS_ACTIONS } from "../actions/localTrainerActions";
 
 function* addNewLT(action) {
   try {
-    yield call(axios.post, "/api/localTrainers/addLT", action.payload);
+    let postResponse = yield call(axios.post, "/api/localTrainers/addLT", action.payload);
+    console.log('post Response', postResponse.status)
+  
   } catch (error) {
     console.log(error);
+    yield dispatch({
+      type: LOCAL_TRAINERS_ACTIONS.SHOW_RECENT_ADD,
+      payload: error
+    });
   }
 }
 
