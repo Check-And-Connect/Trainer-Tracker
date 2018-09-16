@@ -384,7 +384,7 @@ class CohortManager extends Component {
       type: LOCAL_TRAINERS_ACTIONS.EXPORT_LOCAL_TRAINERS,
       payload: localTrainers
     });
-    // <Export localTrainers={localTrainers} />;
+    <Export localTrainers={localTrainers} />;
 
   };
 
@@ -430,8 +430,8 @@ class CohortManager extends Component {
               />
               <div>
                 <Export
-/*                   localTrainers={localTrainers} */
-                    button={ 
+                  // {/* localTrainers={localTrainers}  */}
+                    button={  
                     <Button
                       className={classes.export}
                       onClick={()=>this.handleExport(this.state.currentTrainers)}
