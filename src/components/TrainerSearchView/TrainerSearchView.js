@@ -56,6 +56,10 @@ class TrainerSearchView extends Component {
             localTrainers: [],
             trainersBeforeSearch: [],
             searchKey: '',
+            orderBy: {
+                columnName: '',
+                ascending: true
+            },
             // Using sets instead of arrays for the checkboxesSelected, since they are limited to 
             // unique values by default.
             checkboxesSelected: {
@@ -348,18 +352,71 @@ class TrainerSearchView extends Component {
     };
 
     sortBy = (column) => {
-        console.log('sorting');
-        let sortedTrainers = this.state.localTrainers.sort((a, b) => {
-            if (a[column] > b[column]){
-                return 1;
-            } else if (b.first_name > a.first_name){
-                return -1;
+        let sortFunction;
+
+        const compare = (a, b) => {
+            if (a && b && a > b){
+                return (this.state.orderBy.ascending ? 1 : -1)
+            } else if (a && b && a < b){
+                return (this.state.orderBy.ascending ? -1 : 1)
             } else {
                 return 0;
             }
-        })
-        console.log(sortedTrainers);
+        }
+
+        switch (column){
+            case 'cohort':
+                sortFunction = (a, b) => {
+                    let c = a.cohort.cohort_name;
+                    let d = b.cohort.cohort_name;
+                    return compare(c, d)
+                }
+                break;
+            case 'slo':
+                sortFunction = (a, b) => {
+                    let c = a.state_level_organization.state_level_organization_name;
+                    let d = b.state_level_organization.state_level_organization_name;
+                    return compare(c, d)
+                }
+                break;
+            case 'next':
+                sortFunction = (a, b) => {
+                    let c = a.lastNext[1];
+                    let d = b.lastNext[1];
+                    return compare(c, d)
+                }
+                break;
+            case 'last':
+                sortFunction = (a, b) => {
+                    let c = a.lastNext[0];
+                    let d = b.lastNext[0];
+                    return compare(c, d)
+                }
+                break;
+            case 'due':
+            console.log('due');
+                sortFunction = (a, b) => {
+                    let c = Number(moment(a.lastNext[2]).format('x'));
+                    let d = Number(moment(b.lastNext[2]).format('x'));
+                    return compare(c, d)
+                }
+                break;
+            default: 
+                sortFunction = (a, b) => {
+                    let c = a[column];
+                    let d = b[column];
+                    return compare(c, d)
+                }
+                break;
+        }
+
+        let sortedTrainers = this.state.localTrainers.sort(sortFunction);
+
         this.setState({
+            orderBy: {
+                columnName: column,
+                ascending: !this.state.orderBy.ascending
+            },
             localTrainers: sortedTrainers
         })
     } 
@@ -395,7 +452,7 @@ class TrainerSearchView extends Component {
 
         if (this.state.localTrainers) {
             trainersTableBody = this.state.localTrainers.map((trainer) => {
-                let lastNext = this.getLastNext(trainer.requirements)
+                trainer.lastNext = this.getLastNext(trainer.requirements)
                 return (
                     <TableRow key={trainer.local_trainers_id}>
                         <TableCell className={classes.tableCell}>
@@ -424,9 +481,9 @@ class TrainerSearchView extends Component {
                         </TableCell>
                         <TableCell className={classes.tableCell} >{trainer.state}</TableCell>
                         <TableCell className={classes.tableCell} >{trainer.state_level_organization.state_level_organization_name}</TableCell>
-                        <TableCell className={classes.tableCell} >{lastNext[0]}</TableCell>
-                        <TableCell className={classes.tableCell} >{lastNext[1]}</TableCell>
-                        <TableCell className={classes.tableCell} >{lastNext[2]}</TableCell>
+                        <TableCell className={classes.tableCell} >{trainer.lastNext[0]}</TableCell>
+                        <TableCell className={classes.tableCell} >{trainer.lastNext[1]}</TableCell>
+                        <TableCell className={classes.tableCell} >{trainer.lastNext[2]}</TableCell>
                     </TableRow>
                 )
             })
@@ -465,10 +522,10 @@ class TrainerSearchView extends Component {
                                     <TableCell className={classes.tableCell} onClick={() => this.sortBy('first_name')}>First Name</TableCell>
                                     <TableCell className={classes.tableCell} onClick={() => this.sortBy('last_name')}>Last Name</TableCell>
                                     <TableCell className={classes.tableCell} onClick={() => this.sortBy('state')}>State</TableCell>
-                                    <TableCell className={classes.tableCell} >State-Level Org.</TableCell>
-                                    <TableCell className={classes.tableCell} >Last Completed Req.</TableCell>
-                                    <TableCell className={classes.tableCell} >Upcoming Req.</TableCell>
-                                    <TableCell className={classes.tableCell} >Due Date</TableCell>
+                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('slo')}>State-Level Org.</TableCell>
+                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('last')}>Last Completed Req.</TableCell>
+                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('next')}>Upcoming Req.</TableCell>
+                                    <TableCell className={classes.tableCell} onClick={() => this.sortBy('due')}>Due Date</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
