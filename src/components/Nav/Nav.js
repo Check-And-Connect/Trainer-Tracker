@@ -74,14 +74,14 @@ class Nav extends React.Component {
             </MenuItem>
           </Link>
 
-          <Link to="/" style={{ textDecoration: 'none' }}>
+          {/* <Link to="/" style={{ textDecoration: 'none' }}>
             <MenuItem
               className={this.props.classes.dropDown}
               onClick={this.handleClose}
             >
               Requirements
             </MenuItem>
-          </Link>
+          </Link> */}
 
           <Link to="/national_trainer" style={{ textDecoration: 'none' }}>
             <MenuItem
