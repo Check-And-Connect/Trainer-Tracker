@@ -69,6 +69,10 @@ class CohortManager extends Component {
       stateOrgPicked: "",
       cohortPicked: ""
     },
+    orderBy: {
+      columnName: '',
+      ascending: true
+    },
     dialogOpen: false,
     checkedIDs: [],
     searchKey: "",

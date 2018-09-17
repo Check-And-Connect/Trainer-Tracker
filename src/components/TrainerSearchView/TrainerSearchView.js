@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
+import Export from "../Exporter/Exporter";
+
 import { LOCAL_TRAINERS_ACTIONS } from '../../redux/actions/localTrainerActions';
 import { COHORT_ACTIONS } from '../../redux/actions/cohortActions';
 
@@ -445,6 +447,25 @@ class TrainerSearchView extends Component {
         }
     }
 
+    handleExport = () => {
+        console.log("triggered");
+    
+        let localTrainers = [
+          {
+            first_name: "Isaac",
+            last_name: "Negatu",
+            cohort_name: "Cohort 1"
+          },
+          {
+            first_name: "Yishak",
+            last_name: "Turga",
+            cohort_name: "Cohort 2"
+          }
+        ];
+        
+        return <Export localTrainers={localTrainers} />;
+      };
+
 
     render() {
         let { classes } = this.props;
@@ -456,6 +477,19 @@ class TrainerSearchView extends Component {
         } else {
             sortByIndicator = '▲';
         }
+
+        let localTrainers = [
+            {
+              first_name: "Isaac",
+              last_name: "Negatu",
+              cohort_name: "Cohort 1"
+            },
+            {
+              first_name: "Yishak",
+              last_name: "Turga",
+              cohort_name: "Cohort 2"
+            }
+          ];
 
         if (this.state.localTrainers) {
             trainersTableBody = this.state.localTrainers.map((trainer) => {
@@ -516,9 +550,14 @@ class TrainerSearchView extends Component {
                             search={this.handleSearchTable}
                             searchKey={this.state.searchKey}
                         />
-                        <div>
-                            <Button className={classes.export}>Export</Button>
-                        </div>
+              <div>
+                <Export
+                  localTrainers={localTrainers}
+                  button={
+                    <Button className={classes.export}>Export Table</Button>
+                  }
+                />
+              </div>
                     </div>
                     <div>
                     <Paper>
