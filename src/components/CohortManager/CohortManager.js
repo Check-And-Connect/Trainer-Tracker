@@ -37,11 +37,11 @@ const styles = {
   },
   leftPanel: {
     display: "Grid",
-    gridTemplateRows: "0.0fr 9fr"
+    gridTemplateRows: "0.01fr 9fr"
   },
   rightPanel: {
     display: "Grid",
-    gridTemplateRows: "0.3fr 9fr",
+    gridTemplateRows: "0.01fr 9fr",
     margin: "0em 1em"
   },
   searchAndExport: {
