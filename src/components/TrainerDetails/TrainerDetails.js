@@ -43,6 +43,10 @@ const styles = {
     colorChecked: {},
 }
 
+function TransitionRight(props) {
+    return <Slide {...props} direction="left" />;
+}
+
 class TrainerDetails extends Component{
     constructor(props){
         super(props)
@@ -52,7 +56,8 @@ class TrainerDetails extends Component{
             trainer: null,
             requirements: null,
             cohort: null,
-            slo: null
+            slo: null,
+            snackbarOpen: false
         }
     }
 
@@ -62,6 +67,10 @@ class TrainerDetails extends Component{
         this.props.dispatch({ type: COHORT_ACTIONS.FETCH_COHORTS });
         this.props.dispatch({ type: COHORT_ACTIONS.FETCH_STATE_LEVEL_ORG });
     }
+
+    handleClose = () => {
+        this.setState({ snackbarOpen: false });
+    };
 
     getTrainerDetails = () => {
         let localTrainerID = this.props.match.params.id;
@@ -163,7 +172,8 @@ class TrainerDetails extends Component{
         }
         this.setState({
             editingDetails: false,
-            editingNotes: false
+            editingNotes: false,
+            snackbarOpen: true
         })
     }
 
@@ -444,6 +454,12 @@ class TrainerDetails extends Component{
                             </Grid>
                         </Grid>
                     </Grid>
+                    <Snackbar
+                        open={this.state.snackbarOpen}
+                        onClose={this.handleClose}
+                        TransitionComponent={TransitionRight}
+                        message={<span>Changes Saved</span>}
+                    />
                     <h2 className='centerHeadings'>Notes</h2>
                     <Grid container>
                     <Grid item xs={3}></Grid>
