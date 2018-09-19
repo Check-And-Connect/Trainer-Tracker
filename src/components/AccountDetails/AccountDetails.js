@@ -32,8 +32,8 @@ const styles = {
 
 }
 
-function TransitionRight(props) {
-    return <Slide {...props} direction="right" />;
+function TransitionLeft(props) {
+    return <Slide {...props} direction="left" />;
   }
 
 class AccountDetails extends Component {
@@ -193,7 +193,7 @@ class AccountDetails extends Component {
                         />
                     </div>
                     <div className='centerHeadings'>
-                        <Button className={this.props.classes.button} variant="outlined" onClick={this.saveNationalTrainer(TransitionRight)}>Save</Button>
+                        <Button className={this.props.classes.button} variant="outlined" onClick={this.saveNationalTrainer(TransitionLeft)}>Save</Button>
                     </div>
 
                 </div>

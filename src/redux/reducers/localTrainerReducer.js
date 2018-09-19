@@ -38,8 +38,33 @@ const taskConfirmer = (state = {schdule_created : false, completion : false}, ac
   }
 };
 
+const exportArray =  (state = [], action) => {
+    switch (action.type) {
+        case LOCAL_TRAINERS_ACTIONS.EXPORT_LOCAL_TRAINERS:
+            return action.payload
+        default:
+            return state;
+    }
+  }
+
+const recentlyAdded = (state = '', action) => {
+    switch (action.type) {
+        case LOCAL_TRAINERS_ACTIONS.SHOW_RECENT_ADD:
+            if (action.payload.response.status === 500){
+                return 'Failed to add most recent trainer to database'
+            } else {
+                return state
+            }
+        default:
+            return state;
+    }
+  }
+
+
 export default combineReducers({
   allLocalTrainers,
   singleTrainerReqInfo,
-  taskConfirmer
+  taskConfirmer,
+  exportArray,
+  recentlyAdded
 });
