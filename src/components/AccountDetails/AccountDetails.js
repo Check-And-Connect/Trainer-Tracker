@@ -56,7 +56,6 @@ class AccountDetails extends Component {
 
     componentDidMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
-        // this.props.dispatch({ type: NATIONAL_TRAINER_ACTIONS.FETCH_ONE_NATIONAL_TRAINER });
 
         axios.get(`api/nationalTrainers/getNTDetails`)
             .then(res => {
