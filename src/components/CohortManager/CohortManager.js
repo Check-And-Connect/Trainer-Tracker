@@ -90,13 +90,13 @@ class CohortManager extends Component {
     this.setState({
       currentTrainers: this.props.localTrainers.allLocalTrainers
     });
+    this.handleExport(this.state.currentTrainers);
   }
 
   componentDidUpdate(prevProps) {
     if (!this.props.user.isLoading && this.props.user.userName === null) {
       this.props.history.push("home");
     }
-
     if (
       prevProps.localTrainers.allLocalTrainers.length === 0 &&
       this.props.localTrainers.allLocalTrainers.length !== 0
@@ -119,10 +119,12 @@ class CohortManager extends Component {
         this.setState({
           currentTrainers: filteredTrainers
         });
+        this.handleExport(this.state.currentTrainers);
       } else {
         this.setState({
           currentTrainers: this.props.localTrainers.allLocalTrainers
         });
+        this.handleExport(this.state.currentTrainers);
       }
     }
 
@@ -144,9 +146,7 @@ class CohortManager extends Component {
         snackOpen: true,
         snackMessege: "Marked Complete"
       });
-    }
-
-    
+    }   
   }
 
   handleCellClick = (localTrainerId, requirementId) => {
@@ -175,7 +175,6 @@ class CohortManager extends Component {
         return localTrainer.state;
       }
     );
-
     return [...new Set(allStates)];
   };
 
@@ -235,7 +234,7 @@ class CohortManager extends Component {
       currentTrainers: filteredLocalTrainers,
       checkedIDs: []
     });
-
+    this.handleExport(this.state.currentTrainers);
   };
 
   handleChecked = local_trainer_id => {
@@ -354,11 +353,12 @@ class CohortManager extends Component {
     this.setState({
       currentTrainers: filteredTrainers
     });
+    this.handleExport(this.state.currentTrainers);
   };
 
 //reformats array to send to excel file
   handleExport = (currentTrainers) => {
-    console.log("triggered=============", currentTrainers);
+    console.log("handleExport=============", currentTrainers);
     let localTrainers = [];
     let newObject = {};
 
@@ -371,32 +371,23 @@ class CohortManager extends Component {
       let CCTraining = '';
       let recertification = '';
 
-      for (let i = 0; i < currentTrainers[i].requirements.length; i++) {
-          switch (currentTrainers[i].requirements[i].requirement_id) {
-            case 1:
-              initialTTTWorkshop = currentTrainers[i].requirements[i].requirement_due_date;
-              console.log('--------', currentTrainers[i].requirements[i].requirement_due_date.split('T', 1))
-              break;
-            case 2:
-              TTTTermsOfAgreement = currentTrainers[i].requirements[i].requirement_due_date;
-              break;
-            case 3:
-              observedTrainingSession = currentTrainers[i].requirements[i].requirement_due_date;
-              nationalTrainerThatObserved = currentTrainers[i].requirements[i].national_trainer_first_name + ' ' + currentTrainers[i].requirements[i].national_trainer_last_name;
-              break;
-            case 4:
-              certification = currentTrainers[i].requirements[i].requirement_due_date;
-              break;
-            case 5:
-              CCTraining = currentTrainers[i].requirements[i].requirement_due_date;
-              break;
-            case 6:
-              recertification = currentTrainers[i].requirements[i].requirement_due_date;
-              break;
-            default:
-              console.log('Failed to load requirements')
-              break;
-          }
+      for (let j = 0; j < currentTrainers[j].requirements.length; j++) {
+        if (currentTrainers[i].requirements[j].requirement_id === 1){
+          initialTTTWorkshop = currentTrainers[i].requirements[j].requirement_due_date;
+        } else if (currentTrainers[i].requirements[j].requirement_id === 2){
+          TTTTermsOfAgreement = currentTrainers[i].requirements[j].requirement_due_date;
+        } else if (currentTrainers[i].requirements[j].requirement_id === 3){
+          observedTrainingSession = currentTrainers[i].requirements[j].requirement_due_date;
+          nationalTrainerThatObserved = currentTrainers[i].requirements[j].national_trainer_first_name + ' ' + currentTrainers[i].requirements[j].national_trainer_last_name;
+        } else if (currentTrainers[i].requirements[j].requirement_id === 4){
+          certification = currentTrainers[i].requirements[j].requirement_due_date;
+        } else if (currentTrainers[i].requirements[j].requirement_id === 5){
+          CCTraining = currentTrainers[i].requirements[j].requirement_due_date;
+        } else if (currentTrainers[i].requirements[j].requirement_id === 6){
+          recertification = currentTrainers[i].requirements[j].requirement_due_date;
+        } else (
+          console.log('not found')
+        )       
         }
 
       newObject = {
@@ -416,14 +407,11 @@ class CohortManager extends Component {
       localTrainers.push(newObject);
     }
 
-    console.log(<Export />);
     console.log('local trainers', localTrainers);
     return this.props.dispatch({
       type: LOCAL_TRAINERS_ACTIONS.EXPORT_LOCAL_TRAINERS,
       payload: localTrainers
     });
-    <Export localTrainers={localTrainers} />;
-
   };
 
   handleClose = () => {
@@ -476,7 +464,7 @@ class CohortManager extends Component {
                     button={  
                     <Button
                       className={classes.export}
-                      onClick={()=>this.handleExport(this.state.currentTrainers)}
+                      // onClick={()=>this.handleExport(this.state.currentTrainers)}
                     >
                       Export Table
                     </Button>
