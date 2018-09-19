@@ -10,6 +10,21 @@ let transporter = nodeMailer.createTransport({
   }
 });
 
+const htmlEmail = `
+<h4>Greetings Local C&C Trainer,</h4>
+<p>
+If you have not done so already, please sign the Check & Connect TTT Terms of Agreement and send this document to your national trainer. A signed copy of this document is due within 10 days of your Initial TTT Workshop.
+
+Best regards,
+</p>
+<h4>Your National C&C Training Team</h4>
+
+
+
+`
+
+
+
 
 
 let sendEmail = (notificaitonType , notificationInfo) => {

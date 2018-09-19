@@ -43,6 +43,10 @@ const styles = {
     colorChecked: {},
 }
 
+function TransitionRight(props) {
+    return <Slide {...props} direction="left" />;
+}
+
 class TrainerDetails extends Component{
     constructor(props){
         super(props)
@@ -52,7 +56,8 @@ class TrainerDetails extends Component{
             trainer: null,
             requirements: null,
             cohort: null,
-            slo: null
+            slo: null,
+            snackbarOpen: false
         }
     }
 
@@ -63,6 +68,12 @@ class TrainerDetails extends Component{
         this.props.dispatch({ type: COHORT_ACTIONS.FETCH_STATE_LEVEL_ORG });
     }
 
+    handleClose = () => {
+        this.setState({ snackbarOpen: false });
+    };
+
+    // This is the function that runs on page load to get all of the trainer details and 
+    // set them in the local state.
     getTrainerDetails = () => {
         let localTrainerID = this.props.match.params.id;
         axios.get(`/api/localTrainers/${localTrainerID}`)
@@ -81,11 +92,11 @@ class TrainerDetails extends Component{
             })
     }
 
-    componentDidUpdate = () => {
-        if (!this.props.user.isLoading && this.props.user.userName === null) {
-          this.props.history.push("home");
-        }
-      }
+    // componentDidUpdate = () => {
+    //     if (!this.props.user.isLoading && this.props.user.userName === null) {
+    //       this.props.history.push("home");
+    //     }
+    //   }
 
     handleInputChange = (e) => {
         if (e.target.name === 'notes' && !this.state.editingNotes){
@@ -98,7 +109,8 @@ class TrainerDetails extends Component{
             })
         }
 
-        console.log(e.target.name, e.target.value);
+        // If the user changes the state, slo, or cohort name dropdowns, we need to use the 
+        // filter actions to call the new options that should be shown below it in the hierarchy.
         if (e.target.name === 'state'){
             this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_STATE, payload: e.target.value });
             this.setState({
@@ -149,24 +161,27 @@ class TrainerDetails extends Component{
 
     }
 
+    // This function is for saving any edits to the trainer info or notes.
     handleIconClick = () => {
         if (this.state.editingDetails || this.state.editingNotes){
             let localTrainerID = this.props.match.params.id;
             axios.put(`/api/localTrainers/${localTrainerID}`, this.state.trainer)
                 .then(res => {
-                    console.log(res.data);
+                    this.setState({
+                        editingDetails: false,
+                        editingNotes: false,
+                        snackbarOpen: true
+                    })
                     this.getTrainerDetails();
                 })
                 .catch(err => {
                     console.log(err);
                 })
         }
-        this.setState({
-            editingDetails: false,
-            editingNotes: false
-        })
     }
 
+    // This function is for setting a trainer active or inactive.
+    // It calls the trainer toggle route directly and changes local state in the .then. 
     toggleStatus = () => {
         let localTrainerID = this.props.match.params.id
         axios.put(`/api/localTrainers/status/${localTrainerID}`)
@@ -444,15 +459,18 @@ class TrainerDetails extends Component{
                             </Grid>
                         </Grid>
                     </Grid>
+                    <Snackbar
+                        open={this.state.snackbarOpen}
+                        onClose={this.handleClose}
+                        TransitionComponent={TransitionRight}
+                        message={<span>Changes Saved</span>}
+                    />
                     <h2 className='centerHeadings'>Notes</h2>
                     <Grid container>
                     <Grid item xs={3}></Grid>
                         <Grid item xs={6} container>
                             <Grid item xs={6}></Grid>
                             <Grid item xs={6}>
-                                {/* <FormControl className={this.props.classes.formControl}>
-                                    {notesButtonArea}
-                                </FormControl> */}
                             </Grid>
                             {notesField}
                         </Grid>
