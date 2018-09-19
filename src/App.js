@@ -19,6 +19,7 @@ import AddTrainer from './components/AddTrainer/AddTrainer';
 import TrainerSearchView from './components/TrainerSearchView/TrainerSearchView';
 import TrainerDetails from './components/TrainerDetails/TrainerDetails';
 import NationalTrainer from './components/NationalTrainer/NationalTrainer';
+import CohortDetails from './components/CohortDetails/CohortDetails'
 import AddCohort from './components/AddCohort/AddCohort';
 import AccountDetails from './components/AccountDetails/AccountDetails';
 import AddStateLevelOrg from './components/AddStateLevelOrg/AddStateLevelOrg';
@@ -68,6 +69,9 @@ const App = (props) => (
         <Route
           path="/trainerdetails/:id"
           component={TrainerDetails}
+        />
+        <Route path="/cohort/:cohort_id" 
+        component={CohortDetails}
         />
         <Route
           path="/addcohort"
