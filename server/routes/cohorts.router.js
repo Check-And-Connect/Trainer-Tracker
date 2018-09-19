@@ -133,4 +133,82 @@ router.get('/latestCohort/:state_level_org_id', (req, res) => {
         })
 })
 
+router.get('/cohortById/:cohort_id' , (req, res) => {
+    console.log(req.params);
+    let queryText = `SELECT *, cohort.name as cohort_name, cohort.description as c_desc, requirements.name as req_name FROM cohort
+    JOIN cohort_requirements ON cohort_requirements.cohort_id = cohort.cohort_id
+    JOIN requirements ON requirements.requirements_id = cohort_requirements.requirement_id
+    JOIN state_level_organization ON state_level_organization.state_level_organization_id = cohort.state_level_organization_ref_id
+    WHERE cohort.cohort_id = $1`
+    
+    pool.query(queryText , [req.params.cohort_id] )
+        .then(response => {
+            console.log(response.rows);
+            let responseObj = {
+                cohort_id : response.rows[0].cohort_id,
+                cohort_name : response.rows[0].cohort_name,
+                start_date : response.rows[0].start_date,
+                note  : response.rows[0].c_desc,
+                state_level_org_id : response.rows[0].state_level_organization_id,
+                state : response.rows[0].state,
+                requirements : [] 
+            };
+
+            response.rows.forEach(row => {
+                responseObj.requirements.push({
+                    requirement_id : row.requirement_id,
+                    requirement_name : row.req_name, 
+                    due_date : row.due_date,
+                    notification_1_date : row.notification_1_date,
+                    notification_2_date : row.notification_2_date
+                })
+            })
+
+            res.send(responseObj);
+
+        })
+        .catch(err => {
+            console.log(err);
+
+            res.sendStatus(500);
+        })
+    
+})
+
+router.put('/updateById/:cohort_id', (req, res) => {
+    console.log('============================');
+    console.log(req.params);
+    console.log(req.body);
+    console.log('============================');
+
+    let updateCohortQuery = 'UPDATE cohort SET name = $1, description = $2, state_level_organization_ref_id = $3 WHERE cohort_id = $4';
+
+    let updateCohortRequirements = 'UPDATE cohort_requirements SET due_date = $1, notification_1_date = $2, notification_2_date = $3 WHERE cohort_id = $4 AND requirement_id = $5';
+
+    let reqCounter = req.body.requirements.length;
+    pool.query(updateCohortQuery, [req.body.name, req.body.note, req.body.state_level_organization, req.params.cohort_id  ])
+        .then(response => {
+            
+            req.body.requirements.forEach(requirement => {
+                pool.query(updateCohortRequirements, [requirement.due_date, requirement.notification_1_date, requirement.notification_2_date, req.params.cohort_id, requirement.requirement_id])
+                .then(result => {
+                    console.log(requirement + ' updated');
+                    
+                    reqCounter--;
+                    
+                    if(reqCounter === 0){
+                        res.sendStatus(201);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.sendStatus(500);
+                })
+            })
+        }).catch(err => {
+            console.log(err);
+            res.sendStatus(500);  
+        })
+})
+
 module.exports = router;
