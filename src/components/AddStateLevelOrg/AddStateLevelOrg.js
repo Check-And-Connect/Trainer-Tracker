@@ -375,7 +375,7 @@ class AddStateLevelOrg extends Component {
 
           <div>
             <Button type="submit" variant="outlined">
-              Create New SLO
+              Create
             </Button>
             <Typography variant="subheading" color="error">
               {this.state.errorMessage}
