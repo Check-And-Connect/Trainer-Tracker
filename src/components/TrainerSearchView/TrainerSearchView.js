@@ -259,7 +259,6 @@ class TrainerSearchView extends Component {
     }
 
     applyFilters = (category) => {
-        console.log(this.state.checkboxesSelected);
         let filteredTrainers = [];
         let displayedSloCheckboxes = this.state.checkboxesDisplayed.state_level_organization_name;
         let displayedCohortCheckboxes = this.state.checkboxesDisplayed.cohort_name;
@@ -325,7 +324,6 @@ class TrainerSearchView extends Component {
                         if (typeof object[key] === "string" || typeof object[key] === 'number') {
 
                             if (object[key].toString().toLowerCase().includes(this.state.searchKey.toLowerCase())) {
-                                // console.log(object[key].toString().toLowerCase() + ' includes ' + this.state.searchKey);
 
                                 flag = true;
 
@@ -396,7 +394,6 @@ class TrainerSearchView extends Component {
                 }
                 break;
             case 'due':
-            console.log('due');
                 sortFunction = (a, b) => {
                     let c = Number(moment(a.lastNext[2]).format('x'));
                     let d = Number(moment(b.lastNext[2]).format('x'));

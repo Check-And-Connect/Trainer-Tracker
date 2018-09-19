@@ -72,6 +72,8 @@ class TrainerDetails extends Component{
         this.setState({ snackbarOpen: false });
     };
 
+    // This is the function that runs on page load to get all of the trainer details and 
+    // set them in the local state.
     getTrainerDetails = () => {
         let localTrainerID = this.props.match.params.id;
         axios.get(`/api/localTrainers/${localTrainerID}`)
@@ -90,11 +92,11 @@ class TrainerDetails extends Component{
             })
     }
 
-    componentDidUpdate = () => {
-        if (!this.props.user.isLoading && this.props.user.userName === null) {
-          this.props.history.push("home");
-        }
-      }
+    // componentDidUpdate = () => {
+    //     if (!this.props.user.isLoading && this.props.user.userName === null) {
+    //       this.props.history.push("home");
+    //     }
+    //   }
 
     handleInputChange = (e) => {
         if (e.target.name === 'notes' && !this.state.editingNotes){
@@ -107,7 +109,8 @@ class TrainerDetails extends Component{
             })
         }
 
-        console.log(e.target.name, e.target.value);
+        // If the user changes the state, slo, or cohort name dropdowns, we need to use the 
+        // filter actions to call the new options that should be shown below it in the hierarchy.
         if (e.target.name === 'state'){
             this.props.dispatch({ type: COHORT_ACTIONS.FETCH_FILTER_STATE, payload: e.target.value });
             this.setState({
@@ -158,25 +161,27 @@ class TrainerDetails extends Component{
 
     }
 
+    // This function is for saving any edits to the trainer info or notes.
     handleIconClick = () => {
         if (this.state.editingDetails || this.state.editingNotes){
             let localTrainerID = this.props.match.params.id;
             axios.put(`/api/localTrainers/${localTrainerID}`, this.state.trainer)
                 .then(res => {
-                    console.log(res.data);
+                    this.setState({
+                        editingDetails: false,
+                        editingNotes: false,
+                        snackbarOpen: true
+                    })
                     this.getTrainerDetails();
                 })
                 .catch(err => {
                     console.log(err);
                 })
         }
-        this.setState({
-            editingDetails: false,
-            editingNotes: false,
-            snackbarOpen: true
-        })
     }
 
+    // This function is for setting a trainer active or inactive.
+    // It calls the trainer toggle route directly and changes local state in the .then. 
     toggleStatus = () => {
         let localTrainerID = this.props.match.params.id
         axios.put(`/api/localTrainers/status/${localTrainerID}`)
@@ -466,9 +471,6 @@ class TrainerDetails extends Component{
                         <Grid item xs={6} container>
                             <Grid item xs={6}></Grid>
                             <Grid item xs={6}>
-                                {/* <FormControl className={this.props.classes.formControl}>
-                                    {notesButtonArea}
-                                </FormControl> */}
                             </Grid>
                             {notesField}
                         </Grid>
