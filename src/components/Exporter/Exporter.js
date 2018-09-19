@@ -72,11 +72,8 @@ handleExport = (currentTrainers) => {
   return localTrainers
 };
 
-  render() {
-      console.log('got here');
-      console.log('exporter JS', this.props.localTrainers.exportArray);
 
-      // if (this.props.localTrainers.exportArray.length){
+  render() {
       
       let flattenedArray = this.handleExport(this.props.localTrainers);
 
