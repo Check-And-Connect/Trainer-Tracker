@@ -85,6 +85,17 @@ const latestCohort = (state = [], action) => {
   }
 };
 
+const singleCohort = (state = [], action) => {
+  switch (action.type) {
+    case COHORT_ACTIONS.SET_COHORT_SINGLE:
+      return action.payload;
+    case COHORT_ACTIONS.UNSET_COHORT_SINGLE:
+      return [];
+    default:
+      return state;
+  }
+};
+
 const taskConfirmer = (
   state = { cohort_created: false, slo_created: true },
   action
@@ -98,10 +109,16 @@ const taskConfirmer = (
       return { ...state, slo_created: false };
     case COHORT_ACTIONS.SET_SLO_CREATION_CONFIRMATION:
       return { ...state, slo_created: true };
+    case COHORT_ACTIONS.UNSET_COHORT_UPDATE_CONFIRMATION:
+      return { ...state, cohort_updated : false};
+    case COHORT_ACTIONS.SET_COHORT_CREATION_CONFIRMATION:
+      return { ...state, cohort_updated : true}
     default:
       return state;
   }
 };
+
+
 
 export default combineReducers({
   state_dropDown,
@@ -110,5 +127,6 @@ export default combineReducers({
   cohort_dropDown,
   requirements,
   latestCohort,
-  taskConfirmer
+  taskConfirmer,
+  singleCohort
 });
