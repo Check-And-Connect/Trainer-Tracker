@@ -96,7 +96,6 @@ class CohortManager extends Component {
     if (!this.props.user.isLoading && this.props.user.userName === null) {
       this.props.history.push("home");
     }
-
     if (
       prevProps.localTrainers.allLocalTrainers.length === 0 &&
       this.props.localTrainers.allLocalTrainers.length !== 0
@@ -119,10 +118,12 @@ class CohortManager extends Component {
         this.setState({
           currentTrainers: filteredTrainers
         });
+      
       } else {
         this.setState({
           currentTrainers: this.props.localTrainers.allLocalTrainers
         });
+        
       }
     }
 
@@ -144,9 +145,7 @@ class CohortManager extends Component {
         snackOpen: true,
         snackMessege: "Marked Complete"
       });
-    }
-
-    
+    }   
   }
 
   handleCellClick = (localTrainerId, requirementId) => {
@@ -175,7 +174,6 @@ class CohortManager extends Component {
         return localTrainer.state;
       }
     );
-
     return [...new Set(allStates)];
   };
 
@@ -235,6 +233,7 @@ class CohortManager extends Component {
       currentTrainers: filteredLocalTrainers,
       checkedIDs: []
     });
+    
   };
 
   handleChecked = local_trainer_id => {
@@ -355,26 +354,7 @@ class CohortManager extends Component {
     });
   };
 
-  handleExport = () => {
-    console.log("triggered");
 
-    let localTrainers = [
-      {
-        first_name: "Isaac",
-        last_name: "Negatu",
-        cohort_name: "Cohort 1"
-      },
-      {
-        first_name: "Yishak",
-        last_name: "Turga",
-        cohort_name: "Cohort 2"
-      }
-    ];
-
-    console.log(<Export />);
-
-    return <Export localTrainers={localTrainers} />;
-  };
 
   handleClose = () => {
     this.setState({ snackOpen: false });
@@ -389,19 +369,6 @@ class CohortManager extends Component {
       cohorts = this.getCohorts();
       stateOrgs = this.getStateOrgsAndCohort();
     }
-
-    let localTrainers = [
-      {
-        first_name: "Isaac",
-        last_name: "Negatu",
-        cohort_name: "Cohort 1"
-      },
-      {
-        first_name: "Yishak",
-        last_name: "Turga",
-        cohort_name: "Cohort 2"
-      }
-    ];
 
     return (
       <div>
@@ -435,11 +402,16 @@ class CohortManager extends Component {
               />
               <div>
                 <Export
-                  localTrainers={localTrainers}
-                  button={
-                    <Button className={classes.export}>Export Table</Button>
-                  }
-                />
+                    localTrainers={this.state.currentTrainers}
+                    button={  
+                    <Button
+                      className={classes.export}
+                      // onClick={()=>this.handleExport(this.state.currentTrainers)}
+                    >
+                      Export Table
+                    </Button>
+                   } 
+                 /> 
               </div>
             </div>
             <CohortManagerTable
