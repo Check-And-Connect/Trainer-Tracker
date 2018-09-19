@@ -31,10 +31,6 @@ router.get("/", rejectUnauthenticated, (req, res) => {
             req.query.requirementId
           ])
           .then(response => {
-            console.log('=====================================');
-
-            console.log(response.rows);
-            console.log('=====================================');
             resolve(response);
           })
           .catch(err => {

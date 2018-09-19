@@ -386,7 +386,7 @@ class AddStateLevelOrg extends Component {
               open={this.state.snackOpen}
               onClose={this.handleClose}
               TransitionComponent={TransitionRight}
-              message={<span> Cohort Created</span>}
+              message={<span> State Level Org Created</span>}
             />
       </div>
     );

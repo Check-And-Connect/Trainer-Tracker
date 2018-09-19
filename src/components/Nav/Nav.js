@@ -74,14 +74,6 @@ class Nav extends React.Component {
             </MenuItem>
           </Link>
 
-          <Link to="/" style={{ textDecoration: 'none' }}>
-            <MenuItem
-              className={this.props.classes.dropDown}
-              onClick={this.handleClose}
-            >
-              Requirements
-            </MenuItem>
-          </Link>
 
           <Link to="/national_trainer" style={{ textDecoration: 'none' }}>
             <MenuItem
@@ -106,24 +98,6 @@ class Nav extends React.Component {
   }
 }
 
-// const Nav = () => (
-//   <div className="navbar">
-//     <div>
-//       <ul>
-//         <li>
-//           <Link to="/user">
-//             Create
-//           </Link>
-//         </li>
-//         <li>
-//           <Link to="/info">
-//             Cohort Manager
-//           </Link>
-//         </li>
-//       </ul>
-//     </div>
-//   </div>
-// );
 
 let styles = {};
 
