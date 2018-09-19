@@ -8,6 +8,8 @@ class TrainerHistoryStepper extends Component{
   render(){
     let displayedRequirementHistory = [];
 
+    // Only the requirements with a non-null 'completed' property will be shown in the history stepper.
+    // ie Only the ones that have been marked complete.
     if (this.props.requirements !== null){
       this.props.requirements.forEach((req, index) => {
         if (req.completed){
