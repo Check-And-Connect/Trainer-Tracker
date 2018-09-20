@@ -120,13 +120,13 @@ export class CohortManagerTable extends Component {
             />
           </TableCell>
           <TableCell className={this.props.classes.tableCell}>
-            <Link
+            {/* <Link
               to={`/cohort/${localTrainer.cohort.cohort_id}`}
               className={this.props.classes.buttonInCell}
              
-            >
-              <Button >{localTrainer.cohort.cohort_name}</Button>
-            </Link>
+            > */}
+              <p >{localTrainer.cohort.cohort_name}</p>
+            {/* </Link> */}
           </TableCell>
           <TableCell className={this.props.classes.tableCell}>
             <Link
