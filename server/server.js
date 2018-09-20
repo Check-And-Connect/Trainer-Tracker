@@ -19,16 +19,16 @@ const cron = require('node-cron');
 const notifier = require('./modules/notifier');
 
 
-// cron.schedule('0 8 * * *', () => {
-//   notifier()
+cron.schedule('0 8 * * *', () => {
+  notifier()
 
-// }, {
-//   scheduled : true,
-//   timezone : 'America/Chicago'
-// });
+}, {
+  scheduled : true,
+  timezone : 'America/Chicago'
+});
 
-// cron.schedule('*/30 * * * * *', () => {
-//   notifier()
+// cron.schedule('*/15 * * * * *', () => {
+//    notifier()
 // })
 
 // Body parser middleware
