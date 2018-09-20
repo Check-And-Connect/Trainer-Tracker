@@ -208,8 +208,11 @@ li a:hover {
   justify-content: center;
 }
 
-.outer-div
-{
+.outer-div{
      padding: 150px;
+}
+
+.red {
+    color: red;
 }
 

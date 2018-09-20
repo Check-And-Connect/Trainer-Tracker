@@ -18,7 +18,9 @@ router.get("/", rejectUnauthenticated, (req, res) => {
 
   const queryForPerson =
     getAllLocalTrainersQuery +
-    ` WHERE local_trainers.local_trainers_id = $1 AND cohort_requirements.requirement_id = $2 `;
+    ` WHERE local_trainers.local_trainers_id = $1 AND cohort_requirements.requirement_id = $2
+    ORDER BY cohort_requirements.requirement_id`;
+    // added order by
 
   let poolQuery = () => {
     if (req.query.hasOwnProperty("requirementId")) {
@@ -29,10 +31,6 @@ router.get("/", rejectUnauthenticated, (req, res) => {
             req.query.requirementId
           ])
           .then(response => {
-            console.log('=====================================');
-
-            console.log(response.rows);
-            console.log('=====================================');
             resolve(response);
           })
           .catch(err => {
@@ -147,8 +145,8 @@ router.get("/stateLevelOrganization", (req, res) => {
 
 //Adds a new local trainer to the local trainer table and the local trainers requirements table
 router.post("/addLT", async (req, res) => {
-  console.log("got to post", req.body);
   if (req.isAuthenticated) {
+    // make initial post to local trainers
     const postQuery = `INSERT INTO "local_trainers" (
                         "first_name", 
                         "last_name", 
@@ -159,20 +157,17 @@ router.post("/addLT", async (req, res) => {
                         "district", 
                         "cohort_ref_id") 
                         VALUES ($1,$2,$3,$4,$5,$6,$7,$8);`;
-    await pool
-      .query(postQuery, [
-        req.body.first_name,
-        req.body.last_name,
-        req.body.title,
-        req.body.email,
-        req.body.phone_number,
-        req.body.organization,
-        req.body.district,
-        req.body.cohort
-      ])
+    await pool.query(postQuery, [
+                                  req.body.first_name,
+                                  req.body.last_name,
+                                  req.body.title,
+                                  req.body.email,
+                                  req.body.phone_number,
+                                  req.body.organization,
+                                  req.body.district,
+                                  req.body.cohort
+                                ])
       .then(results => {
-        // res.sendStatus(200);
-        console.log('post', results.command)
         return results.command || null;
       })
       .catch(error => {
@@ -180,8 +175,8 @@ router.post("/addLT", async (req, res) => {
         res.sendStatus(500);
       });
 
+    // get the local trainer id from the post that was just added
     let localTrainerID = null;
-    console.log('trainerID');
     const getTrainerID = `SELECT "local_trainers_id" FROM local_trainers WHERE
                               "first_name" = $1 AND 
                               "last_name" = $2 AND  
@@ -191,20 +186,18 @@ router.post("/addLT", async (req, res) => {
                               "organization" = $6 AND  
                               "district" = $7 AND  
                               "cohort_ref_id" = $8;`;
-    await pool
-      .query(getTrainerID, [
-        req.body.first_name,
-        req.body.last_name,
-        req.body.title,
-        req.body.email,
-        req.body.phone_number,
-        req.body.organization,
-        req.body.district,
-        req.body.cohort
-      ])
+    await pool.query(getTrainerID, [
+                                    req.body.first_name,
+                                    req.body.last_name,
+                                    req.body.title,
+                                    req.body.email,
+                                    req.body.phone_number,
+                                    req.body.organization,
+                                    req.body.district,
+                                    req.body.cohort
+                                  ])
       .then(results => {
         localTrainerID = results.rows[0].local_trainers_id;
-        console.log('localTrainer', localTrainerID);
         return results.rows[0] || null;
       })
       .catch(error => {
@@ -212,25 +205,25 @@ router.post("/addLT", async (req, res) => {
         res.sendStatus(500);
       });
 
+// get all of the requirements that exist in the current local trainers cohort
     let cohortRequirementsID = [];
-    const getcohortRequirementsID =
-      `SELECT "cohort_req_id" FROM cohort_requirements WHERE "cohort_id" = $1;`;
-    await pool
-      .query(getcohortRequirementsID, [
-        req.body.cohort
-      ])
+    const getcohortRequirementsID = `SELECT "cohort_req_id" 
+                                      FROM cohort_requirements 
+                                      WHERE "cohort_id" = $1;`;
+    await pool.query(getcohortRequirementsID, [req.body.cohort])
       .then(results => {
         cohortRequirementsID = results.rows;
+//post the local trainer requirements
         for (let i = 0; i < cohortRequirementsID.length; i++) {
           const cohortReqID = cohortRequirementsID[i].cohort_req_id;
           const postLTRequirements = `INSERT INTO "local_trainers_requirements" (
-                "local_trainers_ref_id", 
-                "cohort_requirements_ref_id") 
-                VALUES ($1,$2);`;
+                                      "local_trainers_ref_id", 
+                                      "cohort_requirements_ref_id") 
+                                      VALUES ($1,$2);`;
           pool.query(postLTRequirements, [
-            localTrainerID,
-            cohortReqID
-          ])
+                                            localTrainerID,
+                                            cohortReqID
+                                          ])
             .then(results => {
               return results.command || null;
             })
@@ -377,6 +370,7 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
   JOIN requirements ON requirements.requirements_id = cohort_requirements.requirement_id
   LEFT OUTER JOIN national_trainer ON local_trainers_requirements.national_trainer_ref_id = national_trainer.national_trainer_id
   WHERE local_trainers_ref_id = $1`;
+
   const trainerRequirementsArray = await pool
     .query(getTrainerRequirementsQuery, [req.params.id])
     .then(PGres => {

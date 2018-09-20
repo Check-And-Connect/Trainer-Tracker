@@ -37,11 +37,11 @@ const styles = {
   },
   leftPanel: {
     display: "Grid",
-    gridTemplateRows: "0.0fr 9fr"
+    gridTemplateRows: "0.01fr 9fr"
   },
   rightPanel: {
     display: "Grid",
-    gridTemplateRows: "0.3fr 9fr",
+    gridTemplateRows: "0.01fr 9fr",
     margin: "0em 1em"
   },
   searchAndExport: {
@@ -69,6 +69,10 @@ class CohortManager extends Component {
       stateOrgPicked: "",
       cohortPicked: ""
     },
+    orderBy: {
+      columnName: '',
+      ascending: true
+    },
     dialogOpen: false,
     checkedIDs: [],
     searchKey: "",
@@ -92,7 +96,6 @@ class CohortManager extends Component {
     if (!this.props.user.isLoading && this.props.user.userName === null) {
       this.props.history.push("home");
     }
-
     if (
       prevProps.localTrainers.allLocalTrainers.length === 0 &&
       this.props.localTrainers.allLocalTrainers.length !== 0
@@ -115,10 +118,12 @@ class CohortManager extends Component {
         this.setState({
           currentTrainers: filteredTrainers
         });
+      
       } else {
         this.setState({
           currentTrainers: this.props.localTrainers.allLocalTrainers
         });
+        
       }
     }
 
@@ -140,9 +145,7 @@ class CohortManager extends Component {
         snackOpen: true,
         snackMessege: "Marked Complete"
       });
-    }
-
-    
+    }   
   }
 
   handleCellClick = (localTrainerId, requirementId) => {
@@ -171,7 +174,6 @@ class CohortManager extends Component {
         return localTrainer.state;
       }
     );
-
     return [...new Set(allStates)];
   };
 
@@ -231,10 +233,10 @@ class CohortManager extends Component {
       currentTrainers: filteredLocalTrainers,
       checkedIDs: []
     });
+    
   };
 
   handleChecked = local_trainer_id => {
-    console.log(local_trainer_id);
     if (local_trainer_id === "selectAll") {
       let allIds = this.state.currentTrainers.map(trainer => {
         return trainer.local_trainers_id;
@@ -308,7 +310,6 @@ class CohortManager extends Component {
 
   filterCurrentTrainersWithSearchKey = () => {
     let flag = false;
-    console.log(this.state.trainersBeforeSearch);
 
     let filteredTrainers = this.state.trainersBeforeSearch.filter(
       localTrainer => {
@@ -351,26 +352,7 @@ class CohortManager extends Component {
     });
   };
 
-  handleExport = () => {
-    console.log("triggered");
 
-    let localTrainers = [
-      {
-        first_name: "Isaac",
-        last_name: "Negatu",
-        cohort_name: "Cohort 1"
-      },
-      {
-        first_name: "Yishak",
-        last_name: "Turga",
-        cohort_name: "Cohort 2"
-      }
-    ];
-
-    console.log(<Export />);
-
-    return <Export localTrainers={localTrainers} />;
-  };
 
   handleClose = () => {
     this.setState({ snackOpen: false });
@@ -385,19 +367,6 @@ class CohortManager extends Component {
       cohorts = this.getCohorts();
       stateOrgs = this.getStateOrgsAndCohort();
     }
-
-    let localTrainers = [
-      {
-        first_name: "Isaac",
-        last_name: "Negatu",
-        cohort_name: "Cohort 1"
-      },
-      {
-        first_name: "Yishak",
-        last_name: "Turga",
-        cohort_name: "Cohort 2"
-      }
-    ];
 
     return (
       <div>
@@ -430,12 +399,16 @@ class CohortManager extends Component {
                 search={this.handleSearch}
               />
               <div>
-                <Export
-                  localTrainers={localTrainers}
-                  button={
-                    <Button className={classes.export}>Export Table</Button>
-                  }
-                />
+                {/* <Export
+                    localTrainers={this.state.currentTrainers}
+                    button={  
+                    <Button
+                      className={classes.export}
+                    >
+                      Export Table
+                    </Button>
+                   } 
+                 />  */}
               </div>
             </div>
             <CohortManagerTable
