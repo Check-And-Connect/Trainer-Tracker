@@ -237,7 +237,6 @@ class CohortManager extends Component {
   };
 
   handleChecked = local_trainer_id => {
-    console.log(local_trainer_id);
     if (local_trainer_id === "selectAll") {
       let allIds = this.state.currentTrainers.map(trainer => {
         return trainer.local_trainers_id;
@@ -311,7 +310,6 @@ class CohortManager extends Component {
 
   filterCurrentTrainersWithSearchKey = () => {
     let flag = false;
-    console.log(this.state.trainersBeforeSearch);
 
     let filteredTrainers = this.state.trainersBeforeSearch.filter(
       localTrainer => {

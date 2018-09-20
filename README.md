@@ -43,8 +43,11 @@ To run a development build on your own machine:
 
 3. Create a .env file with the following variable:
 SERVER_SESSION_SECRET=
+EMAIL=
+EMAIL_PASSWORD=
 
 Add a string of random numbers, symbols, and letters after the SERVER_SESSION_SECRET=.
+If you want to use the email functionality, you will have to add an email and email password.
 
 4. npm run server
 
