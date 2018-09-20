@@ -1,17 +1,11 @@
 import React, { Component } from "react";
 import ReactExport from "react-data-export";
-import { connect } from "react-redux";
-import { Button } from '@material-ui/core'
 import moment from 'moment';
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
-const mapStateToProps = state => ({
-  user: state.user,
-  localTrainers: state.localTrainerReducer
-});
 class Export extends Component {
   constructor(props) {
     super(props)
@@ -19,7 +13,6 @@ class Export extends Component {
 
 //reformats array to send to excel file
 handleExport = (currentTrainers) => {
-  // console.log("handleExport=============", currentTrainers);
   let localTrainers = [];
   let newObject = {};
 
@@ -67,8 +60,6 @@ handleExport = (currentTrainers) => {
     }
     localTrainers.push(newObject);
   }
-
-  // console.log('local trainers', localTrainers);
   return localTrainers
 };
 

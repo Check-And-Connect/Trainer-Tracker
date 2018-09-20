@@ -481,12 +481,12 @@ class TrainerSearchView extends Component {
                 return (
                     <TableRow key={trainer.local_trainers_id}>
                         <TableCell className={classes.tableCell}>
-                            <Link
+                            {/* <Link
                                 to={"/cohort" + trainer.cohort.cohort_id}
                                 className={classes.buttonInCell}
-                            >
-                                <Button>{trainer.cohort.cohort_name}</Button>
-                            </Link>
+                            > */}
+                                <p>{trainer.cohort.cohort_name}</p>
+                            {/* </Link> */}
                         </TableCell>
                         <TableCell className={classes.tableCell}>
                             <Link
