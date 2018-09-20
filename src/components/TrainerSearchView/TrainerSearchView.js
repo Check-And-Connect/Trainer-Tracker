@@ -549,7 +549,7 @@ class TrainerSearchView extends Component {
                         />
               <div>
                 <Export
-                  localTrainers={localTrainers}
+                  localTrainers={this.state.localTrainers}
                   button={
                     <Button className={classes.export}>Export Table</Button>
                   }

@@ -90,7 +90,6 @@ class CohortManager extends Component {
     this.setState({
       currentTrainers: this.props.localTrainers.allLocalTrainers
     });
-    this.handleExport(this.state.currentTrainers);
   }
 
   componentDidUpdate(prevProps) {
@@ -119,12 +118,12 @@ class CohortManager extends Component {
         this.setState({
           currentTrainers: filteredTrainers
         });
-        this.handleExport(this.state.currentTrainers);
+      
       } else {
         this.setState({
           currentTrainers: this.props.localTrainers.allLocalTrainers
         });
-        this.handleExport(this.state.currentTrainers);
+        
       }
     }
 
@@ -234,7 +233,7 @@ class CohortManager extends Component {
       currentTrainers: filteredLocalTrainers,
       checkedIDs: []
     });
-    this.handleExport(this.state.currentTrainers);
+    
   };
 
   handleChecked = local_trainer_id => {
@@ -353,66 +352,9 @@ class CohortManager extends Component {
     this.setState({
       currentTrainers: filteredTrainers
     });
-    this.handleExport(this.state.currentTrainers);
   };
 
-//reformats array to send to excel file
-  handleExport = (currentTrainers) => {
-    console.log("handleExport=============", currentTrainers);
-    let localTrainers = [];
-    let newObject = {};
 
-    for (let i = 0; i < currentTrainers.length; i++) {
-      let initialTTTWorkshop = '';
-      let TTTTermsOfAgreement = '';
-      let observedTrainingSession = '';
-      let nationalTrainerThatObserved = '';
-      let certification = '';
-      let CCTraining = '';
-      let recertification = '';
-
-      for (let j = 0; j < currentTrainers[j].requirements.length; j++) {
-        if (currentTrainers[i].requirements[j].requirement_id === 1){
-          initialTTTWorkshop = currentTrainers[i].requirements[j].requirement_due_date;
-        } else if (currentTrainers[i].requirements[j].requirement_id === 2){
-          TTTTermsOfAgreement = currentTrainers[i].requirements[j].requirement_due_date;
-        } else if (currentTrainers[i].requirements[j].requirement_id === 3){
-          observedTrainingSession = currentTrainers[i].requirements[j].requirement_due_date;
-          nationalTrainerThatObserved = currentTrainers[i].requirements[j].national_trainer_first_name + ' ' + currentTrainers[i].requirements[j].national_trainer_last_name;
-        } else if (currentTrainers[i].requirements[j].requirement_id === 4){
-          certification = currentTrainers[i].requirements[j].requirement_due_date;
-        } else if (currentTrainers[i].requirements[j].requirement_id === 5){
-          CCTraining = currentTrainers[i].requirements[j].requirement_due_date;
-        } else if (currentTrainers[i].requirements[j].requirement_id === 6){
-          recertification = currentTrainers[i].requirements[j].requirement_due_date;
-        } else (
-          console.log('not found')
-        )       
-        }
-
-      newObject = {
-        first_name: currentTrainers[i].first_name,
-        last_name: currentTrainers[i].last_name,
-        state: currentTrainers[i].state,
-        state_level_organization: currentTrainers[i].state_level_organization.state_level_organization_name,
-        cohort: currentTrainers[i].cohort.cohort_name,
-        initial_TTT_Workshop: initialTTTWorkshop,
-        TTT_Terms_Of_Agreement: TTTTermsOfAgreement,
-        observed_Training_Session: observedTrainingSession,
-        national_Trainer_That_Observed: nationalTrainerThatObserved,
-        certification_requirement: certification,
-        CC_Training: CCTraining,
-        re_certification: recertification 
-      }
-      localTrainers.push(newObject);
-    }
-
-    console.log('local trainers', localTrainers);
-    return this.props.dispatch({
-      type: LOCAL_TRAINERS_ACTIONS.EXPORT_LOCAL_TRAINERS,
-      payload: localTrainers
-    });
-  };
 
   handleClose = () => {
     this.setState({ snackOpen: false });
@@ -460,7 +402,7 @@ class CohortManager extends Component {
               />
               <div>
                 <Export
-                  // {/* localTrainers={localTrainers}  */}
+                    localTrainers={this.state.currentTrainers}
                     button={  
                     <Button
                       className={classes.export}
