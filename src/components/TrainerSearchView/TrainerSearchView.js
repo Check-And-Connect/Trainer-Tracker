@@ -453,7 +453,7 @@ class TrainerSearchView extends Component {
                             searchKey={this.state.searchKey}
                         />
                         <div>
-                            <Button className={classes.export}>Export</Button>
+                            <Button className={classes.export}>Export Table</Button>
                         </div>
                     </div>
                     <div>
