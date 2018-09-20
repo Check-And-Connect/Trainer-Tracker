@@ -1,6 +1,6 @@
 # Check and Connect: Trainer Tracker
 
-Trainer Tracker is a full-stack web application that is used by the Check and Connect program to track local trainers in 9 states. National trainers are able to monitor the completion status of certifications, training sessions, and workshops for every local trainer.
+Trainer Tracker is a full-stack web application that is used by the Check and Connect program to track local trainers in multiple states. National trainers are able to monitor the completion status of certifications, training sessions, and workshops for every local trainer.
 
 ## Live on Heroku:
 check-and-connect.herokuapp.com
@@ -44,7 +44,7 @@ To run a development build on your own machine:
 3. Create a .env file with the following variable:
 SERVER_SESSION_SECRET=
 
-Add a string of random numbers after the SERVER_SESSION_SECRET=.
+Add a string of random numbers, symbols, and letters after the SERVER_SESSION_SECRET=.
 
 4. npm run server
 
@@ -56,5 +56,9 @@ Cohort manager page has a filter for specific cohorts that can be managed at the
 Both the search trainers and cohort manager pages have an excel export feature that will create an excel file with all of the local trainers currently in the table.
 Pages exist that allow the user to add national trainers, cohorts, local trainers, and state level organizations.
 Account details page contains the current user's information which can be updated.
+
+## Next Steps:
+Add a page so that new requirements can be made and added to cohorts.
+Create a page that can add state leads to cohorts and state level organizations.
 
 Hand-crafted by: Nate Carroll, Grace Kasahara, Isaac Negatu, and Ross Qualey
