@@ -19,7 +19,7 @@ class Export extends Component {
 
 //reformats array to send to excel file
 handleExport = (currentTrainers) => {
-  console.log("handleExport=============", currentTrainers);
+  // console.log("handleExport=============", currentTrainers);
   let localTrainers = [];
   let newObject = {};
 
@@ -68,7 +68,7 @@ handleExport = (currentTrainers) => {
     localTrainers.push(newObject);
   }
 
-  console.log('local trainers', localTrainers);
+  // console.log('local trainers', localTrainers);
   return localTrainers
 };
 
