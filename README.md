@@ -1,81 +1,64 @@
-# Express/Passport with React
-This version uses React to control the login requests and redirection in coordination with client-side routing.
+# Check and Connect: Trainer Tracker
 
-We **STONGLY** recommend following these instructions carefully. It's a lot, and will take some time to set up, but your life will be much easier this way in the long run.
+Trainer Tracker is a full-stack web application that is used by the Check and Connect program to track local trainers in multiple states. National trainers are able to monitor the completion status of certifications, training sessions, and workshops for every local trainer.
 
-## Prerequisites
+## Live on Heroku:
+check-and-connect.herokuapp.com
 
-Before you get started, make sure you have the following software installed on your computer:
+## Built With:
+Node.js
+Express
+React
+React-Redux
+Redux-Sagas
+PostgreSQL
+NodeMailer
+Node-Cron
+Heroku
 
-- [Node.js](https://nodejs.org/en/)
-- [PostrgeSQL](https://www.postgresql.org/)
-- [Nodemon](https://nodemon.io/)
+## Getting Started:
+Required:
 
-## Create database and table
+Node.js
+PostgreSQL
+Nodemon
 
-Create a new database called `prime_app` and create a `person` table:
+To start with a sample table: 
 
-```SQL
-CREATE TABLE person (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR (80) UNIQUE NOT NULL,
-    password VARCHAR (1000) NOT NULL
-);
-```
+Create a new database in PostgreSQL named check_and_connect.
+The database.sql file contains the SQL commands that will set up the starting tables in the database.
+In order to set up login information, insert this dummy data or your own data into the national_trainer table. You will need to replace the email address with a real email address that you have access to.
 
-If you would like to name your database something else, you will need to change `prime_app` to the name of your new database name in `server/modules/pool.js`
+INSERT INTO "public"."national_trainer"("national_trainer_id","first_name","last_name","user_name","password","email","title","status","pw_reset_token","pw_reset_time")
+VALUES
+(1,'Tyler','Smith','TSmith','password','youremail@gmail.com',NULL,TRUE,NULL,NULL);
 
-## Download (Don't Clone) This Repository
+Since the password isn't hashed, when you get to the login page you will need to click on forgot password first. It will ask you for your email address and then send you an email so that you can reset your password. After that is completed, then you will be able to log into your account.
 
-* Don't Fork or Clone. Instead, click the `Clone or Download` button and select `Download Zip`.
-* Unzip the project and start with the code in that folder.
-* Create a new GitHub project and push this code to the new repository.
+To run a development build on your own machine:
 
-## Development Setup Instructions
+1. Clone/download Repository
 
-* Run `npm install`
-* Create a `.env` file at the root of the project and paste this line into the file:
-    ```
-    SERVER_SESSION_SECRET=superDuperSecret
-    ```
-    While you're in your new `.env` file, take the time to replace `superDuperSecret` with some long random string like `25POUbVtx6RKVNWszd9ERB9Bb6` to keep your application secure. Here's a site that can help you: [https://passwordsgenerator.net/](https://passwordsgenerator.net/). If you don't do this step, create a secret with less than eight characters, or leave it as `superDuperSecret`, you will get a warning.
-* Start postgres if not running already by using `brew services start postgresql`
-* Run `npm run server`
-* Run `npm run client`
-* Navigate to `localhost:3000`
+2. npm install
 
-## Debugging
+3. Create a .env file with the following variable:
+SERVER_SESSION_SECRET=
 
-To debug, you will need to run the client-side separately from the server. Start the client by running the command `npm run dev:client`. Start the debugging server by selecting the Debug button.
+Add a string of random numbers, symbols, and letters after the SERVER_SESSION_SECRET=.
 
-![VSCode Toolbar](documentation/images/vscode-toolbar.png)
+4. npm run server
 
-Then make sure `Launch Program` is selected from the dropdown, then click the green play arrow.
+5. npm run client
 
-![VSCode Debug Bar](documentation/images/vscode-debug-bar.png)
+## Features:
+Search trainers page allows the user to filter and search for specific local trainers.
+Cohort manager page has a filter for specific cohorts that can be managed at the same time.
+Both the search trainers and cohort manager pages have an excel export feature that will create an excel file with all of the local trainers currently in the table.
+Pages exist that allow the user to add national trainers, cohorts, local trainers, and state level organizations.
+Account details page contains the current user's information which can be updated.
 
+## Next Steps:
+Add a page so that new requirements can be made and added to cohorts.
+Create a page that can add state leads to cohorts and state level organizations.
 
-## Production Build
-
-Before pushing to Heroku, run `npm run build` in terminal. This will create a build folder that contains the code Heroku will be pointed at. You can test this build by typing `npm start`. Keep in mind that `npm start` will let you preview the production build but will **not** auto update.
-
-* Start postgres if not running already by using `brew services start postgresql`
-* Run `npm start`
-* Navigate to `localhost:5000`
-
-## Lay of the Land
-
-* `src/` contains the React application
-* `public/` contains static assets for the client-side
-* `build/` after you build the project, contains the transpiled code from `src/` and `public/` that will be viewed on the production site
-* `server/` contains the Express App
-
-## Deployment
-
-1. Create a new Heroku project
-1. Link the Heroku project to the project GitHub Repo
-1. Create an Herkoku Postgres database
-1. Connect to the Heroku Postgres database from Postico
-1. Create the necessary tables
-1. Add an environment variable for `SERVER_SESSION_SECRET` with a nice random string for security
-1. In the deploy section, select manual deploy
+Hand-crafted by: Nate Carroll, Grace Kasahara, Isaac Negatu, and Ross Qualey
