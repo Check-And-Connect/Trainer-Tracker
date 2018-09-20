@@ -399,7 +399,7 @@ class CohortManager extends Component {
                 search={this.handleSearch}
               />
               <div>
-                <Export
+                {/* <Export
                     localTrainers={this.state.currentTrainers}
                     button={  
                     <Button
@@ -408,7 +408,7 @@ class CohortManager extends Component {
                       Export Table
                     </Button>
                    } 
-                 /> 
+                 />  */}
               </div>
             </div>
             <CohortManagerTable

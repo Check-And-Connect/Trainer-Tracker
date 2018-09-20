@@ -106,51 +106,97 @@ function* getRequirements() {
 function* createNewCohort(action) {
   try {
     yield dispatch({
-      type : COHORT_ACTIONS.UNSET_COHORT_CREATION_CONFIRMATION
-    })
+      type: COHORT_ACTIONS.UNSET_COHORT_CREATION_CONFIRMATION
+    });
     yield call(axios.post, "api/cohorts/addNewCohort", action.payload);
 
     yield dispatch({
-      type : COHORT_ACTIONS.SET_COHORT_CREATION_CONFIRMATION
-    })
-    
+      type: COHORT_ACTIONS.SET_COHORT_CREATION_CONFIRMATION
+    });
   } catch (error) {
     console.log(error);
   }
 }
 
 function* createStateLevelOrg(action) {
-    try {
-      yield dispatch({
-        type : COHORT_ACTIONS.UNSET_SLO_CREATION_CONFIRMATION
-      })
-        yield call(axios.post, 'api/cohorts/addNewSLO' , action.payload)
+  try {
+    yield dispatch({
+      type: COHORT_ACTIONS.UNSET_SLO_CREATION_CONFIRMATION
+    });
+    yield call(axios.post, "api/cohorts/addNewSLO", action.payload);
 
-        yield dispatch({
-          type : COHORT_ACTIONS.SET_SLO_CREATION_CONFIRMATION
-        })
-    } catch (error) {
-        console.log(error);
-        
-        
-    }
+    yield dispatch({
+      type: COHORT_ACTIONS.SET_SLO_CREATION_CONFIRMATION
+    });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function* getLatestCohort(action) {
-    try {
-        yield dispatch({
-            type : COHORT_ACTIONS.UNSET_LATEST_COHORT,
-        })
-        let latestCohort = yield call(axios.get, `api/cohorts/latestCohort/${action.payload}`)
-        
-        yield dispatch({
-            type : COHORT_ACTIONS.SET_LATEST_COHORT,
-            payload : latestCohort.data
-        })
-    } catch (error) {
-        console.log(error);
-        
-    }
+  try {
+    yield dispatch({
+      type: COHORT_ACTIONS.UNSET_LATEST_COHORT
+    });
+    let latestCohort = yield call(
+      axios.get,
+      `api/cohorts/latestCohort/${action.payload}`
+    );
+
+    yield dispatch({
+      type: COHORT_ACTIONS.SET_LATEST_COHORT,
+      payload: latestCohort.data
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* getCohortSingle(action) {
+  try {
+    yield dispatch({
+      type: COHORT_ACTIONS.UNSET_COHORT_SINGLE
+    });
+
+    let cohort = yield call(
+      axios.get,
+      `api/cohorts/cohortById/${action.payload.cohort_id}`
+    );
+
+    yield dispatch({
+      type: COHORT_ACTIONS.SET_COHORT_SINGLE,
+      payload: [cohort.data]
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* updateCohort(action) {
+  try {
+    yield dispatch({
+      type : COHORT_ACTIONS.UNSET_COHORT_UPDATE_CONFIRMATION
+    })
+
+    yield call(axios.put , `api/cohorts/updateById/${action.payload.cohort_id}` , action.payload.cohort_info);
+
+
+    yield dispatch({
+      type : COHORT_ACTIONS.FETCH_COHORT_SINGLE,
+      payload : { cohort_id : action.payload.cohort_id}
+    })
+
+
+    yield dispatch({
+      type : COHORT_ACTIONS.SET_COHORT_UPDATE_CONFIRMATION
+    })
+
+
+  } catch (error) {
+    console.log(error);
+    
+    
+  }
 }
 
 function* cohortSaga() {
@@ -165,7 +211,9 @@ function* cohortSaga() {
   );
   yield takeEvery(COHORT_ACTIONS.FETCH_FILTER_SLO, filterSLO);
   yield takeLatest(COHORT_ACTIONS.ADD_SLO, createStateLevelOrg);
-  yield takeLatest(COHORT_ACTIONS.FETCH_LATEST_COHORT , getLatestCohort);
+  yield takeLatest(COHORT_ACTIONS.FETCH_LATEST_COHORT, getLatestCohort);
+  yield takeLatest(COHORT_ACTIONS.FETCH_COHORT_SINGLE, getCohortSingle);
+  yield takeLatest(COHORT_ACTIONS.UPDATE_COHORT, updateCohort);
 }
 
 export default cohortSaga;

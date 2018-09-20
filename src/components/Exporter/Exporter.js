@@ -60,7 +60,6 @@ handleExport = (currentTrainers) => {
     }
     localTrainers.push(newObject);
   }
-
   return localTrainers
 };
 
