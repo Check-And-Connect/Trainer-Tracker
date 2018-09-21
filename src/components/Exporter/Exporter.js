@@ -15,7 +15,7 @@ class Export extends Component {
 handleExport = (currentTrainers) => {
   let localTrainers = [];
   let newObject = {};
-
+  console.log('localTrainers2', currentTrainers)
   for (let i = 0; i < currentTrainers.length; i++) {
     let initialTTTWorkshop = '';
     let TTTTermsOfAgreement = '';
@@ -25,7 +25,7 @@ handleExport = (currentTrainers) => {
     let CCTraining = '';
     let recertification = '';
 
-    for (let j = 0; j < currentTrainers[j].requirements.length; j++) {
+    for (let j = 0; j < currentTrainers[i].requirements.length; j++) {
       if (currentTrainers[i].requirements[j].requirement_id === 1){
         initialTTTWorkshop = moment(currentTrainers[i].requirements[j].requirement_due_date).format('MM-DD-YYYY');
       } else if (currentTrainers[i].requirements[j].requirement_id === 2){
@@ -65,8 +65,11 @@ handleExport = (currentTrainers) => {
 
 
   render() {
-      
-      let flattenedArray = this.handleExport(this.props.localTrainers);
+    let flattenedArray = [];
+    if (this.props.localTrainers !== null || undefined){
+      console.log('localTrainers', this.props.localTrainers)
+      flattenedArray = this.handleExport(this.props.localTrainers);
+    }
 
       return (
         <ExcelFile element={this.props.button}>
