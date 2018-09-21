@@ -15,7 +15,7 @@ class Export extends Component {
 handleExport = (currentTrainers) => {
   let localTrainers = [];
   let newObject = {};
-  console.log('localTrainers2', currentTrainers)
+
   for (let i = 0; i < currentTrainers.length; i++) {
     let initialTTTWorkshop = '';
     let TTTTermsOfAgreement = '';
@@ -67,7 +67,6 @@ handleExport = (currentTrainers) => {
   render() {
     let flattenedArray = [];
     if (this.props.localTrainers !== null || undefined){
-      console.log('localTrainers', this.props.localTrainers)
       flattenedArray = this.handleExport(this.props.localTrainers);
     }
 
