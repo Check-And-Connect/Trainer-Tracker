@@ -133,13 +133,6 @@ class AddCohort extends Component {
     let requirementAry = [];
 
     this.props.cohortReducer.requirements.forEach(requirement => {
-      if (requirement.requirements_id === 1) {
-        console.log(
-          moment(this.state.chosenDate)
-            .add(requirement.duration, "day")
-            .format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ")
-        );
-      }
 
       let newObject = {
         requirement_id: requirement.requirements_id,

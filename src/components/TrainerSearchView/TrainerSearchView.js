@@ -475,19 +475,6 @@ class TrainerSearchView extends Component {
             sortByIndicator = '▲';
         }
 
-        let localTrainers = [
-            {
-              first_name: "Isaac",
-              last_name: "Negatu",
-              cohort_name: "Cohort 1"
-            },
-            {
-              first_name: "Yishak",
-              last_name: "Turga",
-              cohort_name: "Cohort 2"
-            }
-          ];
-
         if (this.state.localTrainers) {
             trainersTableBody = this.state.localTrainers.map((trainer) => {
                 trainer.lastNext = this.getLastNext(trainer.requirements)
