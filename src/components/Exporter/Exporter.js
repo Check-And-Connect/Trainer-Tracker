@@ -25,7 +25,7 @@ handleExport = (currentTrainers) => {
     let CCTraining = '';
     let recertification = '';
 
-    for (let j = 0; j < currentTrainers[j].requirements.length; j++) {
+    for (let j = 0; j < currentTrainers[i].requirements.length; j++) {
       if (currentTrainers[i].requirements[j].requirement_id === 1){
         initialTTTWorkshop = moment(currentTrainers[i].requirements[j].requirement_due_date).format('MM-DD-YYYY');
       } else if (currentTrainers[i].requirements[j].requirement_id === 2){
@@ -60,14 +60,15 @@ handleExport = (currentTrainers) => {
     }
     localTrainers.push(newObject);
   }
-
   return localTrainers
 };
 
 
   render() {
-      
-      let flattenedArray = this.handleExport(this.props.localTrainers);
+    let flattenedArray = [];
+    if (this.props.localTrainers !== null || undefined){
+      flattenedArray = this.handleExport(this.props.localTrainers);
+    }
 
       return (
         <ExcelFile element={this.props.button}>
