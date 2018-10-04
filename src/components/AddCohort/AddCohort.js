@@ -369,7 +369,6 @@ class AddCohort extends Component {
     let dueDateTabel =
       this.state.newCohort.requirements.length > 0 ? this.createDueDates() : [];
 
-    console.log(this.state);
     let content = null;
     if (this.props.user.userName) {
       content = (
