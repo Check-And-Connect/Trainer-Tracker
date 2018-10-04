@@ -6,12 +6,11 @@ import moment from 'moment';
 import Export from "../Exporter/Exporter";
 
 import { LOCAL_TRAINERS_ACTIONS } from '../../redux/actions/localTrainerActions';
-import { COHORT_ACTIONS } from '../../redux/actions/cohortActions';
 
 import TrainerSearchSidebar from '../TrainerSearchSidebar/TrainerSearchSidebar';
 import TrainerTableSearch from '../TrainerTableSearch/TrainerTableSearch';
 
-import { withStyles, Button, Paper, TextField } from "@material-ui/core";
+import { withStyles, Button, Paper } from "@material-ui/core";
 import { Table, TableBody, TableHead, TableRow, TableCell } from '@material-ui/core';
 
 const styles = {
@@ -36,9 +35,6 @@ const styles = {
     buttonInCell: {
         fontSize: "0.8em",
         textDecoration: 'none',
-    },
-    textField: {
-        margin: '0em 0em 0.5em 1em',
     },
     searchAndExport: {
         display: "Grid",
