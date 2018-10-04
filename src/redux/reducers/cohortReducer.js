@@ -97,7 +97,7 @@ const singleCohort = (state = [], action) => {
 };
 
 const taskConfirmer = (
-  state = { cohort_created: false, slo_created: true },
+  state = { cohort_created: false, slo_created: true, cohort_updated: false },
   action
 ) => {
   switch (action.type) {
@@ -111,7 +111,7 @@ const taskConfirmer = (
       return { ...state, slo_created: true };
     case COHORT_ACTIONS.UNSET_COHORT_UPDATE_CONFIRMATION:
       return { ...state, cohort_updated : false};
-    case COHORT_ACTIONS.SET_COHORT_CREATION_CONFIRMATION:
+    case COHORT_ACTIONS.SET_COHORT_UPDATE_CONFIRMATION:
       return { ...state, cohort_updated : true}
     default:
       return state;

@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 import { COHORT_ACTIONS } from "../../redux/actions/cohortActions";
-import { STATE_LEAD_ACTIONS } from "../../redux/actions/stateLeadActions";
 
 import {
   withStyles,
