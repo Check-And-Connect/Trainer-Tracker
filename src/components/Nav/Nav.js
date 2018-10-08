@@ -23,7 +23,7 @@ class Nav extends React.Component {
 
     return (
       <div>
-      
+
         <Link to="/trainersearch" style={{ textDecoration: 'none' }}>
           <Button
             aria-owns={anchorEl ? "simple-menu" : null}
@@ -90,6 +90,15 @@ class Nav extends React.Component {
               onClick={this.handleClose}
             >
               State Level Organization
+            </MenuItem>
+          </Link>
+
+          <Link to="/editrequirements" style={{ textDecoration: 'none' }}>
+            <MenuItem
+              className={this.props.classes.dropDown}
+              onClick={this.handleClose}
+            >
+              Edit Requirements
             </MenuItem>
           </Link>
         </Menu>
