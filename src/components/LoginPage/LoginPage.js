@@ -8,7 +8,7 @@ import {
 } from "../../redux/actions/loginActions";
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 
-import { withStyles, Button, Paper, TextField } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 
 const mapStateToProps = state => ({
   user: state.user,
