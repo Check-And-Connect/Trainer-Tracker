@@ -6,12 +6,11 @@ import moment from 'moment';
 import Export from "../Exporter/Exporter";
 
 import { LOCAL_TRAINERS_ACTIONS } from '../../redux/actions/localTrainerActions';
-import { COHORT_ACTIONS } from '../../redux/actions/cohortActions';
 
 import TrainerSearchSidebar from '../TrainerSearchSidebar/TrainerSearchSidebar';
 import TrainerTableSearch from '../TrainerTableSearch/TrainerTableSearch';
 
-import { withStyles, Button, Paper, TextField } from "@material-ui/core";
+import { withStyles, Button, Paper } from "@material-ui/core";
 import { Table, TableBody, TableHead, TableRow, TableCell } from '@material-ui/core';
 
 const styles = {
@@ -36,9 +35,6 @@ const styles = {
     buttonInCell: {
         fontSize: "0.8em",
         textDecoration: 'none',
-    },
-    textField: {
-        margin: '0em 0em 0.5em 1em',
     },
     searchAndExport: {
         display: "Grid",
@@ -132,11 +128,6 @@ class TrainerSearchView extends Component {
                 }
             })
         }
-    }
-
-    // This is a placeholder for when we actually get the export function hooked up.
-    handleExport = () => {
-        console.log('export function called');
     }
 
     //
@@ -421,11 +412,12 @@ class TrainerSearchView extends Component {
     } 
 
     getLastNext = (requirementsArray) => {
-        if (!requirementsArray) {
-            return ['n/a', 'n/a', 'n/a'];
+
+        let lastNext = ['n/a', 'n/a', 'n/a'];
+        if (!requirementsArray || requirementsArray.length === 0){
+            return lastNext;
         }
 
-        let lastNext = [null, null, null];
         requirementsArray.sort((a, b) => {
             return a.requirement_id - b.requirement_id
         })
@@ -444,26 +436,6 @@ class TrainerSearchView extends Component {
         }
     }
 
-    handleExport = () => {
-        console.log("triggered");
-    
-        let localTrainers = [
-          {
-            first_name: "Isaac",
-            last_name: "Negatu",
-            cohort_name: "Cohort 1"
-          },
-          {
-            first_name: "Yishak",
-            last_name: "Turga",
-            cohort_name: "Cohort 2"
-          }
-        ];
-        
-        return <Export localTrainers={localTrainers} />;
-      };
-
-
     render() {
         let { classes } = this.props;
         let trainersTableBody = null;
@@ -475,31 +447,18 @@ class TrainerSearchView extends Component {
             sortByIndicator = '▲';
         }
 
-        let localTrainers = [
-            {
-              first_name: "Isaac",
-              last_name: "Negatu",
-              cohort_name: "Cohort 1"
-            },
-            {
-              first_name: "Yishak",
-              last_name: "Turga",
-              cohort_name: "Cohort 2"
-            }
-          ];
-
         if (this.state.localTrainers) {
             trainersTableBody = this.state.localTrainers.map((trainer) => {
                 trainer.lastNext = this.getLastNext(trainer.requirements)
                 return (
                     <TableRow key={trainer.local_trainers_id}>
                         <TableCell className={classes.tableCell}>
-                            <Link
+                            {/* <Link
                                 to={"/cohort" + trainer.cohort.cohort_id}
                                 className={classes.buttonInCell}
-                            >
-                                <Button>{trainer.cohort.cohort_name}</Button>
-                            </Link>
+                            > */}
+                                <p>{trainer.cohort.cohort_name}</p>
+                            {/* </Link> */}
                         </TableCell>
                         <TableCell className={classes.tableCell}>
                             <Link
@@ -517,11 +476,21 @@ class TrainerSearchView extends Component {
                                 <Button>{trainer.last_name}</Button>
                             </Link>
                         </TableCell>
-                        <TableCell className={classes.tableCell} >{trainer.state}</TableCell>
-                        <TableCell className={classes.tableCell} >{trainer.state_level_organization.state_level_organization_name}</TableCell>
-                        <TableCell className={classes.tableCell} >{trainer.lastNext[0]}</TableCell>
-                        <TableCell className={classes.tableCell} >{trainer.lastNext[1]}</TableCell>
-                        <TableCell className={classes.tableCell} >{trainer.lastNext[2]}</TableCell>
+                        <TableCell className={classes.tableCell} >
+                            {trainer.state}
+                        </TableCell>
+                        <TableCell className={classes.tableCell} >
+                            {trainer.state_level_organization.state_level_organization_name}
+                        </TableCell>
+                        <TableCell className={classes.tableCell} >
+                            {trainer.lastNext ? trainer.lastNext[0] : 'n/a'}
+                        </TableCell>
+                        <TableCell className={classes.tableCell} >
+                            {trainer.lastNext ? trainer.lastNext[1] : 'n/a'}
+                        </TableCell>
+                        <TableCell className={classes.tableCell} >
+                            {trainer.lastNext ? trainer.lastNext[2] : 'n/a'}
+                        </TableCell>
                     </TableRow>
                 )
             })
@@ -548,12 +517,12 @@ class TrainerSearchView extends Component {
                             searchKey={this.state.searchKey}
                         />
               <div>
-                {/* <Export
+                <Export
                   localTrainers={this.state.localTrainers}
                   button={
                     <Button className={classes.export}>Export Table</Button>
                   }
-                /> */}
+                />
               </div>
                     </div>
                     <div>
