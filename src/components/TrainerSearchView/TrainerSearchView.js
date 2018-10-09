@@ -105,6 +105,7 @@ class TrainerSearchView extends Component {
 
             // As we map over the trainers, we add the state, slo, and cohort information to the displayed checkboxes
             // piece of local state. This ensures that we only ever show checkbox filters for the trainers in the table.
+
             let displayedTrainersList = [];
             this.props.localTrainerReducer.allLocalTrainers.forEach((trainer) => {
                 if (trainer.status) {
@@ -449,7 +450,7 @@ class TrainerSearchView extends Component {
 
         if (this.state.localTrainers) {
             trainersTableBody = this.state.localTrainers.map((trainer) => {
-                let lastNext = this.getLastNext(trainer.requirements)
+                // let lastNext = this.getLastNext(trainer.requirements)
                 return (
                     <TableRow key={trainer.local_trainers_id}>
                         <TableCell className={classes.tableCell}>
@@ -483,13 +484,13 @@ class TrainerSearchView extends Component {
                             {trainer.state_level_organization.state_level_organization_name}
                         </TableCell>
                         <TableCell className={classes.tableCell} >
-                            {lastNext ? lastNext[0] : 'n/a'}
+                            {trainer.lastNext ? trainer.lastNext[0] : 'n/a'}
                         </TableCell>
                         <TableCell className={classes.tableCell} >
-                            {lastNext ? lastNext[1] : 'n/a'}
+                            {trainer.lastNext ? trainer.lastNext[1] : 'n/a'}
                         </TableCell>
                         <TableCell className={classes.tableCell} >
-                            {lastNext ? lastNext[2] : 'n/a'}
+                            {trainer.lastNext ? trainer.lastNext[2] : 'n/a'}
                         </TableCell>
                     </TableRow>
                 )
