@@ -17,7 +17,7 @@ const stateLead_dropDown = (state = [], action) => {
         case STATE_LEAD_ACTIONS.FILTER_STATE_LEAD:
             let newCohort = [];
             for (let i = 0; i < state.length; i++) {
-                if (state[i].state_level_organization_ref_id == action.payload) {
+                if (state[i].state_level_organization_ref_id === action.payload) {
                     newCohort.push(state[i]);
                 }
             }

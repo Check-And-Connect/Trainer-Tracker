@@ -200,8 +200,6 @@ class TrainerDetails extends Component{
 
     render(){
 
-        let { classes } = this.props;
-
         let stateListArray;
         let cohortListArray;
         let sloListArray;

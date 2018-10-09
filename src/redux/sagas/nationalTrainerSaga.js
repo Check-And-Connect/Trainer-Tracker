@@ -1,7 +1,5 @@
 import {
-  takeEvery,
   takeLatest,
-  all,
   call,
   put as dispatch
 } from "redux-saga/effects";
