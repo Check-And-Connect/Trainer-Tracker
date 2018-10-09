@@ -449,7 +449,7 @@ class TrainerSearchView extends Component {
 
         if (this.state.localTrainers) {
             trainersTableBody = this.state.localTrainers.map((trainer) => {
-                trainer.lastNext = this.getLastNext(trainer.requirements)
+                let lastNext = this.getLastNext(trainer.requirements)
                 return (
                     <TableRow key={trainer.local_trainers_id}>
                         <TableCell className={classes.tableCell}>
@@ -483,13 +483,13 @@ class TrainerSearchView extends Component {
                             {trainer.state_level_organization.state_level_organization_name}
                         </TableCell>
                         <TableCell className={classes.tableCell} >
-                            {trainer.lastNext ? trainer.lastNext[0] : 'n/a'}
+                            {lastNext ? lastNext[0] : 'n/a'}
                         </TableCell>
                         <TableCell className={classes.tableCell} >
-                            {trainer.lastNext ? trainer.lastNext[1] : 'n/a'}
+                            {lastNext ? lastNext[1] : 'n/a'}
                         </TableCell>
                         <TableCell className={classes.tableCell} >
-                            {trainer.lastNext ? trainer.lastNext[2] : 'n/a'}
+                            {lastNext ? lastNext[2] : 'n/a'}
                         </TableCell>
                     </TableRow>
                 )
