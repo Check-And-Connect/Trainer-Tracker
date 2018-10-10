@@ -25,7 +25,7 @@ router.get('/states', (req, res) => {
         pool.query(queryText)
             .then((results) => {
                 res.send(results.rows)
-                console.log(results.rows);
+                // console.log(results.rows);
 
             }).catch((err) => {
                 console.log(err);
@@ -42,7 +42,7 @@ router.get('/cohort', (req, res) => {
         pool.query(queryText)
             .then((results) => {
                 res.send(results.rows)
-                console.log(results.rows);
+                // console.log(results.rows);
 
             }).catch((err) => {
                 console.log(err);
@@ -57,7 +57,7 @@ router.get('/requirements', (req, res) => {
     const queryText =  'SELECT * FROM requirements ORDER BY requirements_id';
     pool.query(queryText)
         .then(results => {
-            console.log(results.rows);
+            // console.log(results.rows);
             res.send(results.rows);
         })
         .catch(err => {
@@ -72,7 +72,7 @@ router.get('/requirements', (req, res) => {
 router.post('/addNewCohort', (req, res) => {
     const createCohortQuery = 'INSERT INTO cohort (name, start_date , description, state_level_organization_ref_id) VALUES ($1, $2, $3, $4) RETURNING cohort_id';
 
-    const addtoCohortRequirementQuery = 'INSERT INTO cohort_requirements (cohort_id, requirement_id, due_date, notification_1_date, notification_2_date) VALUES ($1, $2, $3, $4 , $5 )';
+    const addtoCohortRequirementQuery = 'INSERT INTO cohort_requirements (cohort_id, requirement_id, due_date, notification_1_date, notification_2_date, cycle) VALUES ($1, $2, $3, $4 , $5, $6 )';
 
     pool.query(createCohortQuery, [req.body.newCohort.name, req.body.chosenDate, req.body.newCohort.note, req.body.newCohort.state_level_organization])
         .then(result => {
@@ -82,11 +82,11 @@ router.post('/addNewCohort', (req, res) => {
             
             req.body.newCohort.requirements.forEach(requirement => {
 
-                pool.query(addtoCohortRequirementQuery, [cohortId, requirement.requirement_id, requirement.due_date, requirement.notification_1_date, requirement.notification_2_date])
+                pool.query(addtoCohortRequirementQuery, [cohortId, requirement.requirement_id, requirement.due_date, requirement.notification_1_date, requirement.notification_2_date, 1])
                 .then(result1 => {
-                    console.log(requirement.requirement_name + ' ' + 'added');
+                    // console.log(requirement.requirement_name + ' ' + 'added');
                     reqCounter--;
-                    console.log(reqCounter);
+                    // console.log(reqCounter);
                     
                     if(reqCounter === 0){
                         res.sendStatus(201);
@@ -176,10 +176,10 @@ router.get('/cohortById/:cohort_id' , (req, res) => {
 })
 
 router.put('/updateById/:cohort_id', (req, res) => {
-    console.log('============================');
-    console.log(req.params);
-    console.log(req.body);
-    console.log('============================');
+    // console.log('============================');
+    // console.log(req.params);
+    // console.log(req.body);
+    // console.log('============================');
 
     let updateCohortQuery = 'UPDATE cohort SET name = $1, description = $2, state_level_organization_ref_id = $3 WHERE cohort_id = $4';
 

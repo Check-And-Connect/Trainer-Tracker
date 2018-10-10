@@ -44,7 +44,7 @@ function* fetchRequirementForLocalTrainer(action) {
       axios.get,
       `/api/localTrainers/?localTrainerId=${
         action.payload.localTrainerId
-      }&requirementId=${action.payload.requirementId}`
+      }&requirementId=${action.payload.requirementId}&cycle=${action.payload.cycle}`
     );
 
     yield dispatch({

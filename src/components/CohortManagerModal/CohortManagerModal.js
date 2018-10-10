@@ -159,6 +159,7 @@ class CohortManagerModal extends Component {
 
     let payload = {
       requirement_id: this.state.localTrainer.requirements[0].requirement_id,
+      cycle : this.props.cellInfo.cycle,
       date_marked_complete: this.state.completed,
       national_trainer: this.state.nationalTrainer,
       note: this.state.note,
@@ -213,7 +214,11 @@ class CohortManagerModal extends Component {
               <DialogTitle>
                 {localTrainer.first_name} {localTrainer.last_name}
               </DialogTitle>
+              
               <DialogContent>
+                <Typography>
+                  This Requirement is part of cycle : {this.props.cellInfo.cycle}
+                </Typography>
                 <Typography>
                   Organization :{" "}
                   {
