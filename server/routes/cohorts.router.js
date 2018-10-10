@@ -176,10 +176,10 @@ router.get('/cohortById/:cohort_id' , (req, res) => {
 })
 
 router.put('/updateById/:cohort_id', (req, res) => {
-    console.log('============================');
-    console.log(req.params);
-    console.log(req.body);
-    console.log('============================');
+    // console.log('============================');
+    // console.log(req.params);
+    // console.log(req.body);
+    // console.log('============================');
 
     let updateCohortQuery = 'UPDATE cohort SET name = $1, description = $2, state_level_organization_ref_id = $3 WHERE cohort_id = $4';
 

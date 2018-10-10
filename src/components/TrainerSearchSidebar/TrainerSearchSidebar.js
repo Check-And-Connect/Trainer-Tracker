@@ -9,7 +9,6 @@ import {
   Checkbox
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { isNullOrUndefined } from "util";
 
 const styles = {  
     mainComponent : {
@@ -22,9 +21,6 @@ const styles = {
 };
 
 class TrainerSearchSidebar extends Component {
-    constructor(props){
-        super(props)
-    }
 
   render() {
     let { classes } = this.props;
