@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 import { COHORT_ACTIONS } from "../../redux/actions/cohortActions";
-import { STATE_LEAD_ACTIONS } from "../../redux/actions/stateLeadActions";
 
 import {
   withStyles,
@@ -377,7 +376,6 @@ class AddCohort extends Component {
     let dueDateTabel =
       this.state.newCohort.requirements.length > 0 ? this.createDueDates() : [];
 
-    console.log(this.state);
     let content = null;
     if (this.props.user.userName) {
       content = (

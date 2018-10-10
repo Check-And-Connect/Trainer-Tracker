@@ -7,6 +7,11 @@ const router = express.Router();
 const moment = require("moment");
 
 router.get("/", rejectUnauthenticated, (req, res) => {
+
+  /**
+   
+  === This was the original one ===
+   
   const getAllLocalTrainersQuery = `SELECT local_trainers.*, local_trainers_requirements.*, local_trainers_requirements.notes as requirement_notes, national_trainer.first_name as national_trainer_first_name, national_trainer.last_name as national_trainer_last_name, cohort_requirements.*, requirements.name as requirement_name ,cohort.*, state_level_organization.name as slo_name, state_level_organization.state_level_organization_id as state_level_organization_id, state_level_organization.state as state FROM local_trainers
   JOIN local_trainers_requirements ON local_trainers.local_trainers_id = local_trainers_requirements.local_trainers_ref_id
   LEFT OUTER JOIN national_trainer ON local_trainers_requirements.national_trainer_ref_id = national_trainer.national_trainer_id
@@ -14,6 +19,50 @@ router.get("/", rejectUnauthenticated, (req, res) => {
   JOIN requirements ON requirements.requirements_id = cohort_requirements.requirement_id
   JOIN cohort ON cohort.cohort_id = local_trainers.cohort_ref_id
   JOIN state_level_organization ON state_level_organization.state_level_organization_id = cohort.state_level_organization_ref_id`;
+
+
+  */
+
+  // const getAllLocalTrainersQuery = `SELECT local_trainers.*, local_trainers_requirements.*, local_trainers_requirements.notes as requirement_notes, national_trainer.first_name as national_trainer_first_name, national_trainer.last_name as national_trainer_last_name, cohort_requirements.*, requirements.name as requirement_name ,cohort.*, state_level_organization.name as slo_name, state_level_organization.state_level_organization_id as state_level_organization_id, state_level_organization.state as state FROM local_trainers
+  // JOIN local_trainers_requirements ON local_trainers.local_trainers_id = local_trainers_requirements.local_trainers_ref_id
+  // LEFT OUTER JOIN national_trainer ON local_trainers_requirements.national_trainer_ref_id = national_trainer.national_trainer_id
+  // JOIN cohort_requirements ON local_trainers_requirements.cohort_requirements_ref_id = cohort_requirements.cohort_req_id
+  // JOIN requirements ON requirements.requirements_id = cohort_requirements.requirement_id
+  // JOIN cohort ON cohort.cohort_id = local_trainers.cohort_ref_id
+  // JOIN state_level_organization ON state_level_organization.state_level_organization_id = cohort.state_level_organization_ref_id`;
+
+  // Since all of the sorting and filtering logic is performed client-side, the initial call to this route
+  // returns pretty much everything, reshaped so that an entry in the array of trainers has arrays for cohort, 
+  //  requirements, etc. 
+
+  const getAllLocalTrainersQuery = `
+    SELECT 
+      local_trainers.*, 
+      local_trainers_requirements.*, 
+      local_trainers_requirements.notes as requirement_notes, 
+      national_trainer.first_name as national_trainer_first_name, 
+      national_trainer.last_name as national_trainer_last_name, 
+      cohort_requirements.*, 
+      requirements.name as requirement_name,
+      cohort.*, 
+      state_level_organization.name as slo_name, 
+      state_level_organization.state_level_organization_id as state_level_organization_id, 
+      state_level_organization.state as state 
+    FROM local_trainers
+    JOIN 
+      local_trainers_requirements ON local_trainers.local_trainers_id = local_trainers_requirements.local_trainers_ref_id
+    LEFT OUTER JOIN 
+      national_trainer ON local_trainers_requirements.national_trainer_ref_id = national_trainer.national_trainer_id
+    JOIN 
+      cohort_requirements ON local_trainers_requirements.cohort_requirements_ref_id = cohort_requirements.cohort_req_id
+    JOIN 
+      requirements ON requirements.requirements_id = cohort_requirements.requirement_id
+    JOIN 
+      cohort ON cohort.cohort_id = local_trainers.cohort_ref_id
+    JOIN 
+      state_level_organization ON state_level_organization.state_level_organization_id = cohort.state_level_organization_ref_id`;
+
+  // console.log(req.user);
 
   const queryForPerson =
     getAllLocalTrainersQuery +
@@ -61,11 +110,8 @@ router.get("/", rejectUnauthenticated, (req, res) => {
   poolQuery()
     .then(results => {
       let resultAry = [];
-      console.log("POOL QUERY RESULTS.ROWS:");
-      console.log("________________________");
-
+      // console.log('POOL QUERY RESULTS.ROWS:');
       // console.log(results.rows);
-      console.log("________________________");
       results.rows.forEach(element => {
         let indexOfLC = resultAry.findIndex(localTrainer => {
           return localTrainer.local_trainers_id == element.local_trainers_id;
@@ -80,7 +126,9 @@ router.get("/", rejectUnauthenticated, (req, res) => {
             cycle: element.cycle,
             cohort: {
               cohort_id: element.cohort_id,
-              cohort_name: element.name
+              cohort_name: element.name,
+              cohort_cycle: element.cycle || 'na'
+              // Cycles arent actually in the database yet
             },
             state: element.state,
             state_level_organization: {

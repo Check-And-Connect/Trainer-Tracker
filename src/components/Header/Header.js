@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
 import Nav from "../../components/Nav/Nav";
 import { Link } from "react-router-dom";
 import { USER_ACTIONS } from "../../redux/actions/userActions";
@@ -60,6 +59,7 @@ class Header extends Component {
               <img
                 className="logo"
                 src={require("../../styles/images/checkconnect_logo_h_rgb.jpg")}
+                alt="check and connect logo"
               />
             </div>
             <div className="hSplit">
