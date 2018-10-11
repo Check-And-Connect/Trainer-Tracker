@@ -126,9 +126,7 @@ router.get("/", rejectUnauthenticated, (req, res) => {
             cycle: element.cycle,
             cohort: {
               cohort_id: element.cohort_id,
-              cohort_name: element.name,
-              cohort_cycle: element.cycle || 'na'
-              // Cycles arent actually in the database yet
+              cohort_name: element.name
             },
             state: element.state,
             state_level_organization: {

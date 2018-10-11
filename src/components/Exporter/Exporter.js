@@ -19,7 +19,8 @@ handleExport = (currentTrainers) => {
     let observedTrainingSession = '';
     let nationalTrainerThatObserved = '';
     let certification = '';
-    let CCTraining = '';
+    let CCTraining1 = '';
+    let CCTraining2 = '';
     let recertification = '';
 
     for (let j = 0; j < currentTrainers[i].requirements.length; j++) {
@@ -33,7 +34,7 @@ handleExport = (currentTrainers) => {
       } else if (currentTrainers[i].requirements[j].requirement_id === 4){
         certification = moment(currentTrainers[i].requirements[j].requirement_due_date).format('MM-DD-YYYY');
       } else if (currentTrainers[i].requirements[j].requirement_id === 5){
-        CCTraining = moment(currentTrainers[i].requirements[j].requirement_due_date).format('MM-DD-YYYY');
+        CCTraining1 = moment(currentTrainers[i].requirements[j].requirement_due_date).format('MM-DD-YYYY');
       } else if (currentTrainers[i].requirements[j].requirement_id === 6){
         recertification = moment(currentTrainers[i].requirements[j].requirement_due_date).format('MM-DD-YYYY');
       } else (
@@ -52,7 +53,8 @@ handleExport = (currentTrainers) => {
       observed_Training_Session: observedTrainingSession,
       national_Trainer_That_Observed: nationalTrainerThatObserved,
       certification_requirement: certification,
-      CC_Training: CCTraining,
+      CC_Training1: CCTraining1,
+      CC_Training2: CCTraining2,
       re_certification: recertification 
     }
     localTrainers.push(newObject);
@@ -63,6 +65,7 @@ handleExport = (currentTrainers) => {
 
   render() {
     let flattenedArray = [];
+
     if (this.props.localTrainers !== null || undefined){
       flattenedArray = this.handleExport(this.props.localTrainers);
     }
@@ -80,7 +83,8 @@ handleExport = (currentTrainers) => {
             <ExcelColumn label="Observed Training Session" value="observed_Training_Session" />
             <ExcelColumn label="National Trainer that Observed" value="national_Trainer_That_Observed" />
             <ExcelColumn label="Certification" value="certification_requirement" />
-            <ExcelColumn label="C &#38; C Training" value="CC_Training" />
+            <ExcelColumn label="C &#38; C Training 1" value="CC_Training1" />
+            <ExcelColumn label="C &#38; C Training 2" value="CC_Training2" />
             <ExcelColumn label="Recertification" value="re_certification" />
           </ExcelSheet>
         </ExcelFile>

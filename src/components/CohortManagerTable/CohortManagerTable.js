@@ -55,7 +55,7 @@ export class CohortManagerTable extends Component {
     }
     
 
-    console.log(requirement);
+    // console.log(requirement);
     
     let content;
 
