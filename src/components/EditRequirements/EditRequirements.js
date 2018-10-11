@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { USER_ACTIONS } from '../../redux/actions/userActions';
-import { NATIONAL_TRAINER_ACTIONS } from '../../redux/actions/nationalTrainerActions';
 import { COHORT_ACTIONS } from "../../redux/actions/cohortActions";
 
 import {
@@ -40,7 +39,6 @@ class EditRequirements extends Component {
 
     constructor(props) {
         super(props)
-        // this.props.cohortReducer.requirements
         this.state = {
             requirements: [],
             editDetails: false,
@@ -66,38 +64,20 @@ class EditRequirements extends Component {
         }
     }
 
-    // handleChangeFor = (propertyName) => {
-    //     return (event) => {
-    //         this.setState({
-    //             nationalTrainer: {
-    //                 ...this.state.nationalTrainer,
-    //                 [propertyName]: event.target.value
-    //             }
-    //         })
-    //         this.setState({
-    //             editDetails: true
-    //         })
-    //     }
-    // }
-
     handleChangeFor = (req_ID, name, event) => {
         let allReqs = this.state.requirements;
     
         let getReqIndex = allReqs.findIndex(req => {
-            console.log('req_ID', req_ID)
           return req.requirement_id === req_ID;
         });
-        
-        console.log ('event', event.target.value)
+
         allReqs[getReqIndex][name] = event.target.value;
-        console.log ('allReqs', allReqs)
         this.setState({
             requirements: allReqs
         });
         this.setState({
             editDetails: true
-        })
-        
+        })    
       };
 
     updateRequirementState = () => {
@@ -117,14 +97,14 @@ class EditRequirements extends Component {
         });
       };
 
-    saveNationalTrainer = Transition => () => {
+    saveRequirements = Transition => () => {
         this.setState({
             editDetails: false
         })
         this.setState({
             open: true, Transition
         })
-        this.props.dispatch({ type: NATIONAL_TRAINER_ACTIONS.UPDATE_NATIONAL_TRAINER, payload: this.state.nationalTrainer })
+        this.props.dispatch({ type: COHORT_ACTIONS.UPDATE_REQUIREMENTS, payload: this.state.requirements })
     }
 
     handleClose = () => {
@@ -162,7 +142,7 @@ class EditRequirements extends Component {
                         </ul>
                     </div>   
                     <div className='centerHeadings'>
-                        <Button className={this.props.classes.button} variant="outlined" onClick={this.saveNationalTrainer(TransitionLeft)}>Save</Button>
+                        <Button className={this.props.classes.button} variant="outlined" onClick={this.saveRequirements(TransitionLeft)}>Save</Button>
                     </div>
 
                 </div>
