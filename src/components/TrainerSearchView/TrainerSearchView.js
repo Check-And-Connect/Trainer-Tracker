@@ -361,8 +361,8 @@ class TrainerSearchView extends Component {
                 sortFunction = (a, b) => {
                     let c, d;
                     try {
-                        c = a.cohort.cohort_name;
-                        d = b.cohort.cohort_name;
+                        c = a.cohort.cohort_name.trim();
+                        d = b.cohort.cohort_name.trim();
                     } catch(err) {
                         console.log('failed to sort', a, b);
                     }
@@ -373,8 +373,8 @@ class TrainerSearchView extends Component {
                 sortFunction = (a, b) => {
                     let c, d;
                     try {
-                        c = a.state_level_organization.state_level_organization_name;
-                        d = b.state_level_organization.state_level_organization_name;
+                        c = a.state_level_organization.state_level_organization_name.trim();
+                        d = b.state_level_organization.state_level_organization_name.trim();
                     } catch(err) {
                         console.log('failed to sort', a, b);
                     }
@@ -385,8 +385,8 @@ class TrainerSearchView extends Component {
                 sortFunction = (a, b) => {
                     let c, d;
                     try {
-                        c = a.lastNext[1];
-                        d = b.lastNext[1];
+                        c = a.lastNext[1].trim();
+                        d = b.lastNext[1].trim();
                     } catch(err) {
                         console.log('failed to sort', a, b);
                     }
@@ -397,8 +397,8 @@ class TrainerSearchView extends Component {
                 sortFunction = (a, b) => {
                     let c, d;
                     try {
-                        c = a.lastNext[0];
-                        d = b.lastNext[0];
+                        c = a.lastNext[0].trim();
+                        d = b.lastNext[0].trim();
                     } catch(err){
                         console.log('failed to sort', a, b);
                     }
@@ -421,10 +421,10 @@ class TrainerSearchView extends Component {
                 sortFunction = (a, b) => {
                     let c, d;
                     try {
-                        c = a[column];
-                        d = b[column];
+                        c = a[column].trim();
+                        d = b[column].trim();
                     } catch(err) {
-                        console.log('failed to sort', a, b);
+                        console.log('failed to sort by', column, a, b);
                     }
                     return compare(c, d)
                 }
