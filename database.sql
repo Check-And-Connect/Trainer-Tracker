@@ -56,7 +56,8 @@ CREATE TABLE "cohort_requirements" (
  "due_date" date NOT NULL,
  "notes" text,
  "notification_1_date" date,
- "notification_2_date" date
+ "notification_2_date" date,
+ "cycle" INTEGER NOT NULL
 );
 
 CREATE TABLE "local_trainers" (
