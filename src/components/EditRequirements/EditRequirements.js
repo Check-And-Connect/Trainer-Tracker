@@ -23,7 +23,7 @@ const mapStateToProps = state => ({
 const styles = {
     textField: {
         margin: '0em 0em 0.5em 0em',
-        width: "12em",
+        width: "20em",
         textAlign: "center"
     },
     button: {
@@ -54,25 +54,68 @@ class EditRequirements extends Component {
         this.props.dispatch({ type: COHORT_ACTIONS.FETCH_REQUIREMENTS });
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         if (!this.props.user.isLoading && this.props.user.userName === null) {
             this.props.history.push('home');
         }
-    }
-
-    handleChangeFor = (propertyName) => {
-        return (event) => {
-            this.setState({
-                nationalTrainer: {
-                    ...this.state.nationalTrainer,
-                    [propertyName]: event.target.value
-                }
-            })
-            this.setState({
-                editDetails: true
-            })
+        if (
+            prevProps.cohortReducer.requirements.length === 0 &&
+            this.props.cohortReducer.requirements.length !== 0
+          ) {
+            this.updateRequirementState();
         }
     }
+
+    // handleChangeFor = (propertyName) => {
+    //     return (event) => {
+    //         this.setState({
+    //             nationalTrainer: {
+    //                 ...this.state.nationalTrainer,
+    //                 [propertyName]: event.target.value
+    //             }
+    //         })
+    //         this.setState({
+    //             editDetails: true
+    //         })
+    //     }
+    // }
+
+    handleChangeFor = (req_ID, name, event) => {
+        let allReqs = this.state.requirements;
+    
+        let getReqIndex = allReqs.findIndex(req => {
+            console.log('req_ID', req_ID)
+          return req.requirement_id === req_ID;
+        });
+        
+        console.log ('event', event.target.value)
+        allReqs[getReqIndex][name] = event.target.value;
+        console.log ('allReqs', allReqs)
+        this.setState({
+            requirements: allReqs
+        });
+        this.setState({
+            editDetails: true
+        })
+        
+      };
+
+    updateRequirementState = () => {
+        let requirementAry = [];
+    
+        this.props.cohortReducer.requirements.forEach(requirement => {
+    
+          let newObject = {
+            requirement_id: requirement.requirements_id,
+            requirement_name: requirement.name
+          };
+          requirementAry.push(newObject);
+        });
+    
+        this.setState({
+            requirements: requirementAry
+        });
+      };
 
     saveNationalTrainer = Transition => () => {
         this.setState({
@@ -90,13 +133,11 @@ class EditRequirements extends Component {
 
     render() {
         let content = null;
-        let stateListArray = this.props.cohortReducer.requirements.map((item, index) => {
-            return <li><TextField
-                        key={index}
+        let stateListArray = this.state.requirements.map((item, index) => {
+            return <li key={index}><TextField
                         className={this.props.classes.textField}
-                        // label="First Name"
-                        value={item.name}
-                        onChange={this.handleChangeFor('first_name')}
+                        value={item.requirement_name}
+                        onChange={newName => this.handleChangeFor(item.requirement_id, "requirement_name", newName)}
                         margin="normal"
                     /></li>
         })
@@ -116,7 +157,9 @@ class EditRequirements extends Component {
                 <div>
                     <Typography className='centerHeadings' variant="display2">Edit Requirements</Typography>
                     <div className='centerHeadings'>
-                    {stateListArray}
+                        <ul>
+                            {stateListArray}
+                        </ul>
                     </div>   
                     <div className='centerHeadings'>
                         <Button className={this.props.classes.button} variant="outlined" onClick={this.saveNationalTrainer(TransitionLeft)}>Save</Button>
