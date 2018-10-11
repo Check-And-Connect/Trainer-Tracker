@@ -8,88 +8,61 @@ const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 class Export extends Component {
 
-//reformats array to send to excel file
-handleExport = (currentTrainers) => {
-  let localTrainers = [];
-  let newObject = {};
+  //reformats array to send to excel file
 
-  for (let i = 0; i < currentTrainers.length; i++) {
-    let initialTTTWorkshop = '';
-    let TTTTermsOfAgreement = '';
-    let observedTrainingSession = '';
-    let nationalTrainerThatObserved = '';
-    let certification = '';
-    let CCTraining1 = '';
-    let CCTraining2 = '';
-    let recertification = '';
+  newHandleExport = (currentTrainers) => {
+    let allDataRows = [];
+    let requirementNames = new Set();
 
-    for (let j = 0; j < currentTrainers[i].requirements.length; j++) {
-      if (currentTrainers[i].requirements[j].requirement_id === 1){
-        initialTTTWorkshop = moment(currentTrainers[i].requirements[j].requirement_due_date).format('MM-DD-YYYY');
-      } else if (currentTrainers[i].requirements[j].requirement_id === 2){
-        TTTTermsOfAgreement =  moment(currentTrainers[i].requirements[j].requirement_due_date).format('MM-DD-YYYY');
-      } else if (currentTrainers[i].requirements[j].requirement_id === 3){
-        observedTrainingSession = moment(currentTrainers[i].requirements[j].requirement_due_date).format('MM-DD-YYYY');
-        nationalTrainerThatObserved = currentTrainers[i].requirements[j].national_trainer_first_name + ' ' + currentTrainers[i].requirements[j].national_trainer_last_name;
-      } else if (currentTrainers[i].requirements[j].requirement_id === 4){
-        certification = moment(currentTrainers[i].requirements[j].requirement_due_date).format('MM-DD-YYYY');
-      } else if (currentTrainers[i].requirements[j].requirement_id === 5){
-        CCTraining1 = moment(currentTrainers[i].requirements[j].requirement_due_date).format('MM-DD-YYYY');
-      } else if (currentTrainers[i].requirements[j].requirement_id === 6){
-        recertification = moment(currentTrainers[i].requirements[j].requirement_due_date).format('MM-DD-YYYY');
-      } else (
-        console.log('not found')
-      )       
+    for (let trainer of currentTrainers){
+      let dataRow = {
+        first_name: trainer.first_name,
+        last_name: trainer.last_name,
+        state: trainer.state,
+        state_level_organization: trainer.state_level_organization.state_level_organization_name,
+        cohort: trainer.cohort.cohort_name
       }
-
-    newObject = {
-      first_name: currentTrainers[i].first_name,
-      last_name: currentTrainers[i].last_name,
-      state: currentTrainers[i].state,
-      state_level_organization: currentTrainers[i].state_level_organization.state_level_organization_name,
-      cohort: currentTrainers[i].cohort.cohort_name,
-      initial_TTT_Workshop: initialTTTWorkshop,
-      TTT_Terms_Of_Agreement: TTTTermsOfAgreement,
-      observed_Training_Session: observedTrainingSession,
-      national_Trainer_That_Observed: nationalTrainerThatObserved,
-      certification_requirement: certification,
-      CC_Training1: CCTraining1,
-      CC_Training2: CCTraining2,
-      re_certification: recertification 
+      for (let req of trainer.requirements){
+        requirementNames.add(req.requirement_name)
+        dataRow[req.requirementName] = moment(req.requirement_due_date).format('MM-DD-YYYY');
+      }
+      allDataRows.push(dataRow)
     }
-    localTrainers.push(newObject);
+
+    let returnObject = {
+      allDataRows: allDataRows,
+      requirementNames: requirementNames
+    }
+    return returnObject
   }
-  return localTrainers
-};
 
 
   render() {
-    let flattenedArray = [];
+    let requirementColumnHeads;
+    let data;
 
-    if (this.props.localTrainers !== null || undefined){
-      flattenedArray = this.handleExport(this.props.localTrainers);
+    if (this.props.localTrainers !== null || undefined) {
+      data = this.newHandleExport(this.props.localTrainers);
+      requirementColumnHeads = Array.from(data.requirementNames).map(name => {
+        return(
+          <ExcelColumn label={name} name={name} />
+        )
+      })
     }
 
-      return (
-        <ExcelFile element={this.props.button}>
-          <ExcelSheet data={flattenedArray} name='Local Trainers'>
-            <ExcelColumn label="First Name" value="first_name" />
-            <ExcelColumn label="Last Name" value="last_name" />
-            <ExcelColumn label="State" value="state" />
-            <ExcelColumn label="State Level Org" value="state_level_organization" />
-            <ExcelColumn label="Cohort" value="cohort" />
-            <ExcelColumn label="Initial TTT Workshop" value="initial_TTT_Workshop" />
-            <ExcelColumn label="TTT Terms of Agreement" value="TTT_Terms_Of_Agreement" />
-            <ExcelColumn label="Observed Training Session" value="observed_Training_Session" />
-            <ExcelColumn label="National Trainer that Observed" value="national_Trainer_That_Observed" />
-            <ExcelColumn label="Certification" value="certification_requirement" />
-            <ExcelColumn label="C &#38; C Training 1" value="CC_Training1" />
-            <ExcelColumn label="C &#38; C Training 2" value="CC_Training2" />
-            <ExcelColumn label="Recertification" value="re_certification" />
-          </ExcelSheet>
-        </ExcelFile>
-      );
-  } 
+    return (
+      <ExcelFile element={this.props.button}>
+        <ExcelSheet data={data.allDataRows} name='Local Trainers'>
+          <ExcelColumn label="First Name" value="first_name" />
+          <ExcelColumn label="Last Name" value="last_name" />
+          <ExcelColumn label="State" value="state" />
+          <ExcelColumn label="State Level Org" value="state_level_organization" />
+          <ExcelColumn label="Cohort" value="cohort" />
+          {requirementColumnHeads}
+        </ExcelSheet>
+      </ExcelFile>
+    );
+  }
 }
 
 
