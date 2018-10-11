@@ -24,12 +24,18 @@ class Export extends Component {
       }
       for (let req of trainer.requirements){
         requirementNames.add(req.requirement_name)
+
+        if (req.requirement_id === 3){  // observed training
+          requirementNames.add('Observed')
+          dataRow['Observed'] = 'derp';
+        }
+
         if (req.completed){
-          dataRow[req.requirementName] = 'Completed ' + moment(req.completed).format('MM-DD-YYYY');
+          dataRow[req.requirement_name] = 'Completed ' + moment(req.completed).format('MM-DD-YYYY');
         } else if (req.scheduled){
-          dataRow[req.requirementName] = 'Scheduled for ' + moment(req.scheduled).format('MM-DD-YYYY');
+          dataRow[req.requirement_name] = 'Scheduled for ' + moment(req.scheduled).format('MM-DD-YYYY');
         } else if (req.requirement_due_date){
-          dataRow[req.requirementName] = 'Due ' + moment(req.requirement_due_date).format('MM-DD-YYYY');
+          dataRow[req.requirement_name] = 'Due ' + moment(req.requirement_due_date).format('MM-DD-YYYY');
         }
       }
       allDataRows.push(dataRow)
