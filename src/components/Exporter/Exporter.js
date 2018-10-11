@@ -24,7 +24,13 @@ class Export extends Component {
       }
       for (let req of trainer.requirements){
         requirementNames.add(req.requirement_name)
-        dataRow[req.requirementName] = moment(req.requirement_due_date).format('MM-DD-YYYY');
+        if (req.completed){
+          dataRow[req.requirementName] = 'Completed ' + moment(req.completed).format('MM-DD-YYYY');
+        } else if (req.scheduled){
+          dataRow[req.requirementName] = 'Scheduled for ' + moment(req.scheduled).format('MM-DD-YYYY');
+        } else if (req.requirement_due_date){
+          dataRow[req.requirementName] = 'Due ' + moment(req.requirement_due_date).format('MM-DD-YYYY');
+        }
       }
       allDataRows.push(dataRow)
     }
