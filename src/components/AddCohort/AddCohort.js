@@ -146,7 +146,14 @@ class AddCohort extends Component {
           .add(requirement.notification_2_time, "day")
           .format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ")
       };
-      requirementAry.push(newObject);
+
+      if(newObject.requirement_id === 6){
+        newObject.requirement_name = "CHECK AND CONNECT TRAINING";
+        requirementAry.push(newObject);
+      }else if (newObject.requirement_id !== 5){
+        requirementAry.push(newObject);
+      }
+      
     });
 
     this.setState({

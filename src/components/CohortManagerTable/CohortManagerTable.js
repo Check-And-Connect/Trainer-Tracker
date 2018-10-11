@@ -43,29 +43,36 @@ const styles = {
 export class CohortManagerTable extends Component {
   
 
-  formatRequirement = (localTrainerId, reqAry, reqId) => {
+  formatRequirement = (localTrainerId, reqAry, cycle, reqId) => {
     let requirement = reqAry.filter(req => {
-      return req.requirement_id === reqId;
+      return (req.requirement_id === reqId && req.cycle === cycle);
     });
 
+    if(requirement.length === 0) {
+      requirement = reqAry.filter(req => {
+        return (req.requirement_id === reqId);
+      });
+    }
+    
+
+    console.log(requirement);
+    
     let content;
-    
-    
 
     if (requirement.length !== 0) {
-      let pastDue = moment(requirement[0].requirement_due_date).isBefore(moment());
+      let pastDue = moment(requirement[requirement.length - 1].requirement_due_date).isBefore(moment());
 
-      if (requirement[0].completed) {
+      if (requirement[requirement.length - 1].completed) {
         content = (
           <Button
-            onClick={() => this.props.onCellClick(localTrainerId, reqId)}
+            onClick={() => this.props.onCellClick(localTrainerId, reqId, requirement[requirement.length-1].cycle)}
             className={this.props.classes.completed}
           >
             Completed <br />
-            {moment(requirement[0].completed).format("MM-DD-YYYY")}
+            {moment(requirement[requirement.length - 1].completed).format("MM-DD-YYYY")}
           </Button>
         );
-      } else if (requirement[0].scheduled_date) {
+      } else if (requirement[requirement.length - 1].scheduled_date) {
         
         let style = '';
         if(pastDue){
@@ -76,11 +83,11 @@ export class CohortManagerTable extends Component {
         
         content = (
           <Button
-            onClick={() => this.props.onCellClick(localTrainerId, reqId)}
+            onClick={() => this.props.onCellClick(localTrainerId, reqId, requirement[requirement.length-1].cycle)}
             className={style}
           >
             Scheduled <br />
-            {moment(requirement[0].scheduled_date).format("MM-DD-YYYY")}
+            {moment(requirement[requirement.length - 1].scheduled_date).format("MM-DD-YYYY")}
           </Button>
         );
       } else {
@@ -93,11 +100,11 @@ export class CohortManagerTable extends Component {
         }
         content = (
           <Button
-            onClick={() => this.props.onCellClick(localTrainerId, reqId)}
+            onClick={() => this.props.onCellClick(localTrainerId, reqId, requirement[requirement.length-1].cycle)}
             className={style}
           >
             Due <br />
-            {moment(requirement[0].requirement_due_date).format("MM-DD-YYYY")}
+            {moment(requirement[requirement.length - 1].requirement_due_date).format("MM-DD-YYYY")}
           </Button>
         );
       }
@@ -120,13 +127,16 @@ export class CohortManagerTable extends Component {
             />
           </TableCell>
           <TableCell className={this.props.classes.tableCell}>
-            {/* <Link
+            <Link
               to={`/cohort/${localTrainer.cohort.cohort_id}`}
               className={this.props.classes.buttonInCell}
              
-            > */}
-              <p >{localTrainer.cohort.cohort_name}</p>
-            {/* </Link> */}
+            >
+              <Button>{localTrainer.cohort.cohort_name}</Button>
+            </Link>
+          </TableCell>
+          <TableCell className={this.props.classes.tableCell}>
+            {localTrainer.cycle}
           </TableCell>
           <TableCell className={this.props.classes.tableCell}>
             <Link
@@ -148,6 +158,7 @@ export class CohortManagerTable extends Component {
             {this.formatRequirement(
               localTrainer.local_trainers_id,
               localTrainer.requirements,
+              localTrainer.cycle,
               1
             )}
           </TableCell>
@@ -155,6 +166,7 @@ export class CohortManagerTable extends Component {
             {this.formatRequirement(
               localTrainer.local_trainers_id,
               localTrainer.requirements,
+              localTrainer.cycle,
               2
             )}
           </TableCell>
@@ -162,6 +174,7 @@ export class CohortManagerTable extends Component {
             {this.formatRequirement(
               localTrainer.local_trainers_id,
               localTrainer.requirements,
+              localTrainer.cycle,
               3
             )}
           </TableCell>
@@ -169,6 +182,7 @@ export class CohortManagerTable extends Component {
             {this.formatRequirement(
               localTrainer.local_trainers_id,
               localTrainer.requirements,
+              localTrainer.cycle,
               4
             )}
           </TableCell>
@@ -176,13 +190,21 @@ export class CohortManagerTable extends Component {
             {this.formatRequirement(
               localTrainer.local_trainers_id,
               localTrainer.requirements,
+              localTrainer.cycle,
               5
             )}
           </TableCell>
           <TableCell className={this.props.classes.tableCell}>{this.formatRequirement(
               localTrainer.local_trainers_id,
               localTrainer.requirements,
+              localTrainer.cycle,
               6
+            )}</TableCell>
+            <TableCell className={this.props.classes.tableCell}>{this.formatRequirement(
+              localTrainer.local_trainers_id,
+              localTrainer.requirements,
+              localTrainer.cycle,
+              7
             )}</TableCell>
         </TableRow>
       );
@@ -207,6 +229,9 @@ export class CohortManagerTable extends Component {
                   Cohort
                 </TableCell>
                 <TableCell className={this.props.classes.tableCell}>
+                  Cycle
+                </TableCell>
+                <TableCell className={this.props.classes.tableCell}>
                   First Name
                 </TableCell>
                 <TableCell className={this.props.classes.tableCell}>
@@ -225,7 +250,10 @@ export class CohortManagerTable extends Component {
                   Cert. Workshop
                 </TableCell>
                 <TableCell className={this.props.classes.tableCell}>
-                  C&amp;C Training
+                  C&amp;C Training 1
+                </TableCell>
+                <TableCell className={this.props.classes.tableCell}>
+                  C&amp;C Training 2
                 </TableCell>
                 <TableCell className={this.props.classes.tableCell}>
                   Recertification
@@ -235,7 +263,7 @@ export class CohortManagerTable extends Component {
             <TableBody>{tableInfo}</TableBody>
           </Table>
         </Paper>
-        {/* {JSON.stringify(this.props.currentTrainers)} */}
+       
       </div>
     );
   }

@@ -22,7 +22,7 @@ router.get("/", (req, res) => {
   pool
     .query(getNationalTrainersQuery)
     .then(response => {
-      console.log(response.rows);
+      // console.log(response.rows);
       res.send(response.rows);
     })
     .catch(err => {
@@ -37,7 +37,7 @@ router.get("/getNTDetails", (req, res) => {
   pool
     .query(getNTDetailsQuery, [req.user.national_trainer_id])
     .then(response => {
-      console.log('NTDetails', response.rows[0]);
+      // console.log('NTDetails', response.rows[0]);
       res.send(response.rows[0]);
     })
     .catch(err => {
@@ -47,7 +47,7 @@ router.get("/getNTDetails", (req, res) => {
 });
 
 router.post("/addNew", (req, res) => {
-  console.log("req: ", req.body);
+  // console.log("req: ", req.body);
 
   const first_name = req.body.first_name;
   const last_name = req.body.last_name;
@@ -82,10 +82,6 @@ router.post("/changeStatus/:id", (req, res) => {
 
 router.get("/confirmEmail/:nt_email", (req, res) => {
   let email = req.params.nt_email;
-  console.log("--------------------");
-
-  console.log(email);
-  console.log("--------------------");
 
   let queryText = "SELECT * FROM national_trainer WHERE email = $1";
 
@@ -113,10 +109,10 @@ router.get("/confirmEmail/:nt_email", (req, res) => {
 });
 
 router.post("/requestPasswordReset", (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const token = chanceInstance.hash();
   let now = moment().format();
-  console.log(token);
+  // console.log(token);
 
   let queryText =
     "UPDATE national_trainer SET pw_reset_token = $1, pw_reset_time = $2 WHERE email = $3 RETURNING pw_reset_token";
@@ -125,7 +121,7 @@ router.post("/requestPasswordReset", (req, res) => {
     .query(queryText, [token, now, req.body.email])
     .then(response => {
 
-      console.log(response.rows);
+      // console.log(response.rows);
       
 
       let text = `
@@ -136,7 +132,7 @@ router.post("/requestPasswordReset", (req, res) => {
         </div>
       `;
 
-      console.log(token);
+      // console.log(token);
       
 
       let mailOptions = {
@@ -151,7 +147,7 @@ router.post("/requestPasswordReset", (req, res) => {
           console.log(err);
           res.sendStatus(500);
         } else {
-          console.log("email sent" + info.response);
+          // console.log("email sent" + info.response);
           res.sendStatus(205);
         }
       });
@@ -163,7 +159,7 @@ router.post("/requestPasswordReset", (req, res) => {
 });
 
 router.put("/resetPassword", (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
 
   let getPWResetTime = `SELECT *  FROM national_trainer WHERE pw_reset_token = $1`;
 
@@ -173,13 +169,13 @@ router.put("/resetPassword", (req, res) => {
     .query(getPWResetTime, [req.body.token])
     .then(response => {
       if (response.rows.length !== 0) {
-        console.log(response.rows[0].pw_reset_time);
+        // console.log(response.rows[0].pw_reset_time);
         let time = moment(response.rows[0].pw_reset_time).format(
           "YYYY-MM-DD HH:mm:SS"
         );
         let now = moment().format("YYYY-MM-DD HH:mm:ss");
         let timeDifference = moment(now).diff(moment(time), "hours");
-        console.log(timeDifference);
+        // console.log(timeDifference);
         
         if (timeDifference > 0) {
           res.send([
@@ -214,7 +210,7 @@ router.put("/resetPassword", (req, res) => {
 });
 
 router.put('/updateNT', (req, res) => {
-  console.log('got to put', req.body)
+  // console.log('got to put', req.body)
   if (req.isAuthenticated) {
       const queryText = `Update "national_trainer" 
                           SET "first_name" = $1, 
