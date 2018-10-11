@@ -39,14 +39,14 @@ CREATE TABLE "cohort" (
 );
 
 CREATE TABLE "cohort_requirements" (
-"cohort_req_id" SERIAL PRIMARY KEY,
-"cohort_id" INTEGER REFERENCES cohort(cohort_id),
-"requirement_id" INTEGER REFERENCES requirements(requirements_id),
-"due_date" date NOT NULL,
-"notes" text,
-"notification_1_date" date,
-"notification_2_date" date,
-"cycle" integer NOT NULL
+ "cohort_req_id" SERIAL PRIMARY KEY,
+ "cohort_id" INTEGER REFERENCES cohort(cohort_id),
+ "requirement_id" INTEGER REFERENCES requirements(requirements_id),
+ "due_date" date NOT NULL,
+ "notes" text,
+ "notification_1_date" date,
+ "notification_2_date" date,
+ "cycle" INTEGER NOT NULL
 );
 
 CREATE TABLE "local_trainers" (

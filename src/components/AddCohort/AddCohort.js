@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 import { COHORT_ACTIONS } from "../../redux/actions/cohortActions";
-import { STATE_LEAD_ACTIONS } from "../../redux/actions/stateLeadActions";
 
 import {
   withStyles,
@@ -147,7 +146,14 @@ class AddCohort extends Component {
           .add(requirement.notification_2_time, "day")
           .format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ")
       };
-      requirementAry.push(newObject);
+
+      if(newObject.requirement_id === 6){
+        newObject.requirement_name = "CHECK AND CONNECT TRAINING";
+        requirementAry.push(newObject);
+      }else if (newObject.requirement_id !== 5){
+        requirementAry.push(newObject);
+      }
+      
     });
 
     this.setState({
@@ -370,7 +376,6 @@ class AddCohort extends Component {
     let dueDateTabel =
       this.state.newCohort.requirements.length > 0 ? this.createDueDates() : [];
 
-    console.log(this.state);
     let content = null;
     if (this.props.user.userName) {
       content = (

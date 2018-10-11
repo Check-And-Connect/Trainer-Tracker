@@ -72,10 +72,10 @@ class LoginPage extends Component {
         <img
           className="logo"
           src={require("../../styles/images/checkconnect_logo_h_rgb.jpg")}
+          alt="check and connect logo"
         />
         {this.renderAlert()}
         <form onSubmit={this.login}>
-          <h3></h3>
           <div>
             <label htmlFor="username">
               Username:

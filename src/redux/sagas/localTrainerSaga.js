@@ -6,6 +6,7 @@ import {
   put as dispatch
 } from "redux-saga/effects";
 import axios from "../../../node_modules/axios";
+import moment from 'moment';
 import { LOCAL_TRAINERS_ACTIONS } from "../actions/localTrainerActions";
 
 function* addNewLT(action) {
@@ -27,7 +28,12 @@ function* fetchLocalTrainers() {
     });
     let allTrainers = yield call(axios.get, "/api/localTrainers/");
 
-    console.log(allTrainers);
+    // We are attaching the upcoming and previous reqs to the trainer objects here
+    // so that by the time the array is set on the redux state, those properties will
+    // be available. 
+    allTrainers.data.forEach(trainer => {
+      trainer.lastNext = getLastNext(trainer.requirements)
+    })
 
     yield dispatch({
       type: LOCAL_TRAINERS_ACTIONS.SET_LOCAL_TRAINERS,
@@ -44,7 +50,7 @@ function* fetchRequirementForLocalTrainer(action) {
       axios.get,
       `/api/localTrainers/?localTrainerId=${
         action.payload.localTrainerId
-      }&requirementId=${action.payload.requirementId}`
+      }&requirementId=${action.payload.requirementId}&cycle=${action.payload.cycle}`
     );
 
     yield dispatch({
@@ -152,6 +158,31 @@ function* addSaga() {
     LOCAL_TRAINERS_ACTIONS.SCHEDULE_FOR_REQUIREMENT,
     scheduleForRequirement
   );
+}
+
+function getLastNext(requirementsArray) {
+
+  let lastNext = ['n/a', 'n/a', 'n/a'];
+  if (!requirementsArray || requirementsArray.length === 0){
+      return lastNext;
+  }
+
+  requirementsArray.sort((a, b) => {
+      return a.requirement_id - b.requirement_id
+  })
+  for (let i = 0; i < requirementsArray.length; i++) {
+      if (requirementsArray[i].completed === null) {
+          lastNext[1] = requirementsArray[i].requirement_name;
+          lastNext[2] = moment(requirementsArray[i].requirement_due_date).format("MM-DD-YYYY");
+          if (i === 0) {
+              lastNext[0] = 'n/a';
+              return lastNext
+          } else {
+              lastNext[0] = requirementsArray[i - 1].requirement_name;
+              return lastNext;
+          }
+      }
+  }
 }
 
 export default addSaga;

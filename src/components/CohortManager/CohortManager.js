@@ -62,7 +62,8 @@ class CohortManager extends Component {
     trainersBeforeSearch: [],
     cellInfo: {
       localTrainerId: 0,
-      requirementId: 0
+      requirementId: 0,
+      cycle: 0
     },
     filters: {
       statePicked: "",
@@ -148,11 +149,12 @@ class CohortManager extends Component {
     }   
   }
 
-  handleCellClick = (localTrainerId, requirementId) => {
+  handleCellClick = (localTrainerId, requirementId , cycle) => {
     this.setState({
       cellInfo: {
         localTrainerId: localTrainerId,
-        requirementId: requirementId
+        requirementId: requirementId,
+        cycle : cycle
       },
       dialogOpen: true
     });

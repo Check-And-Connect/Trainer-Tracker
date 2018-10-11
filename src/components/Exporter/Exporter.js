@@ -7,9 +7,6 @@ const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 class Export extends Component {
-  constructor(props) {
-    super(props)
-}
 
 //reformats array to send to excel file
 handleExport = (currentTrainers) => {
