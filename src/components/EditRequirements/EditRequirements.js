@@ -151,6 +151,9 @@ class EditRequirements extends Component {
         return (
             <div>
                 {content}
+                <div className='centerHeadings'>
+                    <h2 className='red'>{this.props.cohortReducer.failedToEditRequirements}</h2>
+                </div>
                 <Snackbar
                     open={this.state.open}
                     onClose={this.handleClose}

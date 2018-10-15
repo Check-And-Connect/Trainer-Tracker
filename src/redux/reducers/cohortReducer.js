@@ -70,6 +70,20 @@ const requirements = (state = [], action) => {
   }
 };
 
+//reducer for if the requirement fails to update
+const failedToEditRequirements = (state = '', action) => {
+  switch (action.type) {
+      case COHORT_ACTIONS.ERROR_EDIT_REQUIREMENTS:
+          if (action.payload.response.status === 500){
+              return 'Failed to edit requirements'
+          } else {
+              return state
+          }
+      default:
+          return state;
+  }
+}
+
 const latestCohort = (state = [], action) => {
   
   switch (action.type) {
@@ -128,5 +142,6 @@ export default combineReducers({
   requirements,
   latestCohort,
   taskConfirmer,
-  singleCohort
+  singleCohort,
+  failedToEditRequirements
 });
