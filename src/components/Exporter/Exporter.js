@@ -24,18 +24,18 @@ class Export extends Component {
       }
       for (let req of trainer.requirements){
         requirementNames.add(req.requirement_name)
+        let reqKey = req.requirement_name.toLowerCase().replace(/\s+/g, '');
 
-        if (req.requirement_id === 3){  // observed training
-          requirementNames.add('Observed')
-          dataRow['Observed'] = 'derp';
-        }
+        // if (req.requirement_id === 3){  // observed training
+        //   requirementNames.add('Observed')
+        // }
 
         if (req.completed){
-          dataRow[req.requirement_name] = 'Completed ' + moment(req.completed).format('MM-DD-YYYY');
+          dataRow[reqKey] = 'Completed ' + moment(req.completed).format('MM-DD-YYYY');
         } else if (req.scheduled){
-          dataRow[req.requirement_name] = 'Scheduled for ' + moment(req.scheduled).format('MM-DD-YYYY');
+          dataRow[reqKey] = 'Scheduled for ' + moment(req.scheduled).format('MM-DD-YYYY');
         } else if (req.requirement_due_date){
-          dataRow[req.requirement_name] = 'Due ' + moment(req.requirement_due_date).format('MM-DD-YYYY');
+          dataRow[reqKey] = 'Due ' + moment(req.requirement_due_date).format('MM-DD-YYYY');
         }
       }
       allDataRows.push(dataRow)
@@ -57,7 +57,7 @@ class Export extends Component {
       data = this.newHandleExport(this.props.localTrainers);
       requirementColumnHeads = Array.from(data.requirementNames).map(name => {
         return(
-          <ExcelColumn label={name} name={name} />
+          <ExcelColumn label={name} value={name.toLowerCase().replace(/\s+/g, '')} />
         )
       })
     }
