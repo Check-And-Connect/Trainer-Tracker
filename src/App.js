@@ -25,6 +25,7 @@ import AccountDetails from './components/AccountDetails/AccountDetails';
 import AddStateLevelOrg from './components/AddStateLevelOrg/AddStateLevelOrg';
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import ConfirmEmail from "./components/ConfirmEmail/ConfirmEmail";
+import EditRequirements from "./components/EditRequirements/EditRequirements";
 import './styles/main.css';
 
 const mapStateToProps = state => ({
@@ -84,7 +85,11 @@ const App = (props) => (
         <Route
           path="/accountdetails"
           component={AccountDetails}
-          />
+        />
+        <Route
+          path="/editrequirements"
+          component={EditRequirements}
+        />
         {/* OTHERWISE (no path!) */}
         <Route render={() => <h1>404</h1>} />
 

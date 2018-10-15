@@ -198,6 +198,14 @@ function* updateCohort(action) {
     
   }
 }
+//
+function* updateRequirements(action) {
+  try {
+    yield call(axios.put, `api/cohorts/updateRequirements/`, action.payload);
+  } catch (err) {
+    yield console.log(err);
+  }
+}
 
 function* cohortSaga() {
   yield takeEvery(COHORT_ACTIONS.FETCH_COHORTS, getCohorts);
@@ -214,6 +222,7 @@ function* cohortSaga() {
   yield takeLatest(COHORT_ACTIONS.FETCH_LATEST_COHORT, getLatestCohort);
   yield takeLatest(COHORT_ACTIONS.FETCH_COHORT_SINGLE, getCohortSingle);
   yield takeLatest(COHORT_ACTIONS.UPDATE_COHORT, updateCohort);
+  yield takeLatest(COHORT_ACTIONS.UPDATE_REQUIREMENTS, updateRequirements);
 }
 
 export default cohortSaga;
