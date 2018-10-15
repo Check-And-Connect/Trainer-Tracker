@@ -54,9 +54,6 @@ export class CohortManagerTable extends Component {
       });
     }
     
-
-    console.log(requirement);
-    
     let content;
 
     if (requirement.length !== 0) {
@@ -65,7 +62,7 @@ export class CohortManagerTable extends Component {
       if (requirement[requirement.length - 1].completed) {
         content = (
           <Button
-            onClick={() => this.props.onCellClick(localTrainerId, reqId, requirement[requirement.length-1].cycle)}
+            onClick={() => this.props.onCellClick(localTrainerId, reqId, requirement[requirement.length-1].cycle, requirement[requirement.length-1].lc_req_id)}
             className={this.props.classes.completed}
           >
             Completed <br />
@@ -83,7 +80,7 @@ export class CohortManagerTable extends Component {
         
         content = (
           <Button
-            onClick={() => this.props.onCellClick(localTrainerId, reqId, requirement[requirement.length-1].cycle)}
+            onClick={() => this.props.onCellClick(localTrainerId, reqId, requirement[requirement.length-1].cycle , requirement[requirement.length-1].lc_req_id)}
             className={style}
           >
             Scheduled <br />
@@ -100,7 +97,7 @@ export class CohortManagerTable extends Component {
         }
         content = (
           <Button
-            onClick={() => this.props.onCellClick(localTrainerId, reqId, requirement[requirement.length-1].cycle)}
+            onClick={() => this.props.onCellClick(localTrainerId, reqId, requirement[requirement.length-1].cycle , requirement[requirement.length-1].lc_req_id)}
             className={style}
           >
             Due <br />
