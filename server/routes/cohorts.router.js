@@ -210,6 +210,7 @@ router.put('/updateById/:cohort_id', (req, res) => {
     let updateCohortRequirements = 'UPDATE cohort_requirements SET due_date = $1, notification_1_date = $2, notification_2_date = $3 WHERE cohort_id = $4 AND requirement_id = $5';
 
     let reqCounter = req.body.requirements.length;
+    if (req.isAuthenticated) {
     pool.query(updateCohortQuery, [req.body.name, req.body.note, req.body.state_level_organization, req.params.cohort_id])
         .then(response => {
 
@@ -233,6 +234,9 @@ router.put('/updateById/:cohort_id', (req, res) => {
             console.log(err);
             res.sendStatus(500);
         })
+    } else {
+        res.sendStatus(403);
+    }
 })
 
 module.exports = router;

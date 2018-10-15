@@ -198,12 +198,17 @@ function* updateCohort(action) {
     
   }
 }
-//
+
+//saga for updating requirements
 function* updateRequirements(action) {
   try {
     yield call(axios.put, `api/cohorts/updateRequirements/`, action.payload);
-  } catch (err) {
-    yield console.log(err);
+  } catch (error) {
+    console.log(error);
+    yield dispatch({
+      type: COHORT_ACTIONS.ERROR_EDIT_REQUIREMENTS,
+      payload: error
+    });
   }
 }
 
