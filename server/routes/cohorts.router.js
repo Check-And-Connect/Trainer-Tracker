@@ -276,4 +276,29 @@ router.put("/updateById/:cohort_id", (req, res) => {
     });
 });
 
+//updates the names of the requirements
+router.put('/updateRequirements', (req, res) => {
+    console.log('got to put', req.body)
+    if (req.isAuthenticated) {
+        const updateRequirements = `Update "requirements" SET "name" = $1 WHERE "requirements_id" = $2;`;
+        let reqCounter = req.body.length;
+        req.body.forEach(requirement => {
+            pool.query(updateRequirements, [requirement.requirement_name, requirement.requirement_id])
+                .then(result => {
+                    reqCounter--;
+                    if (reqCounter === 0) {
+                        res.sendStatus(201);
+                    }
+                })
+                .catch((err) => {
+                    console.log('Error updating', err);
+                    res.sendStatus(500);
+                })
+        })
+    } else {
+        res.sendStatus(403);
+    }
+})
+
+
 module.exports = router;
