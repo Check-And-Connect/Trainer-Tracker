@@ -55,21 +55,14 @@ class Export extends Component {
   render() {
     let requirementColumnHeads;
     let data;
-    let multiDataSet;
 
     if (this.props.localTrainers !== null || undefined) {
-      // data = this.newHandleExport(this.props.localTrainers);
-      // requirementColumnHeads = Array.from(data.requirementNames).map(name => {
-      //   return(
-      //     <ExcelColumn label={name} value={name.toLowerCase().replace(/\s+/g, '_')} />
-      //   )
-      // })
-      multiDataSet = {
-        columns: [
-          
-        ],
-        data: this.newHandleExport(this.props.localTrainers)
-      }
+      data = this.newHandleExport(this.props.localTrainers);
+      requirementColumnHeads = Array.from(data.requirementNames).map(name => {
+        return(
+          <ExcelColumn label={name} value={name.toLowerCase().replace(/\s+/g, '_')} />
+        )
+      })
     }
 
     return (
