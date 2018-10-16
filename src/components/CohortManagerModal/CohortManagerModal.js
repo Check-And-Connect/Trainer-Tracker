@@ -213,12 +213,13 @@ class CohortManagerModal extends Component {
           {localTrainer && (
             <div>
               <DialogTitle>
-                {localTrainer.first_name} {localTrainer.last_name}
+                {localTrainer.first_name.toUpperCase()} {localTrainer.last_name.toUpperCase()}
               </DialogTitle>
               <DialogContent>
                 <Typography>
-                  This Requirement is part of cycle : {this.props.cellInfo.cycle}
+                  Requirement is part of cycle {this.props.cellInfo.cycle}
                 </Typography>
+                <br/>
                 <Typography>
                   Organization :{" "}
                   {
@@ -290,7 +291,7 @@ class CohortManagerModal extends Component {
                                 onClick={this.handleMarkDone}
                               />
                             }
-                            label="Mark Complete"
+                            label={this.state.completed ? 'Completed' : 'Mark Complete'}
                           />
                           <br />
                           <div className="picker">

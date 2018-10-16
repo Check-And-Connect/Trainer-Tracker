@@ -291,13 +291,6 @@ class CohortDetails extends Component {
   createDueDates = () => {
     let tableBody = this.state.currentCycleRequirements.map(
       (requirement, index) => {
-        console.log(this.state);
-
-        console.log(
-          this.state.cohortInState.requirements[this.state.cycleDisplayed][
-            index
-          ]
-        );
 
         return (
           <TableRow key={index}>

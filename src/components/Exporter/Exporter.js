@@ -36,9 +36,9 @@ handleExport = (currentTrainers) => {
         CCTraining = moment(currentTrainers[i].requirements[j].requirement_due_date).format('MM-DD-YYYY');
       } else if (currentTrainers[i].requirements[j].requirement_id === 6){
         recertification = moment(currentTrainers[i].requirements[j].requirement_due_date).format('MM-DD-YYYY');
-      } else (
-        console.log('not found')
-      )       
+      } else {
+        // console.log('not found')
+      }
       }
 
     newObject = {

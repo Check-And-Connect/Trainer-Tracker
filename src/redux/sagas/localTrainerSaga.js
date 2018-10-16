@@ -76,6 +76,7 @@ function* markComplete(action) {
       date_marked_complete: action.payload.date_marked_complete,
       national_trainer: action.payload.national_trainer,
       note: action.payload.note,
+      cycle : action.payload.cycle,
       lc_req_id : action.payload.lc_req_id
     };
 
@@ -120,7 +121,8 @@ function* scheduleForRequirement(action) {
 
     let actualPayload = {
       requirement_id: action.payload.requirement_id,
-      date_scheduled: action.payload.date_scheduled
+      date_scheduled: action.payload.date_scheduled,
+      cycle : action.payload.cycle
     };
 
     yield all(

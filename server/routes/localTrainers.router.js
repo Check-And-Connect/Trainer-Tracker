@@ -70,12 +70,6 @@ router.get("/", rejectUnauthenticated, (req, res) => {
     ORDER BY cohort_requirements.requirement_id`;
   // added order by
 
-  console.log('-----------------------');
-  console.log(req.query);
-  console.log('-----------------------');
-  
-  
-  
   let poolQuery = () => {
     if (req.query.hasOwnProperty("requirementId")) {
       return new Promise((resolve, reject) => {
@@ -87,14 +81,11 @@ router.get("/", rejectUnauthenticated, (req, res) => {
           ])
           .then(response => {
             
-            
-            
             resolve(response);
           })
           .catch(err => {
             console.log(err);
-            console.log('--------------------');
-            console.log('got in the single one');
+
             reject();
             res.sendStatus(500);
           });
@@ -104,13 +95,11 @@ router.get("/", rejectUnauthenticated, (req, res) => {
         pool
           .query(getAllLocalTrainersQuery + ' ORDER BY cohort_requirements.cycle')
           .then(response => {
-            
             resolve(response);
           })
           .catch(err => {
             console.log(err);
-            console.log('--------------------');
-            console.log('got in the long one');
+
             reject();
             res.sendStatus(500);
           });
@@ -320,15 +309,27 @@ router.post("/markRequirememtComplete/:local_trainer_id", (req, res) => {
 
   let markCompleteQuery =
     "UPDATE local_trainers_requirements SET completed = $1 , national_trainer_ref_id = $2 , notes = $3 WHERE local_trainers_requirements_id = $4";
+  pool
+    .query(getLocalTrainerRequirementIdQuery, [
+      req.params.local_trainer_id,
+      req.body.requirement_id,
+      req.body.cycle
+    ])
+    .then(response => {
+      console.log("========================/n");
 
-    pool
+      console.log(response.rows);
+
+      console.log("========================/n");
+
+      pool
         .query(markCompleteQuery, [
           req.body.date_marked_complete,
           req.body.national_trainer
             ? req.body.national_trainer
             : req.user.national_trainer_id,
           req.body.note ? req.body.note : null,
-          req.body.lc_req_id
+          response.rows[0].local_trainers_requirements_id
         ])
         .then(() => {
           if (req.body.requirement_id === 7) {
@@ -343,27 +344,11 @@ router.post("/markRequirememtComplete/:local_trainer_id", (req, res) => {
           console.log(err);
           res.sendStatus(500);
         });
-
-
-  // pool
-  //   .query(getLocalTrainerRequirementIdQuery, [
-  //     req.params.local_trainer_id,
-  //     req.body.requirement_id,
-  //     req.params.cycle
-  //   ])
-  //   .then(response => {
-  //     console.log("========================/n");
-
-  //     console.log(response.rows);
-
-  //     console.log("========================/n");
-
-      
-  //   })
-  //   .catch(err => {
-  //     console.log(err);
-  //     res.sendStatus(500);
-  //   });
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(500);
+    });
 });
 
 let createNewCycle = (cohort_id, cycle, recertificationDate) => {
@@ -459,7 +444,7 @@ let createNewCycle = (cohort_id, cycle, recertificationDate) => {
 router.post("/scheduleForRequirement/:local_trainer_id", (req, res) => {
   let getLocalTrainerRequirementIdQuery = `SELECT local_trainers_requirements.local_trainers_requirements_id FROM local_trainers_requirements JOIN cohort_requirements ON cohort_requirements.cohort_req_id = local_trainers_requirements.cohort_requirements_ref_id
   JOIN cohort ON cohort_requirements.cohort_id = cohort.cohort_id
-  WHERE local_trainers_requirements.local_trainers_ref_id = $1 AND cohort_requirements.requirement_id = $2;`;
+  WHERE local_trainers_requirements.local_trainers_ref_id = $1 AND cohort_requirements.requirement_id = $2 AND cohort_requirements.cycle = $3;`;
 
   console.log(req.body);
 
@@ -468,7 +453,8 @@ router.post("/scheduleForRequirement/:local_trainer_id", (req, res) => {
   pool
     .query(getLocalTrainerRequirementIdQuery, [
       req.params.local_trainer_id,
-      req.body.requirement_id
+      req.body.requirement_id,
+      req.body.cycle
     ])
     .then(response => {
       console.log(response.rows);

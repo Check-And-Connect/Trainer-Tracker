@@ -20,6 +20,7 @@ import Scheduler from "../Scheduler/Scheduler";
 import CohortManagerTable from "../CohortManagerTable/CohortManagerTable";
 import CohortManagerTableSearch from "../CohortManagerTableSearch/CohortManagerTableSearch";
 import CohortManagerModal from "../CohortManagerModal/CohortManagerModal";
+import CohortManagerCyclePicker from "../CohortManagerCyclePicker/CohortManagerCyclePicker"
 
 const mapStateToProps = state => ({
   user: state.user,
@@ -46,7 +47,7 @@ const styles = {
   },
   searchAndExport: {
     display: "Grid",
-    gridTemplateColumns: "7fr 1fr"
+    gridTemplateColumns: "1fr 5fr 1fr"
   },
   export: {
     marginTop: "1em",
@@ -64,7 +65,7 @@ class CohortManager extends Component {
       localTrainerId: 0,
       requirementId: 0,
       cycle: 0,
-      lc_req_id : 0
+      lc_req_id: 0
     },
     filters: {
       statePicked: "",
@@ -72,8 +73,13 @@ class CohortManager extends Component {
       cohortPicked: ""
     },
     orderBy: {
-      columnName: '',
+      columnName: "",
       ascending: true
+    },
+    oneCohortID: null,
+    cyclePickerInfo: {
+      currentCohortCycle: null,
+      cycleDisplayed: null
     },
     dialogOpen: false,
     checkedIDs: [],
@@ -120,12 +126,10 @@ class CohortManager extends Component {
         this.setState({
           currentTrainers: filteredTrainers
         });
-      
       } else {
         this.setState({
           currentTrainers: this.props.localTrainers.allLocalTrainers
         });
-        
       }
     }
 
@@ -147,16 +151,16 @@ class CohortManager extends Component {
         snackOpen: true,
         snackMessege: "Marked Complete"
       });
-    }   
+    }
   }
 
-  handleCellClick = (localTrainerId, requirementId , cycle, lc_req_id) => {
+  handleCellClick = (localTrainerId, requirementId, cycle, lc_req_id) => {
     this.setState({
       cellInfo: {
         localTrainerId: localTrainerId,
         requirementId: requirementId,
-        cycle : cycle,
-        lc_req_id : lc_req_id
+        cycle: cycle,
+        lc_req_id: lc_req_id
       },
       dialogOpen: true
     });
@@ -197,10 +201,14 @@ class CohortManager extends Component {
   };
 
   getStateOrgsAndCohort = () => {
-    let stateOrgs = this.state.currentTrainers.map(localTrainer => {
-      return localTrainer.state_level_organization
-        .state_level_organization_name;
-    });
+    let stateOrgs = this.props.localTrainers.allLocalTrainers.map(
+      localTrainer => {
+        if (localTrainer.state === this.state.currentTrainers[0].state) {
+          return localTrainer.state_level_organization
+            .state_level_organization_name;
+        }
+      }
+    );
 
     return [...new Set(stateOrgs)];
   };
@@ -233,11 +241,57 @@ class CohortManager extends Component {
       }
     );
 
+    this.setState(
+      {
+        currentTrainers: filteredLocalTrainers,
+        checkedIDs: []
+      },
+      () => {
+        this.checkCohortSimilarity(this.state.currentTrainers);
+      }
+    );
+  };
+
+  checkCohortSimilarity = localTrainers => {
+    let cohortIdStart = localTrainers[0].cohort.cohort_id;
+    let flag = false;
+    let index = 0;
+
+    while (!flag && index !== localTrainers.length - 1) {
+      if (localTrainers[index].cohort.cohort_id !== cohortIdStart) {
+        flag = true;
+      } else {
+        index++;
+      }
+    }
+
+    if (!flag) {
+
+      this.setState({
+        oneCohortID: cohortIdStart,
+        cyclePickerInfo: {
+          currentCohortCycle: localTrainers[0].cycle,
+          cycleDisplayed: localTrainers[0].cycle
+        }
+      });
+    } else {
+      this.setState({
+        oneCohortID: null,
+        cyclePickerInfo: {
+          currentCohortCycle: null,
+          cycleDisplayed: null
+        }
+      });
+    }
+  };
+
+  changeCycleDisplayed = cycle => {
     this.setState({
-      currentTrainers: filteredLocalTrainers,
-      checkedIDs: []
+      cyclePickerInfo: {
+        ...this.state.cyclePickerInfo,
+        cycleDisplayed: cycle
+      }
     });
-    
   };
 
   handleChecked = local_trainer_id => {
@@ -274,7 +328,8 @@ class CohortManager extends Component {
   handleMarkComplete = data => {
     let payload = {
       ...data,
-      localTrainerIDs: this.state.checkedIDs
+      localTrainerIDs: this.state.checkedIDs,
+      cycle : this.state.cyclePickerInfo.cycleDisplayed
     };
 
     this.props.dispatch({
@@ -286,7 +341,8 @@ class CohortManager extends Component {
   handleScheduling = data => {
     let payload = {
       ...data,
-      localTrainerIDs: this.state.checkedIDs
+      localTrainerIDs: this.state.checkedIDs,
+      cycle : this.state.cyclePickerInfo.cycleDisplayed
     };
 
     this.props.dispatch({
@@ -352,11 +408,12 @@ class CohortManager extends Component {
     );
 
     this.setState({
-      currentTrainers: filteredTrainers
+      currentTrainers: filteredTrainers,
+      checkedIDs : []
+    }, () => {
+      this.checkCohortSimilarity(this.state.currentTrainers);
     });
   };
-
-
 
   handleClose = () => {
     this.setState({ snackOpen: false });
@@ -380,13 +437,15 @@ class CohortManager extends Component {
               <Scheduler
                 handleMarkComplete={this.handleMarkComplete}
                 handleScheduling={this.handleScheduling}
+                cycleDisplayed={this.state.cyclePickerInfo.cycleDisplayed}
               />
             )}
 
             {this.state.checkedIDs.length === 0 && (
               <Typography className={classes.note}>
                 <br />
-                *Click on Checkboxes to Schedule or Mark Complete
+                *Click on Checkboxes to Schedule or Mark Complete. Make sure you
+                filter down to one cohort before doing so.
               </Typography>
             )}
             <CohortManagerFilter
@@ -403,19 +462,26 @@ class CohortManager extends Component {
                 search={this.handleSearch}
               />
               <div>
+                {(this.state.oneCohortID && (
+                  <CohortManagerCyclePicker
+                    cyclePickerInfo={this.state.cyclePickerInfo}
+                    changeCycleDisplayed={this.changeCycleDisplayed}
+                  />
+                )) ||
+                  " "}
+              </div>
+              <div>
                 <Export
-                    localTrainers={this.state.currentTrainers}
-                    button={  
-                    <Button
-                      className={classes.export}
-                    >
-                      Export Table
-                    </Button>
-                   } 
-                 /> 
+                  localTrainers={this.state.currentTrainers}
+                  button={
+                    <Button className={classes.export}>Export Table</Button>
+                  }
+                />
               </div>
             </div>
             <CohortManagerTable
+              oneCohortID={this.state.oneCohortID}
+              cyclePickerInfo={this.state.cyclePickerInfo}
               onCellClick={this.handleCellClick}
               currentTrainers={this.state.currentTrainers}
               handleChecked={this.handleChecked}
