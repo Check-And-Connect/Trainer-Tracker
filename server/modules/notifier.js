@@ -12,7 +12,7 @@ let transporter = nodeMailer.createTransport({
   }
 });
 
-
+//signed ttt agreement email
 let tttTermsMail = (emailAddress , firstName) => {
   ejs.renderFile(__dirname + '/emailTemplates/tttAgreement.ejs', {}, (err, data) => {
     if(err){
@@ -46,6 +46,7 @@ let tttTermsMail = (emailAddress , firstName) => {
   })
 }
 
+//Observed Training email
 let observedTrainingMail = (emailAddress) => {
   ejs.renderFile(__dirname + '/emailTemplates/observedSession.ejs', {}, (err, data) => {
     if(err){
@@ -79,6 +80,7 @@ let observedTrainingMail = (emailAddress) => {
   })
 }
 
+//certification workshop email
 let certWorkshopMail = (emailAddress) => {
   ejs.renderFile(__dirname + '/emailTemplates/certificationWorkshop.ejs', {}, (err, data) => {
     if(err){
@@ -88,7 +90,7 @@ let certWorkshopMail = (emailAddress) => {
       let mailOptions = {
         from: "Check And Connect",
         to: emailAddress,
-        subject: "Train The Trainer Terms of Agreement",
+        subject: "Certification Workshop",
         html: data,
         attachments : [{
           filename : 'cc_logo.png',
@@ -112,7 +114,7 @@ let certWorkshopMail = (emailAddress) => {
   })
 }
 
-
+// first C&C training email
 let cAndCTrainingMail = (emailAddress) => {
   ejs.renderFile(__dirname + '/emailTemplates/CCtraining.ejs', {}, (err, data) => {
     if(err){
@@ -122,7 +124,7 @@ let cAndCTrainingMail = (emailAddress) => {
       let mailOptions = {
         from: "Check And Connect",
         to: emailAddress,
-        subject: "Train The Trainer Terms of Agreement",
+        subject: "Check and Connect Training",
         html: data,
         attachments : [{
           filename : 'cc_logo.png',
@@ -140,15 +142,168 @@ let cAndCTrainingMail = (emailAddress) => {
           
         }
       });
-
-
     }
   })
 }
 
+//recertification 1 email 
+let recertification1Mail = (emailAddress) => {
+  ejs.renderFile(__dirname + '/emailTemplates/recertificationWorkshop1.ejs', {}, (err, data) => {
+    if(err){
+      console.log(err);
+    }else{
+      
+      let mailOptions = {
+        from: "Check And Connect",
+        to: emailAddress,
+        subject: "Recertification Workshop",
+        html: data,
+        attachments : [{
+          filename : 'cc_logo.png',
+          path : __dirname + '/emailTemplates/cc_logo.png' ,
+          cid : 'cc_logo'
+        }]
+      };
+  
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("email sent" + info.response);
+          console.log('email sent to ' + firstName);
+          
+        }
+      });
+    }
+  })
+}
 
+//signed TTT agreement 2, sent after first recertification and second recert
+let tttTerms2Mail = (emailAddress , firstName) => {
+  ejs.renderFile(__dirname + '/emailTemplates/tttAgreement2.ejs', {}, (err, data) => {
+    if(err){
+      console.log(err);
+    }else{
+      
+      let mailOptions = {
+        from: "Check And Connect",
+        to: emailAddress,
+        subject: "Train the Trainer Terms of Agreement",
+        html: data,
+        attachments : [{
+          filename : 'cc_logo.png',
+          path : __dirname + '/emailTemplates/cc_logo.png' ,
+          cid : 'cc_logo'
+        }]
+      };
+  
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("email sent" + info.response);
+          console.log('email sent to ' + firstName);       
+        }
+      });
+    }
+  })
+}
 
+// second C&C training email, 12 months and then 24 months after recert.
+let cAndCTraining2Mail = (emailAddress) => {
+  ejs.renderFile(__dirname + '/emailTemplates/CCtraining2.ejs', {}, (err, data) => {
+    if(err){
+      console.log(err);
+    }else{
+      
+      let mailOptions = {
+        from: "Check And Connect",
+        to: emailAddress,
+        subject: "Check and Connect Training",
+        html: data,
+        attachments : [{
+          filename : 'cc_logo.png',
+          path : __dirname + '/emailTemplates/cc_logo.png' ,
+          cid : 'cc_logo'
+        }]
+      };
+  
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("email sent" + info.response);
+          console.log('email sent to ' + firstName);
+          
+        }
+      });
+    }
+  })
+}
 
+//recertification 2 email 
+let recertification2Mail = (emailAddress) => {
+  ejs.renderFile(__dirname + '/emailTemplates/recertificationWorkshop2.ejs', {}, (err, data) => {
+    if(err){
+      console.log(err);
+    }else{
+      
+      let mailOptions = {
+        from: "Check And Connect",
+        to: emailAddress,
+        subject: "Recertification Workshop",
+        html: data,
+        attachments : [{
+          filename : 'cc_logo.png',
+          path : __dirname + '/emailTemplates/cc_logo.png' ,
+          cid : 'cc_logo'
+        }]
+      };
+  
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("email sent" + info.response);
+          console.log('email sent to ' + firstName);
+          
+        }
+      });
+    }
+  })
+}
+
+// third C&C training email, 12 months and then 24 months after second recert.
+let cAndCTraining3Mail = (emailAddress) => {
+  ejs.renderFile(__dirname + '/emailTemplates/CCtraining3.ejs', {}, (err, data) => {
+    if(err){
+      console.log(err);
+    }else{
+      
+      let mailOptions = {
+        from: "Check And Connect",
+        to: emailAddress,
+        subject: "Check and Connect Training",
+        html: data,
+        attachments : [{
+          filename : 'cc_logo.png',
+          path : __dirname + '/emailTemplates/cc_logo.png' ,
+          cid : 'cc_logo'
+        }]
+      };
+  
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("email sent" + info.response);
+          console.log('email sent to ' + firstName);
+          
+        }
+      });
+    }
+  })
+}
 
 
 let sendEmail = (notificaitonType, cohortInfo) => {
