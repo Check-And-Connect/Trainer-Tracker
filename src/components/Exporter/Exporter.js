@@ -14,6 +14,7 @@ class Export extends Component {
     let allDataRows = [];
     let requirementNames = new Set();
 
+
     for (let trainer of currentTrainers){
       let dataRow = {
         first_name: trainer.first_name,

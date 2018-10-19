@@ -163,7 +163,8 @@ class CohortManagerModal extends Component {
       date_marked_complete: this.state.completed,
       national_trainer: this.state.nationalTrainer,
       note: this.state.note,
-      localTrainerIDs: [this.state.localTrainer.local_trainers_id]
+      localTrainerIDs: [this.state.localTrainer.local_trainers_id],
+      lc_req_id : this.props.cellInfo.lc_req_id
     };
     this.props.dispatch({
       type: LOCAL_TRAINERS_ACTIONS.MARK_COMPLETE,
@@ -212,13 +213,13 @@ class CohortManagerModal extends Component {
           {localTrainer && (
             <div>
               <DialogTitle>
-                {localTrainer.first_name} {localTrainer.last_name}
+                {localTrainer.first_name.toUpperCase()} {localTrainer.last_name.toUpperCase()}
               </DialogTitle>
-              
               <DialogContent>
                 <Typography>
-                  This Requirement is part of cycle : {this.props.cellInfo.cycle}
+                  Requirement is part of cycle {this.props.cellInfo.cycle}
                 </Typography>
+                <br/>
                 <Typography>
                   Organization :{" "}
                   {
@@ -290,7 +291,7 @@ class CohortManagerModal extends Component {
                                 onClick={this.handleMarkDone}
                               />
                             }
-                            label="Mark Complete"
+                            label={this.state.completed ? 'Completed' : 'Mark Complete'}
                           />
                           <br />
                           <div className="picker">
