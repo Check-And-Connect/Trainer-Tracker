@@ -31,6 +31,19 @@ const notifier = require('./modules/notifier');
 //    notifier()
 // })
 
+//test
+cron.schedule('0 8 * * *', () => {
+  notifier()
+
+}, {
+  scheduled : true,
+  timezone : 'America/Chicago'
+});
+
+cron.schedule('*/15 * * * * *', () => {
+   notifier()
+})
+
 // Body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

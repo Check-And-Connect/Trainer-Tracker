@@ -40,8 +40,6 @@ let tttTermsMail = (emailAddress , firstName) => {
           
         }
       });
-
-
     }
   })
 }
@@ -305,31 +303,50 @@ let cAndCTraining3Mail = (emailAddress) => {
   })
 }
 
-
-let sendEmail = (notificaitonType, cohortInfo) => {
-  let cohortId = cohortInfo.cohort_id;
+let sendEmail = (notificationType, cohortInfo) => {
+  let cohortId = cohortInfo.requirement_id;
+  let cohortCycle = cohortInfo.cycle;
+  //cohortInfo has all of the info for cohort requirements
 
   pool
-    .query(`SELECT * FROM local_trainers WHERE cohort_ref_id = ${cohortId}`)
+    .query(`SELECT "local_trainers"."first_name", "local_trainers"."email", "local_trainers_requirements"."completed" FROM "local_trainers"
+            JOIN "local_trainers_requirements" ON "local_trainers"."local_trainers_id" = "local_trainers_requirements"."local_trainers_ref_id"
+            WHERE "local_trainers_requirements"."cohort_requirements_ref_id" = ${cohortId};`)
     .then(results => {
-
+      
       results.rows.forEach(localTrainer => {
-        if(cohortInfo.requirement_id === 2){
+        console.log('localTrainer', localTrainer)
+        if(cohortInfo.requirement_id === 2 && cohortCycle === 1 && localTrainer.completed == null){
           tttTermsMail(localTrainer.email , localTrainer.first_name)
-        }else if(cohortInfo.requirement_id === 3){
+        }else if(cohortInfo.requirement_id === 3 && cohortCycle === 1 && localTrainer.completed == null){
           observedTrainingMail(localTrainer.email , localTrainer.first_name)
-        }else if(cohortInfo.requirement_id === 4){
+        }else if(cohortInfo.requirement_id === 4 && cohortCycle === 1 && localTrainer.completed == null){
           certWorkshopMail(localTrainer.email , localTrainer.first_name)
-        }else if(cohortInfo.requirement_id === 5){
+        }else if(cohortInfo.requirement_id === 6 && cohortCycle === 1 && localTrainer.completed == null){
           cAndCTrainingMail(localTrainer.email , localTrainer.first_name)
+        }else if(cohortInfo.requirement_id === 7 && cohortCycle === 1 && localTrainer.completed == null){
+          recertification1Mail(localTrainer.email , localTrainer.first_name)
+        }else if(cohortInfo.requirement_id === 2 && cohortCycle > 1 && localTrainer.completed == null){
+          tttTerms2Mail(localTrainer.email , localTrainer.first_name)
+        }else if(cohortInfo.requirement_id === 5 && cohortCycle === 2 && localTrainer.completed == null){
+          cAndCTraining2Mail(localTrainer.email , localTrainer.first_name)
+        }else if(cohortInfo.requirement_id === 6 && cohortCycle === 2 && localTrainer.completed == null){
+          cAndCTraining2Mail(localTrainer.email , localTrainer.first_name)
+        }else if(cohortInfo.requirement_id === 7 && cohortCycle > 1 && localTrainer.completed == null){
+          recertification2Mail(localTrainer.email , localTrainer.first_name)
+        }else if(cohortInfo.requirement_id === 5 && cohortCycle > 2 && localTrainer.completed == null){
+          cAndCTraining3Mail(localTrainer.email , localTrainer.first_name)
+        }else if(cohortInfo.requirement_id === 6 && cohortCycle > 2 && localTrainer.completed == null){
+          cAndCTraining3Mail(localTrainer.email , localTrainer.first_name)
         }
 
       });
     });
 };
+
 let notifier = () => {
   pool.query("SELECT * FROM cohort_requirements ").then(response => {
-    console.log(response.rows[0]);
+    console.log(response.rows);
 
     console.log(
       moment(response.rows[0].notification_1_date).format("YYYY-MM-DD")
