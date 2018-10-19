@@ -126,9 +126,7 @@ router.get("/", rejectUnauthenticated, (req, res) => {
             cycle: element.cycle,
             cohort: {
               cohort_id: element.cohort_id,
-              cohort_name: element.name,
-              cohort_cycle: element.cycle || 'na'
-              // Cycles arent actually in the database yet
+              cohort_name: element.name
             },
             state: element.state,
             state_level_organization: {
@@ -147,7 +145,8 @@ router.get("/", rejectUnauthenticated, (req, res) => {
                   element.national_trainer_first_name,
                 national_trainer_last_name: element.national_trainer_last_name,
                 requirement_note: element.requirement_notes,
-                cycle : element.cycle
+                cycle : element.cycle,
+                lc_req_id : element.local_trainers_requirements_id
               }
             ]
           };
@@ -163,7 +162,8 @@ router.get("/", rejectUnauthenticated, (req, res) => {
             national_trainer_id: element.national_trainer_ref_id,
             national_trainer_first_name: element.national_trainer_first_name,
             national_trainer_last_name: element.national_trainer_last_name,
-            cycle : element.cycle
+            cycle : element.cycle,
+            lc_req_id : element.local_trainers_requirements_id
           };
 
           resultAry[indexOfLC].requirements.push(newReq);
@@ -301,7 +301,7 @@ router.post("/addLT", async (req, res) => {
 router.post("/markRequirememtComplete/:local_trainer_id", (req, res) => {
   let getLocalTrainerRequirementIdQuery = `SELECT * FROM local_trainers_requirements JOIN cohort_requirements ON cohort_requirements.cohort_req_id = local_trainers_requirements.cohort_requirements_ref_id
   JOIN cohort ON cohort_requirements.cohort_id = cohort.cohort_id
-  WHERE local_trainers_requirements.local_trainers_ref_id = $1 AND cohort_requirements.requirement_id = $2;`;
+  WHERE local_trainers_requirements.local_trainers_ref_id = $1 AND cohort_requirements.requirement_id = $2 AND cohort_requirements.cycle = $3;`;
 
   console.log(req.body);
 
@@ -310,7 +310,8 @@ router.post("/markRequirememtComplete/:local_trainer_id", (req, res) => {
   pool
     .query(getLocalTrainerRequirementIdQuery, [
       req.params.local_trainer_id,
-      req.body.requirement_id
+      req.body.requirement_id,
+      req.body.cycle
     ])
     .then(response => {
       console.log("========================/n");
@@ -441,7 +442,7 @@ let createNewCycle = (cohort_id, cycle, recertificationDate) => {
 router.post("/scheduleForRequirement/:local_trainer_id", (req, res) => {
   let getLocalTrainerRequirementIdQuery = `SELECT local_trainers_requirements.local_trainers_requirements_id FROM local_trainers_requirements JOIN cohort_requirements ON cohort_requirements.cohort_req_id = local_trainers_requirements.cohort_requirements_ref_id
   JOIN cohort ON cohort_requirements.cohort_id = cohort.cohort_id
-  WHERE local_trainers_requirements.local_trainers_ref_id = $1 AND cohort_requirements.requirement_id = $2;`;
+  WHERE local_trainers_requirements.local_trainers_ref_id = $1 AND cohort_requirements.requirement_id = $2 AND cohort_requirements.cycle = $3;`;
 
   console.log(req.body);
 
@@ -450,7 +451,8 @@ router.post("/scheduleForRequirement/:local_trainer_id", (req, res) => {
   pool
     .query(getLocalTrainerRequirementIdQuery, [
       req.params.local_trainer_id,
-      req.body.requirement_id
+      req.body.requirement_id,
+      req.body.cycle
     ])
     .then(response => {
       console.log(response.rows);

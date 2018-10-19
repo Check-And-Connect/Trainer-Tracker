@@ -48,15 +48,13 @@ export class CohortManagerTable extends Component {
       return (req.requirement_id === reqId && req.cycle === cycle);
     });
 
-    if(requirement.length === 0) {
+    if(requirement.length === 0 && !this.props.oneCohortID) {
       requirement = reqAry.filter(req => {
         return (req.requirement_id === reqId);
       });
     }
     
 
-    console.log(requirement);
-    
     let content;
 
     if (requirement.length !== 0) {
@@ -65,7 +63,7 @@ export class CohortManagerTable extends Component {
       if (requirement[requirement.length - 1].completed) {
         content = (
           <Button
-            onClick={() => this.props.onCellClick(localTrainerId, reqId, requirement[requirement.length-1].cycle)}
+            onClick={() => this.props.onCellClick(localTrainerId, reqId, requirement[requirement.length-1].cycle, requirement[requirement.length-1].lc_req_id)}
             className={this.props.classes.completed}
           >
             Completed <br />
@@ -83,7 +81,7 @@ export class CohortManagerTable extends Component {
         
         content = (
           <Button
-            onClick={() => this.props.onCellClick(localTrainerId, reqId, requirement[requirement.length-1].cycle)}
+            onClick={() => this.props.onCellClick(localTrainerId, reqId, requirement[requirement.length-1].cycle , requirement[requirement.length-1].lc_req_id)}
             className={style}
           >
             Scheduled <br />
@@ -100,7 +98,7 @@ export class CohortManagerTable extends Component {
         }
         content = (
           <Button
-            onClick={() => this.props.onCellClick(localTrainerId, reqId, requirement[requirement.length-1].cycle)}
+            onClick={() => this.props.onCellClick(localTrainerId, reqId, requirement[requirement.length-1].cycle , requirement[requirement.length-1].lc_req_id)}
             className={style}
           >
             Due <br />
@@ -116,7 +114,11 @@ export class CohortManagerTable extends Component {
   };
 
   render() {
+
+    
     let tableInfo = this.props.currentTrainers.map(localTrainer => {
+      let cycle = this.props.oneCohortID ? this.props.cyclePickerInfo.cycleDisplayed : localTrainer.cycle;
+
       let tableRow = (
         <TableRow key={localTrainer.local_trainers_id}>
           <TableCell className={this.props.classes.tableCell}>
@@ -124,6 +126,7 @@ export class CohortManagerTable extends Component {
               onChange={() => this.props.handleChecked(localTrainer.local_trainers_id)}
               value={localTrainer.local_trainers_id.toString()}
               checked={this.props.checkedIDs.includes(localTrainer.local_trainers_id)}
+              disabled={this.props.oneCohortID === null}
             />
           </TableCell>
           <TableCell className={this.props.classes.tableCell}>
@@ -136,7 +139,7 @@ export class CohortManagerTable extends Component {
             </Link>
           </TableCell>
           <TableCell className={this.props.classes.tableCell}>
-            {localTrainer.cycle}
+            {cycle}
           </TableCell>
           <TableCell className={this.props.classes.tableCell}>
             <Link
@@ -158,7 +161,7 @@ export class CohortManagerTable extends Component {
             {this.formatRequirement(
               localTrainer.local_trainers_id,
               localTrainer.requirements,
-              localTrainer.cycle,
+              cycle,
               1
             )}
           </TableCell>
@@ -166,7 +169,7 @@ export class CohortManagerTable extends Component {
             {this.formatRequirement(
               localTrainer.local_trainers_id,
               localTrainer.requirements,
-              localTrainer.cycle,
+              cycle,
               2
             )}
           </TableCell>
@@ -174,7 +177,7 @@ export class CohortManagerTable extends Component {
             {this.formatRequirement(
               localTrainer.local_trainers_id,
               localTrainer.requirements,
-              localTrainer.cycle,
+              cycle,
               3
             )}
           </TableCell>
@@ -182,7 +185,7 @@ export class CohortManagerTable extends Component {
             {this.formatRequirement(
               localTrainer.local_trainers_id,
               localTrainer.requirements,
-              localTrainer.cycle,
+              cycle,
               4
             )}
           </TableCell>
@@ -190,20 +193,20 @@ export class CohortManagerTable extends Component {
             {this.formatRequirement(
               localTrainer.local_trainers_id,
               localTrainer.requirements,
-              localTrainer.cycle,
+              cycle,
               5
             )}
           </TableCell>
           <TableCell className={this.props.classes.tableCell}>{this.formatRequirement(
               localTrainer.local_trainers_id,
               localTrainer.requirements,
-              localTrainer.cycle,
+              cycle,
               6
             )}</TableCell>
             <TableCell className={this.props.classes.tableCell}>{this.formatRequirement(
               localTrainer.local_trainers_id,
               localTrainer.requirements,
-              localTrainer.cycle,
+              cycle,
               7
             )}</TableCell>
         </TableRow>
@@ -223,6 +226,7 @@ export class CohortManagerTable extends Component {
                     checked={this.props.currentTrainers.length === this.props.checkedIDs.length}
                     onChange={() => this.props.handleChecked('selectAll')}
                     value="all"
+                    disabled={this.props.oneCohortID === null}
                   />
                 </TableCell>
                 <TableCell className={this.props.classes.tableCell}>

@@ -75,7 +75,9 @@ function* markComplete(action) {
       requirement_id: action.payload.requirement_id,
       date_marked_complete: action.payload.date_marked_complete,
       national_trainer: action.payload.national_trainer,
-      note: action.payload.note
+      note: action.payload.note,
+      cycle : action.payload.cycle,
+      lc_req_id : action.payload.lc_req_id
     };
 
     yield all(
@@ -94,7 +96,8 @@ function* markComplete(action) {
       type: LOCAL_TRAINERS_ACTIONS.FETCH_TRAINER_REQUIREMENT_SINGLE,
       payload: {
         requirementId: action.payload.requirement_id,
-        localTrainerId: action.payload.localTrainerIDs[0]
+        localTrainerId: action.payload.localTrainerIDs[0],
+        cycle : action.payload.cycle
       }
     });
 
@@ -118,7 +121,8 @@ function* scheduleForRequirement(action) {
 
     let actualPayload = {
       requirement_id: action.payload.requirement_id,
-      date_scheduled: action.payload.date_scheduled
+      date_scheduled: action.payload.date_scheduled,
+      cycle : action.payload.cycle
     };
 
     yield all(
