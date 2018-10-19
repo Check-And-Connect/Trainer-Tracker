@@ -314,7 +314,6 @@ let sendEmail = (notificationType, cohortInfo) => {
     .then(results => {
       
       results.rows.forEach(localTrainer => {
-        console.log('localTrainer', localTrainer)
         if(cohortInfo.requirement_id === 2 && cohortCycle === 1 && localTrainer.completed == null){
           tttTermsMail(localTrainer.email , localTrainer.first_name)
         }else if(cohortInfo.requirement_id === 3 && cohortCycle === 1 && localTrainer.completed == null){
