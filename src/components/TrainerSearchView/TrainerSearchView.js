@@ -359,43 +359,73 @@ class TrainerSearchView extends Component {
         switch (column){
             case 'cohort':
                 sortFunction = (a, b) => {
-                    let c = a.cohort.cohort_name;
-                    let d = b.cohort.cohort_name;
+                    let c, d;
+                    try {
+                        c = a.cohort.cohort_name.trim();
+                        d = b.cohort.cohort_name.trim();
+                    } catch(err) {
+                        console.log('failed to sort', a, b);
+                    }
                     return compare(c, d)
                 }
                 break;
             case 'slo':
                 sortFunction = (a, b) => {
-                    let c = a.state_level_organization.state_level_organization_name;
-                    let d = b.state_level_organization.state_level_organization_name;
+                    let c, d;
+                    try {
+                        c = a.state_level_organization.state_level_organization_name.trim();
+                        d = b.state_level_organization.state_level_organization_name.trim();
+                    } catch(err) {
+                        console.log('failed to sort', a, b);
+                    }
                     return compare(c, d)
                 }
                 break;
             case 'next':
                 sortFunction = (a, b) => {
-                    let c = a.lastNext[1];
-                    let d = b.lastNext[1];
+                    let c, d;
+                    try {
+                        c = a.lastNext[1].trim();
+                        d = b.lastNext[1].trim();
+                    } catch(err) {
+                        console.log('failed to sort', a, b);
+                    }
                     return compare(c, d)
                 }
                 break;
             case 'last':
                 sortFunction = (a, b) => {
-                    let c = a.lastNext[0];
-                    let d = b.lastNext[0];
+                    let c, d;
+                    try {
+                        c = a.lastNext[0].trim();
+                        d = b.lastNext[0].trim();
+                    } catch(err){
+                        console.log('failed to sort', a, b);
+                    }
                     return compare(c, d)
                 }
                 break;
             case 'due':
                 sortFunction = (a, b) => {
-                    let c = Number(moment(a.lastNext[2]).format('x'));
-                    let d = Number(moment(b.lastNext[2]).format('x'));
+                    let c, d;
+                    try {
+                        c = Number(moment(a.lastNext[2]).format('x'));
+                        d = Number(moment(b.lastNext[2]).format('x'));
+                    } catch(err){
+                        console.log('failed to sort', a, b);
+                    }
                     return compare(c, d)
                 }
                 break;
             default: 
                 sortFunction = (a, b) => {
-                    let c = a[column];
-                    let d = b[column];
+                    let c, d;
+                    try {
+                        c = a[column].trim();
+                        d = b[column].trim();
+                    } catch(err) {
+                        console.log('failed to sort by', column, a, b);
+                    }
                     return compare(c, d)
                 }
                 break;
@@ -411,31 +441,6 @@ class TrainerSearchView extends Component {
             localTrainers: sortedTrainers
         })
     } 
-
-    getLastNext = (requirementsArray) => {
-
-        let lastNext = ['n/a', 'n/a', 'n/a'];
-        if (!requirementsArray || requirementsArray.length === 0){
-            return lastNext;
-        }
-
-        requirementsArray.sort((a, b) => {
-            return a.requirement_id - b.requirement_id
-        })
-        for (let i = 0; i < requirementsArray.length; i++) {
-            if (requirementsArray[i].completed === null) {
-                lastNext[1] = requirementsArray[i].requirement_name;
-                lastNext[2] = moment(requirementsArray[i].requirement_due_date).format("MM-DD-YYYY");
-                if (i === 0) {
-                    lastNext[0] = 'n/a';
-                    return lastNext
-                } else {
-                    lastNext[0] = requirementsArray[i - 1].requirement_name;
-                    return lastNext;
-                }
-            }
-        }
-    }
 
     render() {
         let { classes } = this.props;

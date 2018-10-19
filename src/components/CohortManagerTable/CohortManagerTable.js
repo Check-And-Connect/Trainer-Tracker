@@ -54,6 +54,7 @@ export class CohortManagerTable extends Component {
       });
     }
     
+
     let content;
 
     if (requirement.length !== 0) {
