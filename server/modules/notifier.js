@@ -306,7 +306,6 @@ let cAndCTraining3Mail = (emailAddress) => {
 let sendEmail = (notificationType, cohortInfo) => {
   let cohortId = cohortInfo.requirement_id;
   let cohortCycle = cohortInfo.cycle;
-  //cohortInfo has all of the info for cohort requirements
 
   pool
     .query(`SELECT "local_trainers"."first_name", "local_trainers"."email", "local_trainers_requirements"."completed" FROM "local_trainers"
