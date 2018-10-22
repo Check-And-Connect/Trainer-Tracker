@@ -31,6 +31,7 @@ const notifier = require('./modules/notifier');
 //    notifier()
 // })
 
+
 // Body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
