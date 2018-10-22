@@ -21,7 +21,7 @@ const styles = {
     padding : '0em 1.3em 1em 1.3em'
   },
   radios : {
-    height : '35px'
+    height : 'auto'
   }
 };
 
