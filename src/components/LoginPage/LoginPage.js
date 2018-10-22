@@ -8,12 +8,25 @@ import {
 } from "../../redux/actions/loginActions";
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 
-import { TextField } from "@material-ui/core";
+import { Button, TextField, withStyles } from "@material-ui/core";
+import './LoginPage.css';
 
 const mapStateToProps = state => ({
   user: state.user,
   login: state.login
 });
+
+const styles = {
+  mainComponent: {
+    display: "grid", 
+    gridTemplateColumns: "1fr 4fr 1fr"
+  },
+  loginContainer: {
+    // backgroundColor: "white",
+    gridColumnStart: "2",
+    marginTop: "50px",
+  }
+}
 
 class LoginPage extends Component {
   constructor(props) {
@@ -66,14 +79,21 @@ class LoginPage extends Component {
   }
 
   render() {
+    let { classes } = this.props;
+
     return (
-      <div className="outer-div">
-      <div className="loginContainer">
+      <div className={classes.mainComponent}>
+      <div className={classes.loginContainer}>
         <img
+          className="bigLogo"
+          src={require("./CC-logo.png")}
+          alt="big check and connect logo"
+        />
+        {/* <img
           className="logo"
           src={require("../../styles/images/checkconnect_logo_h_rgb.jpg")}
           alt="check and connect logo"
-        />
+        /> */}
         {this.renderAlert()}
         <form onSubmit={this.login}>
           <div>
@@ -99,12 +119,17 @@ class LoginPage extends Component {
             </label>
           </div>
           <div>
-            <input
+            <Button
               type="submit"
               name="submit"
               value="Log In"
-            />
-            <Link to="/confrim_email">Forgot Password</Link>
+            >
+              Log In
+            </Button>
+            <Button>
+              Forgot Password
+            </Button>
+            {/* <Link to="/confrim_email">Forgot Password</Link> */}
           </div>
         </form>
       </div>
@@ -113,4 +138,5 @@ class LoginPage extends Component {
   }
 }
 
-export default connect(mapStateToProps)(LoginPage);
+const styledComponent = withStyles(styles)(LoginPage);
+export default connect(mapStateToProps)(styledComponent);
