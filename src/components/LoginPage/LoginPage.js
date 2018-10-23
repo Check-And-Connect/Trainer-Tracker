@@ -8,7 +8,7 @@ import {
 } from "../../redux/actions/loginActions";
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 
-import { Button, TextField, withStyles } from "@material-ui/core";
+import { Button, TextField, Paper, withStyles } from "@material-ui/core";
 import './LoginPage.css';
 
 const mapStateToProps = state => ({
@@ -19,12 +19,19 @@ const mapStateToProps = state => ({
 const styles = {
   mainComponent: {
     display: "grid", 
-    gridTemplateColumns: "1fr 4fr 1fr"
+    gridTemplateColumns: "2fr 7fr 2fr",
+    alignItems: "center",
+    justifyContent: "center",
   },
   loginContainer: {
     // backgroundColor: "white",
     gridColumnStart: "2",
     marginTop: "50px",
+    display: "grid",
+    justifyItems: "center"
+  },
+  formContainer: {
+    width: "340px",
   }
 }
 
@@ -94,6 +101,8 @@ class LoginPage extends Component {
           src={require("../../styles/images/checkconnect_logo_h_rgb.jpg")}
           alt="check and connect logo"
         /> */}
+        <div className={classes.formContainer}>
+        <Paper elevation={12}>
         {this.renderAlert()}
         <form onSubmit={this.login}>
           <div>
@@ -132,6 +141,8 @@ class LoginPage extends Component {
             {/* <Link to="/confrim_email">Forgot Password</Link> */}
           </div>
         </form>
+        </Paper>
+        </div>
       </div>
       </div>
     );
