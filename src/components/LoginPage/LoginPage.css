@@ -1,10 +1,10 @@
-body {
+/* body {
     background-image: url("CC-background.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: right top;
     background-attachment: fixed;
-}
+} */
 
 Button {
     margin: 10px;

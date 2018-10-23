@@ -10,13 +10,26 @@ import { USER_ACTIONS } from "../../redux/actions/userActions";
 
 import { Button, TextField, Paper, withStyles } from "@material-ui/core";
 import './LoginPage.css';
+import Background from './CC-background.png';
+
 
 const mapStateToProps = state => ({
   user: state.user,
   login: state.login
 });
 
+
 const styles = {
+  wholePage: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    backgroundImage: "url(" + Background + ")",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "right top",
+    backgroundAttachment: "fixed",
+  },
   mainComponent: {
     display: "grid", 
     gridTemplateColumns: "2fr 7fr 2fr",
@@ -89,6 +102,7 @@ class LoginPage extends Component {
     let { classes } = this.props;
 
     return (
+      <div className={classes.wholePage}>
       <div className={classes.mainComponent}>
       <div className={classes.loginContainer}>
         <img
@@ -96,14 +110,8 @@ class LoginPage extends Component {
           src={require("./CC-logo.png")}
           alt="big check and connect logo"
         />
-        {/* <img
-          className="logo"
-          src={require("../../styles/images/checkconnect_logo_h_rgb.jpg")}
-          alt="check and connect logo"
-        /> */}
-        <div className={classes.formContainer}>
-        <Paper elevation={12}>
         {this.renderAlert()}
+        <div className={classes.formContainer}>
         <form onSubmit={this.login}>
           <div>
             <label htmlFor="username">
@@ -141,8 +149,8 @@ class LoginPage extends Component {
             {/* <Link to="/confrim_email">Forgot Password</Link> */}
           </div>
         </form>
-        </Paper>
         </div>
+      </div>
       </div>
       </div>
     );
