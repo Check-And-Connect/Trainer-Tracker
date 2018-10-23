@@ -23,7 +23,7 @@ const styles = {
     width: "15em"
   },
   mainComponent: {
-    textAlign : 'center',
+    textAlign: "center",
     padding: "1em"
   },
   buttons: {
@@ -38,7 +38,7 @@ const styles = {
 class Scheduler extends Component {
   state = {
     requirement_id: "",
-    selectedDate: moment().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+    selectedDate: moment().format("ddd, DD MMM YYYY HH:mm:ss ZZ"),
     errorMessege: ""
   };
 
@@ -62,8 +62,10 @@ class Scheduler extends Component {
   handleMarkComplete = event => {
     event.preventDefault();
     if (this.state.requirement_id !== "") {
-      this.props.handleMarkComplete({requirement_id : this.state.requirement_id, date_marked_complete : this.state.selectedDate});
-      
+      this.props.handleMarkComplete({
+        requirement_id: this.state.requirement_id,
+        date_marked_complete: this.state.selectedDate
+      });
     } else {
       this.setState({
         errorMessege: "Please choose a requirement before you mark complete."
@@ -74,8 +76,10 @@ class Scheduler extends Component {
   handleScheduling = event => {
     event.preventDefault();
     if (this.state.requirement_id !== "") {
-
-      this.props.handleScheduling({requirement_id : this.state.requirement_id, date_scheduled : this.state.selectedDate});
+      this.props.handleScheduling({
+        requirement_id: this.state.requirement_id,
+        date_scheduled: this.state.selectedDate
+      });
     } else {
       this.setState({
         errorMessege: "Please choose a requirement before you schedule."
@@ -89,23 +93,42 @@ class Scheduler extends Component {
     console.log(this.state);
 
     let requirements = this.props.cohort.requirements.map(requirement => {
-      return (
-        <MenuItem
-          key={requirement.requirements_id}
-          value={requirement.requirements_id}
-        >
-          {requirement.name}
-        </MenuItem>
-      );
+      if (parseInt(this.props.cycleDisplayed) !== 1) {
+        if (
+          requirement.requirements_id === 2 ||
+          requirement.requirements_id === 5 ||
+          requirement.requirements_id === 6 ||
+          requirement.requirements_id === 7
+        ) {
+          return (
+            <MenuItem
+              key={requirement.requirements_id}
+              value={requirement.requirements_id}
+            >
+              {requirement.name}
+            </MenuItem>
+          );
+        }
+      } else {
+        if (requirement.requirements_id !== 5) {
+          return (
+            <MenuItem
+              key={requirement.requirements_id}
+              value={requirement.requirements_id}
+            >
+              {requirement.name}
+            </MenuItem>
+          );
+        }
+      }
     });
 
     return (
       <div className={classes.mainComponent}>
         <Typography>ACTION</Typography>
-        <br/>
+        <br />
         <MuiPickersUtilsProvider utils={MomentUtils}>
           <form>
-           
             <FormControl required={true} className={classes.formControl}>
               <InputLabel>Select A Requirement</InputLabel>
               <Select

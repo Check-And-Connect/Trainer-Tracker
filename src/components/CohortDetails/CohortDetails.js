@@ -19,8 +19,12 @@ import {
   TableBody,
   TableCell,
   Slide,
-  Snackbar
+  Snackbar,
+  IconButton
 } from "@material-ui/core";
+
+import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
+import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 
 import MomentUtils from "material-ui-pickers/utils/moment-utils";
 import MuiPickersUtilsProvider from "material-ui-pickers/utils/MuiPickersUtilsProvider";
@@ -61,6 +65,18 @@ const styles = theme => ({
     textAlign: "center",
     marginTop: "1em",
     marginBottom: "2em"
+  },
+  cyclePicker: {
+    display: "Grid",
+    gridTemplateColumns: "0fr 0.01fr 0fr",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  arrows: {
+    fontSize: "2em"
+  },
+  cycleDisplayed: {
+    fontSize: "1.5em"
   }
 });
 
@@ -75,12 +91,15 @@ class CohortDetails extends Component {
         state: "",
         state_level_organization: "",
         note: "",
-        requirements: []
+        cycle: "",
+        requirements: {}
       },
       chosenDate: moment().format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ"),
       errorMessage: "",
-      snackOpen: "",
-      editMode : false
+      snackOpen: false,
+      editMode: false,
+      cycleDisplayed: "",
+      currentCycleRequirements: []
     };
   }
 
@@ -103,32 +122,57 @@ class CohortDetails extends Component {
       prevProps.cohortReducer.singleCohort.length === 0 &&
       this.props.cohortReducer.singleCohort.length !== 0
     ) {
-      this.setState({
-        cohortInState: {
-          ...this.state.cohortInState,
-          cohort_id: this.props.cohortReducer.singleCohort[0].cohort_id,
-          name: this.props.cohortReducer.singleCohort[0].cohort_name,
-          start_date: this.props.cohortReducer.singleCohort[0].start_date,
-          note: this.props.cohortReducer.singleCohort[0].note,
-          state: this.props.cohortReducer.singleCohort[0].state,
-          state_level_organization: this.props.cohortReducer.singleCohort[0]
-            .state_level_org_id,
-          requirements: this.props.cohortReducer.singleCohort[0].requirements
+      this.setState(
+        {
+          cohortInState: {
+            ...this.state.cohortInState,
+            cohort_id: this.props.cohortReducer.singleCohort[0].cohort_id,
+            name: this.props.cohortReducer.singleCohort[0].cohort_name,
+            start_date: this.props.cohortReducer.singleCohort[0].start_date,
+            note: this.props.cohortReducer.singleCohort[0].note,
+            state: this.props.cohortReducer.singleCohort[0].state,
+            state_level_organization: this.props.cohortReducer.singleCohort[0]
+              .state_level_org_id,
+            cycle: this.props.cohortReducer.singleCohort[0].cycle,
+            requirements: this.props.cohortReducer.singleCohort[0].requirements
+          },
+          cycleDisplayed: this.props.cohortReducer.singleCohort[0].cycle
+        },
+        () => {
+          console.log(
+            this.state.cohortInState.requirements[this.state.cycleDisplayed]
+          );
+
+          this.setState({
+            currentCycleRequirements: this.state.cohortInState.requirements[
+              this.state.cycleDisplayed
+            ]
+          });
         }
-      });
+      );
 
       this.props.dispatch({
         type: COHORT_ACTIONS.FETCH_FILTER_STATE,
         payload: this.props.cohortReducer.singleCohort[0].state
       });
     }
+
+    if (
+      prevProps.cohortReducer.taskConfirmer.cohort_updated === false &&
+      this.props.cohortReducer.taskConfirmer.cohort_updated === true
+    ) {
+      this.setState({
+        snackOpen: true,
+        editMode : false
+      });
+    }
   }
 
   handleChangeFor = propertyName => {
     return event => {
-        this.setState({
-            editMode : true
-         }) 
+      this.setState({
+        editMode: true
+      });
       this.setState({
         cohortInState: {
           ...this.state.cohortInState,
@@ -141,9 +185,9 @@ class CohortDetails extends Component {
 
   handleChangeForState = propertyName => {
     return event => {
-        this.setState({
-            editMode : true
-         }) 
+      this.setState({
+        editMode: true
+      });
       this.setState({
         cohortInState: {
           ...this.state.cohortInState,
@@ -161,9 +205,9 @@ class CohortDetails extends Component {
 
   handleChangeForSLO = propertyName => {
     return event => {
-        this.setState({
-            editMode : true
-         }) 
+      this.setState({
+        editMode: true
+      });
       this.setState({
         cohortInState: {
           ...this.state.cohortInState,
@@ -178,42 +222,76 @@ class CohortDetails extends Component {
     };
   };
 
-  handleDateChange = (req_ID, dateType, date) => {
-     this.setState({
-        editMode : true
-     }) 
-    let allReqs = this.state.cohortInState.requirements;
+  handleDateChange = (req_ID, dateType, date, cycle) => {
+    this.setState({
+      editMode: true
+    });
+    let requirementAry = this.state.cohortInState.requirements[cycle];
 
-    let getReqIndex = allReqs.findIndex(req => {
+    let getReqIndex = requirementAry.findIndex(req => {
       return req.requirement_id === req_ID;
     });
 
-    allReqs[getReqIndex][dateType] = date;
+    requirementAry[getReqIndex][dateType] = date;
 
     this.setState({
-      newCohort: {
+      cohortInState: {
         ...this.state.cohortInState,
-        requirements: allReqs
+        requirements: {
+          ...this.state.cohortInState.requirements,
+          [cycle]: requirementAry
+        }
       }
     });
   };
 
-  handleSubmit = (event) => {
-      event.preventDefault();
+  handleSubmit = event => {
+    event.preventDefault();
 
-      this.props.dispatch({
-          type : COHORT_ACTIONS.UPDATE_COHORT,
-          payload : {
-              ...this.props.match.params , 
-              cohort_info : this.state.cohortInState
-          }
-      })
+    this.props.dispatch({
+      type: COHORT_ACTIONS.UPDATE_COHORT,
+      payload: {
+        ...this.props.match.params,
+        cohort_info: this.state.cohortInState
+      }
+    });
+  };
 
+  previousCycle = () => {
+    let prevCycle = parseInt(this.state.cycleDisplayed) -1;
+    
+    let reqs = this.state.cohortInState.requirements[prevCycle].sort((a , b) => {
+      return a.requirement_id - b.requirement_id
+    })
+
+    this.setState({
+      cycleDisplayed : prevCycle,
+      currentCycleRequirements : reqs
+    })
   }
 
+  nextCycle = () => {
+    let nextCycle = parseInt(this.state.cycleDisplayed) + 1;
+
+    let reqs = this.state.cohortInState.requirements[nextCycle].sort((a , b) => {
+      return a.requirement_id - b.requirement_id
+    })
+
+    this.setState({
+      cycleDisplayed : nextCycle,
+      currentCycleRequirements : reqs
+    })
+  }
+
+  handleClose = () => {
+    this.setState({ snackOpen: false });
+  };
+
+  
   createDueDates = () => {
-    let tableBody = this.state.cohortInState.requirements.map(
+    let tableBody = this.state.currentCycleRequirements.map(
       (requirement, index) => {
+
         return (
           <TableRow key={index}>
             <TableCell>{requirement.requirement_name.toUpperCase()}</TableCell>
@@ -223,12 +301,17 @@ class CohortDetails extends Component {
                 keyboard
                 format="MM/DD/YYYY"
                 label="Due Date"
-                value={this.state.cohortInState.requirements[index].due_date}
+                value={
+                  this.state.cohortInState.requirements[
+                    this.state.cycleDisplayed
+                  ][index].due_date
+                }
                 onChange={date =>
                   this.handleDateChange(
                     requirement.requirement_id,
                     "due_date",
-                    date.format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ")
+                    date.format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ"),
+                    requirement.cycle
                   )
                 }
               />
@@ -241,14 +324,16 @@ class CohortDetails extends Component {
                 format="MM/DD/YYYY"
                 label="Notification 1"
                 value={
-                  this.state.cohortInState.requirements[index]
-                    .notification_1_date
+                  this.state.cohortInState.requirements[
+                    this.state.cycleDisplayed
+                  ][index].notification_1_date
                 }
                 onChange={date =>
                   this.handleDateChange(
                     requirement.requirement_id,
                     "notification_1_date",
-                    date.format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ")
+                    date.format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ"),
+                    requirement.cycle
                   )
                 }
               />
@@ -261,14 +346,16 @@ class CohortDetails extends Component {
                 format="MM/DD/YYYY"
                 label="Notification 2"
                 value={
-                  this.state.cohortInState.requirements[index]
-                    .notification_2_date
+                  this.state.cohortInState.requirements[
+                    this.state.cycleDisplayed
+                  ][index].notification_2_date
                 }
                 onChange={date =>
                   this.handleDateChange(
                     requirement.requirement_id,
                     "notification_2_date",
-                    date.format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ")
+                    date.format("YYYY-MM-DD[T]HH:mm:ss.SSSZZ"),
+                    requirement.cycle
                   )
                 }
               />
@@ -314,11 +401,9 @@ class CohortDetails extends Component {
         );
       }
     );
-
+ 
     let dueDateTabel =
-      this.state.cohortInState.requirements.length > 0
-        ? this.createDueDates()
-        : [];
+      this.state.cohortInState.requirements !== {} ? this.createDueDates() : [];
 
     let content = null;
     if (this.props.user.userName) {
@@ -377,18 +462,45 @@ class CohortDetails extends Component {
               />
             </div>
             <br />
+            <div>
+              <Typography variant="title">
+                {" "}
+                Current Cohort Cycle : {this.state.cohortInState.cycle}{" "}
+              </Typography>
+            </div>
+            <br />
           </div>
 
           <div className={classes.bottomPart}>
             <br />
             <Typography variant="display1">Cohort Deadlines</Typography>
+            <br />
+            <p>Cycle</p>
+            <div className={classes.cyclePicker}>
+              <IconButton disabled={parseInt(this.state.cycleDisplayed) === 1} onClick={this.previousCycle}>
+                <KeyboardArrowLeft className={classes.arrows} />
+              </IconButton>
+              <p className={classes.cycleDisplayed}>
+                {this.state.cycleDisplayed}
+              </p>
+              <IconButton
+                disabled={
+                  parseInt(this.state.cycleDisplayed) ===
+                  parseInt(this.state.cohortInState.cycle)
+                }
+                onClick={this.nextCycle}
+              >
+                <KeyboardArrowRight className={classes.arrows} />
+              </IconButton>
+            </div>
             {dueDateTabel}
           </div>
           <div className={classes.createButton}>
-
-            {this.state.editMode && <Button type="Submit" variant="outlined">
-              Update Cohort
-            </Button>}
+            {this.state.editMode && (
+              <Button type="Submit" variant="outlined">
+                Update Cohort
+              </Button>
+            )}
             <br />
             <Typography variant="subheading" color="error">
               {this.state.errorMessage}
@@ -397,7 +509,7 @@ class CohortDetails extends Component {
               open={this.state.snackOpen}
               onClose={this.handleClose}
               TransitionComponent={TransitionRight}
-              message={<span> Cohort Created</span>}
+              message={<span> Cohort Updated </span>}
             />
           </div>
         </div>
