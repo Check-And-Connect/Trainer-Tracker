@@ -9,7 +9,6 @@ import {
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 
 import { Button, TextField, Paper, withStyles } from "@material-ui/core";
-import './LoginPage.css';
 import Background from './CC-background.png';
 
 
@@ -45,6 +44,11 @@ const styles = {
   },
   formContainer: {
     width: "340px",
+    margin: "30px"
+  },
+  bigLogo: {
+    width: "100%",
+    height: "auto"
   }
 }
 
@@ -106,7 +110,7 @@ class LoginPage extends Component {
       <div className={classes.mainComponent}>
       <div className={classes.loginContainer}>
         <img
-          className="bigLogo"
+          className={classes.bigLogo}
           src={require("./CC-logo.png")}
           alt="big check and connect logo"
         />
@@ -148,7 +152,6 @@ class LoginPage extends Component {
               Forgot Password
             </Button>
             </Link>
-            {/* <Link to="/confrim_email">Forgot Password</Link> */}
           </div>
         </form>
         </div>
