@@ -114,6 +114,7 @@ class CohortDetails extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    // This If clause kicks off an infinite loop of some kind if the user tries to log out from this page.
     if (!this.props.user.isLoading && this.props.user.userName === null) {
       this.props.history.push("home");
     }

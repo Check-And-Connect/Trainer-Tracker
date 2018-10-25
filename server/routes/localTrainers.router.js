@@ -579,7 +579,7 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
 });
 
 // THIS ROUTE TOGGLES LOCAL TRAINER STATUS AND THAT'S ALL IT DOES
-router.put("/status/:id", (req, res) => {
+router.put("/status/:id", rejectUnauthenticated,  (req, res) => {
   // console.log('toggle route reached');
   const toggleTrainerQuery = `UPDATE local_trainers SET status = NOT status WHERE local_trainers_id = $1;`;
   pool

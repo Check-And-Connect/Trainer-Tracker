@@ -41,7 +41,26 @@ const styles = {
 };
 
 export class CohortManagerTable extends Component {
-  
+  constructor(props){
+    super(props);
+    this.state = {
+      orderBy: {
+        columnName: '',
+        ascending: true
+      }
+    }
+  }
+
+  sortBy = (column) => {
+    this.setState({
+      orderBy: {
+        ...this.state.orderBy,
+        columnName: column
+      }
+    }, (column) => {
+      console.log(column);
+    })
+  }
 
   formatRequirement = (localTrainerId, reqAry, cycle, reqId) => {
     let requirement = reqAry.filter(req => {
@@ -114,6 +133,13 @@ export class CohortManagerTable extends Component {
   };
 
   render() {
+
+    let sortByIndicator;
+    if (this.state.orderBy.ascending){
+        sortByIndicator = '▼';
+    } else {
+        sortByIndicator = '▲';
+    }
 
     
     let tableInfo = this.props.currentTrainers.map(localTrainer => {
@@ -229,38 +255,38 @@ export class CohortManagerTable extends Component {
                     disabled={this.props.oneCohortID === null}
                   />
                 </TableCell>
-                <TableCell className={this.props.classes.tableCell}>
-                  Cohort
+                <TableCell className={this.props.classes.tableCell} onClick={() => this.sortBy('cohort')}>
+                  Cohort {this.state.orderBy.columnName === 'cohort' ? sortByIndicator : ' '}
                 </TableCell>
-                <TableCell className={this.props.classes.tableCell}>
-                  Cycle
+                <TableCell className={this.props.classes.tableCell} onClick={() => this.sortBy('cycle')}>
+                  Cycle {this.state.orderBy.columnName === 'cycle' ? sortByIndicator : ' '}
                 </TableCell>
-                <TableCell className={this.props.classes.tableCell}>
-                  First Name
+                <TableCell className={this.props.classes.tableCell} onClick={() => this.sortBy('first_name')}>
+                  First Name {this.state.orderBy.columnName === 'cohort' ? sortByIndicator : ' '}
                 </TableCell>
-                <TableCell className={this.props.classes.tableCell}>
-                  Last Name
+                <TableCell className={this.props.classes.tableCell} onClick={() => this.sortBy('last_name')}>
+                  Last Name {this.state.orderBy.columnName === 'cohort' ? sortByIndicator : ' '}
                 </TableCell>
-                <TableCell className={this.props.classes.tableCell}>
-                  Initial Training
+                <TableCell className={this.props.classes.tableCell} onClick={() => this.sortBy('req_1')}>
+                  Initial Training {this.state.orderBy.columnName === 'cohort' ? sortByIndicator : ' '}
                 </TableCell>
-                <TableCell className={this.props.classes.tableCell}>
-                  TTT Terms
+                <TableCell className={this.props.classes.tableCell} onClick={() => this.sortBy('req_2')}>
+                  TTT Terms {this.state.orderBy.columnName === 'cohort' ? sortByIndicator : ' '}
                 </TableCell>
-                <TableCell className={this.props.classes.tableCell}>
-                  Observed Training
+                <TableCell className={this.props.classes.tableCell} onClick={() => this.sortBy('req_3')}>
+                  Observed Training {this.state.orderBy.columnName === 'cohort' ? sortByIndicator : ' '}
                 </TableCell>
-                <TableCell className={this.props.classes.tableCell}>
-                  Cert. Workshop
+                <TableCell className={this.props.classes.tableCell} onClick={() => this.sortBy('req_4')}>
+                  Cert. Workshop {this.state.orderBy.columnName === 'cohort' ? sortByIndicator : ' '}
                 </TableCell>
-                <TableCell className={this.props.classes.tableCell}>
-                  C&amp;C Training 1
+                <TableCell className={this.props.classes.tableCell} onClick={() => this.sortBy('req_5')}>
+                  C&amp;C Training 1 {this.state.orderBy.columnName === 'cohort' ? sortByIndicator : ' '}
                 </TableCell>
-                <TableCell className={this.props.classes.tableCell}>
-                  C&amp;C Training 2
+                <TableCell className={this.props.classes.tableCell} onClick={() => this.sortBy('req_6')}>
+                  C&amp;C Training 2 {this.state.orderBy.columnName === 'cohort' ? sortByIndicator : ' '}
                 </TableCell>
-                <TableCell className={this.props.classes.tableCell}>
-                  Recertification
+                <TableCell className={this.props.classes.tableCell} onClick={() => this.sortBy('req_7')}>
+                  Recertification {this.state.orderBy.columnName === 'cohort' ? sortByIndicator : ' '}
                 </TableCell>
               </TableRow>
             </TableHead>

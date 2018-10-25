@@ -11,9 +11,6 @@ import { connect } from 'react-redux';
 
 import Header from './components/Header/Header';
 import LoginPage from './components/LoginPage/LoginPage';
-// import RegisterPage from './components/RegisterPage/RegisterPage';
-// import UserPage from './components/UserPage/UserPage';
-// import InfoPage from './components/InfoPage/InfoPage';
 import CohortManager from './components/CohortManager/CohortManager'
 import AddTrainer from './components/AddTrainer/AddTrainer';
 import TrainerSearchView from './components/TrainerSearchView/TrainerSearchView';
@@ -51,10 +48,6 @@ const App = (props) => (
           path="/national_trainer"
           component={NationalTrainer}
         />
-        {/* <Route
-          path="/user"
-          component={UserPage}
-        /> */}
         <Route
           path="/cohort_manager"
           component={CohortManager}
