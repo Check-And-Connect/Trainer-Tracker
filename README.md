@@ -31,7 +31,7 @@ In order to set up login information, insert this dummy data or your own data in
 
 INSERT INTO "public"."national_trainer"("national_trainer_id","first_name","last_name","user_name","password","email","title","status","pw_reset_token","pw_reset_time")
 VALUES
-(1,'Tyler','Smith','TSmith','password','youremail@gmail.com',NULL,TRUE,NULL,NULL);
+(1,'YourFirstName','YourLastName','username','password','youremail@gmail.com',NULL,TRUE,NULL,NULL);
 
 Since the password isn't hashed, when you get to the login page you will need to click on forgot password first. It will ask you for your email address and then send you an email so that you can reset your password. After that is completed, then you will be able to log into your account.
 

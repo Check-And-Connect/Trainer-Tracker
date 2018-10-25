@@ -210,7 +210,7 @@ router.post("/addLT", async (req, res) => {
                         "organization", 
                         "district", 
                         "cohort_ref_id") 
-                        VALUES ($1,$2,$3,$4,$5,$6,$7,$8);`;
+                      VALUES ($1,$2,$3,$4,$5,$6,$7,$8);`;
     await pool
       .query(postQuery, [
         req.body.first_name,
@@ -226,7 +226,7 @@ router.post("/addLT", async (req, res) => {
         return results.command || null;
       })
       .catch(error => {
-        console.log(error);
+        console.log('first error', error);
         res.sendStatus(500);
       });
 
@@ -257,7 +257,7 @@ router.post("/addLT", async (req, res) => {
         return results.rows[0] || null;
       })
       .catch(error => {
-        console.log(error);
+        console.log('second error', error);
         res.sendStatus(500);
       });
 
@@ -283,7 +283,7 @@ router.post("/addLT", async (req, res) => {
               return results.command || null;
             })
             .catch(error => {
-              console.log(error);
+              console.log('third error', error);
               res.sendStatus(500);
             });
         }
