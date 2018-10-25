@@ -143,9 +143,11 @@ class LoginPage extends Component {
             >
               Log In
             </Button>
+            <Link to="/confrim_email">
             <Button>
               Forgot Password
             </Button>
+            </Link>
             {/* <Link to="/confrim_email">Forgot Password</Link> */}
           </div>
         </form>
