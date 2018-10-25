@@ -14,7 +14,6 @@ class Export extends Component {
     let allDataRows = [];
     let requirementNames = new Set();
 
-
     for (let trainer of currentTrainers){
       let dataRow = {
         first_name: trainer.first_name,
@@ -23,7 +22,12 @@ class Export extends Component {
         state_level_organization: trainer.state_level_organization.state_level_organization_name,
         cohort: trainer.cohort.cohort_name
       }
-      for (let req of trainer.requirements){
+
+      let sortedRequirements = trainer.requirements.sort(function(a,b){
+            return new Date (a.requirement_due_date) - new Date (b.requirement_due_date);
+      });
+
+      for (let req of sortedRequirements){
         requirementNames.add(req.requirement_name + ' ' + req.cycle)
         let reqKey = req.requirement_name.toLowerCase().replace(/\s+/g, '_') + '_' + req.cycle;
 
