@@ -31,7 +31,7 @@ const styles = {
   },
   pastDue : {
     textDecoration: 'none',
-    fontSize : '1em',
+    fontSize : '0.9em',
     background : 'linear-gradient(135deg, white 85%, rgba(255, 12, 12, 0.5));'
   },
   scheduled : {
