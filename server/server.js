@@ -27,7 +27,7 @@ const notifier = require('./modules/notifier');
 //   timezone : 'America/Chicago'
 // });
 
-// cron.schedule('*/15 * * * * *', () => {
+// cron.schedule('*/10 * * * * *', () => {
 //    notifier()
 // })
 
