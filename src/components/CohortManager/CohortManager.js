@@ -255,6 +255,11 @@ class CohortManager extends Component {
   };
 
   checkCohortSimilarity = localTrainers => {
+
+    if (!localTrainers[0]){
+      return null;
+    }
+    
     let cohortIdStart = localTrainers[0].cohort.cohort_id;
     let flag = false;
     let index = 0;
