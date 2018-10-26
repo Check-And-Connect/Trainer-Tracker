@@ -24,7 +24,8 @@ import CohortManagerCyclePicker from "../CohortManagerCyclePicker/CohortManagerC
 
 const mapStateToProps = state => ({
   user: state.user,
-  localTrainers: state.localTrainerReducer
+  localTrainers: state.localTrainerReducer,
+  cohortInfo : state.cohortReducer
 });
 
 function TransitionRight(props) {
@@ -487,6 +488,7 @@ class CohortManager extends Component {
               currentTrainers={this.state.currentTrainers}
               handleChecked={this.handleChecked}
               checkedIDs={this.state.checkedIDs}
+              cohortInfo={this.props.cohortInfo}
             />
             {this.state.dialogOpen && (
               <CohortManagerModal

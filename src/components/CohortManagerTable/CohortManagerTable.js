@@ -9,6 +9,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import Tooltip from '@material-ui/core/Tooltip';
 
 import moment from "moment";
 
@@ -37,6 +38,9 @@ const styles = {
     textDecoration: 'none',
     fontSize : '0.9em',
     background : 'linear-gradient(135deg, white 85%, rgba(255, 250, 0,1));'
+  },
+  tooltip : {
+    fontSize : '4em'
   }
 };
 
@@ -215,6 +219,16 @@ export class CohortManagerTable extends Component {
       return tableRow;
     });
 
+    let tableHeadInfo = this.props.cohortInfo.requirements.map(req => {
+      return  <Tooltip title={req.name} placement="top" className={this.props.classes.tooltip} >
+                <TableCell className={this.props.classes.tableCell}>
+              
+                  {`${req.name.slice(0,15)}...`}
+              
+                </TableCell>
+              </Tooltip>
+    })
+
     return (
       <div className={this.props.classes.mainComponent}>
         <Paper>
@@ -241,27 +255,7 @@ export class CohortManagerTable extends Component {
                 <TableCell className={this.props.classes.tableCell}>
                   Last Name
                 </TableCell>
-                <TableCell className={this.props.classes.tableCell}>
-                  Initial Training
-                </TableCell>
-                <TableCell className={this.props.classes.tableCell}>
-                  TTT Terms
-                </TableCell>
-                <TableCell className={this.props.classes.tableCell}>
-                  Observed Training
-                </TableCell>
-                <TableCell className={this.props.classes.tableCell}>
-                  Cert. Workshop
-                </TableCell>
-                <TableCell className={this.props.classes.tableCell}>
-                  C&amp;C Training 1
-                </TableCell>
-                <TableCell className={this.props.classes.tableCell}>
-                  C&amp;C Training 2
-                </TableCell>
-                <TableCell className={this.props.classes.tableCell}>
-                  Recertification
-                </TableCell>
+                {tableHeadInfo}
               </TableRow>
             </TableHead>
             <TableBody>{tableInfo}</TableBody>
