@@ -61,10 +61,16 @@ class CohortManagerFilter extends Component {
     let states, stateOrgs, cohorts;
 
     if (this.props.states) {
-      states = this.props.states.map(state => {
+      let newStates = [];
+      for (let state of this.props.states){
+        if (state !== undefined){
+          newStates.push(state);
+        }
+      }
+      states = newStates.map(state => {
         return (
           <FormControlLabel
-          className={classes.radios}
+            className={classes.radios}
             key={state}
             value={state}
             control={<Radio />}
@@ -75,10 +81,16 @@ class CohortManagerFilter extends Component {
     }
 
     if (this.props.cohorts && this.state.stateOrgPicked !== "") {
-      cohorts = this.props.cohorts.map((cohort, index) => {
+      let newCohorts = [];
+      for (let cohort of this.props.cohorts){
+        if (cohort !== undefined){
+          newCohorts.push(cohort);
+        }
+      }
+      cohorts = newCohorts.map((cohort, index) => {
         return (
           <FormControlLabel
-          className={classes.radios}
+           className={classes.radios}
             key={index}
             value={cohort}
             control={<Radio />}
@@ -89,11 +101,17 @@ class CohortManagerFilter extends Component {
     }
 
     if (this.props.stateOrgs && this.state.statePicked !== "") {
-      stateOrgs = this.props.stateOrgs.map(stateOrg => {
+      let newStateLevelOrgs = [];
+      for (let org of this.props.stateOrgs){
+        if (org !== undefined){
+          newStateLevelOrgs.push(org);
+        }
+      }
+      stateOrgs = newStateLevelOrgs.map((stateOrg, index) => {
         return (
           <FormControlLabel
-          className={classes.radios}
-            key={stateOrg}
+            className={classes.radios}
+            key={index}
             value={stateOrg}
             control={<Radio />}
             label={stateOrg}

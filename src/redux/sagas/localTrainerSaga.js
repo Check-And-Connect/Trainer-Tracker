@@ -12,6 +12,17 @@ import { LOCAL_TRAINERS_ACTIONS } from "../actions/localTrainerActions";
 function* addNewLT(action) {
   try {
     yield call(axios.post, "/api/localTrainers/addLT", action.payload);  
+    yield dispatch({
+      type: LOCAL_TRAINERS_ACTIONS.UNSET_LOCAL_TRAINERS
+    });
+    let allTrainers = yield call(axios.get, "/api/localTrainers/");
+    allTrainers.data.forEach(trainer => {
+      trainer.lastNext = getLastNext(trainer.requirements)
+    })
+    yield dispatch({
+      type: LOCAL_TRAINERS_ACTIONS.SET_LOCAL_TRAINERS,
+      payload: allTrainers.data
+    });
   } catch (error) {
     console.log(error);
     yield dispatch({
