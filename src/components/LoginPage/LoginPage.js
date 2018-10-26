@@ -8,12 +8,49 @@ import {
 } from "../../redux/actions/loginActions";
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 
-import { TextField } from "@material-ui/core";
+import { Button, TextField, Paper, withStyles } from "@material-ui/core";
+import Background from './CC-background.png';
+
 
 const mapStateToProps = state => ({
   user: state.user,
   login: state.login
 });
+
+
+const styles = {
+  wholePage: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    backgroundImage: "url(" + Background + ")",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "right top",
+    backgroundAttachment: "fixed",
+  },
+  mainComponent: {
+    display: "grid", 
+    gridTemplateColumns: "2fr 7fr 2fr",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  loginContainer: {
+    // backgroundColor: "white",
+    gridColumnStart: "2",
+    marginTop: "50px",
+    display: "grid",
+    justifyItems: "center"
+  },
+  formContainer: {
+    width: "340px",
+    margin: "30px"
+  },
+  bigLogo: {
+    width: "100%",
+    height: "auto"
+  }
+}
 
 class LoginPage extends Component {
   constructor(props) {
@@ -66,15 +103,19 @@ class LoginPage extends Component {
   }
 
   render() {
+    let { classes } = this.props;
+
     return (
-      <div className="outer-div">
-      <div className="loginContainer">
+      <div className={classes.wholePage}>
+      <div className={classes.mainComponent}>
+      <div className={classes.loginContainer}>
         <img
-          className="logo"
-          src={require("../../styles/images/checkconnect_logo_h_rgb.jpg")}
-          alt="check and connect logo"
+          className={classes.bigLogo}
+          src={require("./CC-logo.png")}
+          alt="big check and connect logo"
         />
         {this.renderAlert()}
+        <div className={classes.formContainer}>
         <form onSubmit={this.login}>
           <div>
             <label htmlFor="username">
@@ -99,18 +140,27 @@ class LoginPage extends Component {
             </label>
           </div>
           <div>
-            <input
+            <Button
               type="submit"
               name="submit"
               value="Log In"
-            />
-            <Link to="/confrim_email">Forgot Password</Link>
+            >
+              Log In
+            </Button>
+            <Link to="/confrim_email">
+            <Button>
+              Forgot Password
+            </Button>
+            </Link>
           </div>
         </form>
+        </div>
+      </div>
       </div>
       </div>
     );
   }
 }
 
-export default connect(mapStateToProps)(LoginPage);
+const styledComponent = withStyles(styles)(LoginPage);
+export default connect(mapStateToProps)(styledComponent);

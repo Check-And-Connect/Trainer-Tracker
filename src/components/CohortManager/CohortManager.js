@@ -58,6 +58,7 @@ const styles = {
     margin: "1em"
   }
 };
+
 class CohortManager extends Component {
   state = {
     currentTrainers: [],
