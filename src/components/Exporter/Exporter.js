@@ -29,7 +29,7 @@ class Export extends Component {
 
       for (let req of sortedRequirements){
         requirementNames.add(req.requirement_name + ' ' + req.cycle)
-        let reqKey = req.requirement_name.toLowerCase().replace(/\s+/g, '_') + '_' + req.cycle;
+        let reqKey = req.requirement_name.toLowerCase().trim().replace(/\s+/g, '_') + '_' + req.cycle;
 
         if (req.requirement_id === 3){  // observed training
           requirementNames.add('Observed By')
